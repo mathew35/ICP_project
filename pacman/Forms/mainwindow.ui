@@ -10,8 +10,11 @@
     <height>400</height>
    </rect>
   </property>
+  <property name="contextMenuPolicy">
+   <enum>Qt::ActionsContextMenu</enum>
+  </property>
   <property name="windowTitle">
-   <string>pacmanQT</string>
+   <string>Pacman</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QComboBox" name="comboBox">
