@@ -1,11 +1,14 @@
-// pacman.cpp : Defines the entry point for the application.
-//
+/**
+ * MainWindow class file
+ *
+ * @author Matúš Vráblik (xvrabl05)
+ */
 
 #include "mainwindow.h"
 
-mainwindow::mainwindow(QWidget *parent)
-    : QMainWindow(parent) {
-    ui.setupUi(this);
+mainwindow::mainwindow(QWidget* parent)
+	: QMainWindow(parent) {
+	ui.setupUi(this);
 }
 
 mainwindow::~mainwindow() {

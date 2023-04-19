@@ -1,5 +1,9 @@
-// pacman.h : Include file for standard system include files,
-// or project specific include files.
+/**
+* Header file for main window of application.
+*
+* @author Matúš Vráblik(xvrabl05)
+*
+*/
 #pragma once
 
 #include <iostream>

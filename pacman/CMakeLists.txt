@@ -1,5 +1,7 @@
-﻿# CMakeList.txt : CMake project for pacman, include source and define
+﻿# CMakeList.txt : CMake project for main, include source and define
 # project specific logic here.
+#
+# author Matúš Vráblik (xvrabl05)
 #
 cmake_minimum_required (VERSION 3.8)
 
