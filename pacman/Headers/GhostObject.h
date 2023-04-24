@@ -7,8 +7,7 @@
 #pragma once
 
 #include "MazeObject.h"
-#include "PathField.cpp"
-#include "Field.h"
+#include "PathField.h"
 
 
 class GhostObject : public MazeObject {
@@ -19,7 +18,6 @@ protected:
 	Field* bottomField;
 	Field* rightField;
 	Field* upperField;
-	Field* leftField;
 	Field* leftField;
 public:
 	GhostObject(int row, int col, PathField* field);

@@ -9,7 +9,7 @@
 #include "PathField.h"
 
 
-PathField::PathField(int row, int col) {
+void PathField::PathField(int row, int col) {
 	this->col = col;
 	this->row = row;
 	this->fieldType = '.';
@@ -17,7 +17,7 @@ PathField::PathField(int row, int col) {
 	this->fieldObject = nullptr;
 }
 
-PathField::PathField(int row, int col, char typeOfObject) {
+void PathField::PathField(int row, int col, char typeOfObject) {
 	this->col = col;
 	this->row = row;
 	this->fieldType = '.';
@@ -62,15 +62,15 @@ bool PathField::isEmpty() {
 }
 
 Field* PathField::nextField(Field::Direction dirs) {
-	if (dirs == D) {
+	if (dirs == Field::Direction::D) {
 		return this->bottomField;
 	}
-	else if (dirs == R) {
+	else if (dirs == Field::Direction::R) {
 		return this->rightField;
 	}
-	else if (dirs == U)
+	else if (dirs == Field::Direction::U)
 		return this->upperField;
-	else if (dirs == L) {
+	else if (dirs == Field::Direction::L) {
 		return this->leftField;
 	}
 	else {

@@ -5,8 +5,7 @@
 *
 */
 #pragma once
-#include "MazeObject.h"
-#include "Maze.h"
+class MazeObject;
 
 class Field {
 public:

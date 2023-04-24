@@ -7,7 +7,7 @@
 #pragma once
 
 #include "MazeObject.h"
-#include "PathField.cpp"
+#include "PathField.h"
 #include "Field.h"
 
 class PacmanObject : public MazeObject {
