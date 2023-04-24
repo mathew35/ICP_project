@@ -6,17 +6,18 @@
 */
 #pragma once
 
-#include <vector>
+#include <list>
 #include <string>
 #include "MazeObject.h"
+#include "Field.h"
 
 class MazeClass : public Maze {
 public:
 	void createArray(int rows, int cols);
-	virtual int numCols() override;
-	virtual std::vector<MazeObject> ghosts() override;
-	virtual int numRows() override;
-	virtual Field getField() override;
+	int numCols() override;
+	std::list<MazeObject> ghosts() override;
+	int numRows() override;
+	Field* getField() override;
 
 	void insertLine(std::string line);
 	void setFields();

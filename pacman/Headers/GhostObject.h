@@ -7,18 +7,18 @@
 #pragma once
 
 #include "MazeObject.h"
-#include "PathField"
+#include "PathField.cpp"
 #include "Field.h"
 
 class GhostObject : public MazeObject {
 public:
-	GhostObject(int row, int col, PathField field);
+	GhostObject(int row, int col, PathField* field);
 
-	void setSurroundinFieldsGhost(Field bottom, Field right, Field upper, Field left, PathField curPath);
+	void setSurroundinFieldsGhost(Field* bottom, Field* right, Field* upper, Field* left, PathField* curPath);
 
-	virtual bool canMove(Field::Direction dir) override;
-	virtual Field getField() override;
-	virtual int getLives() override;
-	virtual bool move(Field::Direction dir) override;
+	bool canMove(Field::Direction var1) override;
+	Field* getField() override;
+	int getLives() override;
+	bool move(Field::Direction dir) override;
 
 };

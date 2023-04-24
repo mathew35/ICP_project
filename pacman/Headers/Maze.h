@@ -5,13 +5,12 @@
 *
 */
 #pragma once
-#include <vector>
+#include <list>
 
 #include "Field.h"
 
 class Maze {
 public:
-
 
 	virtual Field getField(int var1, int var2) = 0;
 
@@ -19,5 +18,5 @@ public:
 
 	virtual int numCols() = 0;
 
-	virtual std::vector<MazeObject> ghosts() = 0;
+	virtual std::list<MazeObject> ghosts() = 0;
 };
