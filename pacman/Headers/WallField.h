@@ -13,6 +13,10 @@
 #include "Field.h"
 
 class WallField : public Field {
+private:
+	char fieldType;
+	int row;
+	int col;
 public:
 	WallField(int row, int col);
 

@@ -10,6 +10,8 @@
 #include <string>
 #include "MazeObject.h"
 #include "Field.h"
+#include "PathField.h"
+#include "WallField.h"
 
 class MazeClass : public Maze {
 public:
@@ -22,7 +24,14 @@ public:
 	void insertLine(std::string line);
 	void setFields();
 private:
-	void insertGhost(Field field);
+	int numberOfLines = 1;
+	std::list<MazeObject*> listOfGhosts;
+	Field*** fieldArray;
+
+	int rows;
+	int cols;
+
+	void insertGhost(Field* field);
 	void horizontalWall(int rows, int cols);
 	void verticalWall(int rows, int cols);
 };

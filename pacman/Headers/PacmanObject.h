@@ -11,6 +11,17 @@
 #include "Field.h"
 
 class PacmanObject : public MazeObject {
+private:
+	int lives = 3;
+protected:
+	int row;
+	int col;
+	PathField* callerField;
+	Field* bottomField;
+	Field* rightField;
+	Field* upperField;
+	Field* leftField;
+
 public:
 	PacmanObject(int row, int col, PathField* field);
 

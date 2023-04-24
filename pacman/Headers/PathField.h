@@ -13,7 +13,20 @@
 #include "Field.h"
 
 class PathField : public Field {
+private:
+	int row;
+	int col;
+	char fieldType;
+	Field* bottomField;
+	Field* upperField;
+	Field* rightField;
+	Field* leftField;
+	char typeOfObject;
 public:
+	void objectMoved();
+
+	MazeObject* fieldObject;
+
 	PathField(int row, int col);
 
 	PathField(int row, int col, char typeOfObject);
@@ -33,4 +46,5 @@ public:
 	void setPacmanObject(MazeObject* fieldObject);
 
 	void setGhostObject(MazeObject* fieldObject);
+	void PathField::setObjectFields(MazeObject* object);
 };

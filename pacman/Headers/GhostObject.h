@@ -10,7 +10,17 @@
 #include "PathField.cpp"
 #include "Field.h"
 
+
 class GhostObject : public MazeObject {
+protected:
+	int row;
+	int col;
+	PathField* callerField;
+	Field* bottomField;
+	Field* rightField;
+	Field* upperField;
+	Field* leftField;
+	Field* leftField;
 public:
 	GhostObject(int row, int col, PathField* field);
 

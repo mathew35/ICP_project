@@ -10,6 +10,7 @@
 #include <string>
 #include "MazeObject.h"
 #include "Maze.h"
+#include "MazeClass.h"
 
 class MazeConfigure {
 public:
@@ -17,5 +18,12 @@ public:
 	bool processLine(std::string line);
 	bool stopReading();
 	Maze createMaze();
+protected:
+	MazeClass* newMaze;
+	bool correctLine = true;
+	bool doneReading = false;
+private:
+	int counLines = 0;
+
 };
 

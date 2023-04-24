@@ -8,6 +8,7 @@
 #include <list>
 
 #include "Field.h"
+#include "MazeObject.h"
 
 class Maze {
 public:

@@ -7,9 +7,8 @@
 
 #include "MazeObject.h"
 
-class MazeObject {
-public:
-	bool equals(MazeObject* obj) {
-		return this == obj;
-	}
-};
+
+bool MazeObject::equals(MazeObject* obj) {
+	return this == obj;
+}
+
