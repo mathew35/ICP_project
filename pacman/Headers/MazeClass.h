@@ -15,9 +15,9 @@ class MazeClass : public Maze {
 public:
 	void createArray(int rows, int cols);
 	int numCols() override;
-	std::list<MazeObject> ghosts() override;
+	std::list<MazeObject*> ghosts() override;
 	int numRows() override;
-	Field* getField() override;
+	Field* getField(int row, int col) override;
 
 	void insertLine(std::string line);
 	void setFields();
