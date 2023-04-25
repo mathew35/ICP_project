@@ -9,6 +9,7 @@
 #include "MazeObject.h"
 #include "PathField.h"
 #include "Field.h"
+class PathField;
 
 class PacmanObject : public MazeObject {
 private:

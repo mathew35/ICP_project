@@ -8,7 +8,7 @@
 
 #include "MazeObject.h"
 #include "PathField.h"
-
+class PathField;
 
 class GhostObject : public MazeObject {
 protected:

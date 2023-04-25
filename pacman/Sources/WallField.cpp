@@ -23,4 +23,3 @@ bool WallField::isEmpty() { return true; }
 
 Field* WallField::nextField(Field::Direction dir) { return nullptr; }
 
-};

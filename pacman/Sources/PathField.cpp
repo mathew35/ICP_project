@@ -9,7 +9,7 @@
 #include "PathField.h"
 
 
-void PathField::PathField(int row, int col) {
+PathField::PathField(int row, int col) {
 	this->col = col;
 	this->row = row;
 	this->fieldType = '.';
@@ -17,7 +17,7 @@ void PathField::PathField(int row, int col) {
 	this->fieldObject = nullptr;
 }
 
-void PathField::PathField(int row, int col, char typeOfObject) {
+PathField::PathField(int row, int col, char typeOfObject) {
 	this->col = col;
 	this->row = row;
 	this->fieldType = '.';

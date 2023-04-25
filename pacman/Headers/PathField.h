@@ -8,6 +8,9 @@
 
 
 #include <typeinfo>
+#include "Field.h"
+#include "PacmanObject.h";
+#include "GhostObject.h"
 
 class PathField : public Field {
 private:

@@ -12,6 +12,7 @@
 #include "Field.h"
 #include "PathField.h"
 #include "WallField.h"
+#include "Maze.h"
 
 class MazeClass : public Maze {
 public:

@@ -14,10 +14,11 @@
 
 class MazeConfigure {
 public:
+	MazeConfigure();
 	void startReading(int rows, int cols);
 	bool processLine(std::string line);
 	bool stopReading();
-	Maze createMaze();
+	Maze* createMaze();
 protected:
 	MazeClass* newMaze;
 	bool correctLine = true;
