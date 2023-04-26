@@ -6,7 +6,7 @@
 */
 
 #include "PacmanObject.h"
-#include "PathField.cpp"
+#include "PathField.h"
 #include "Field.h"
 
 
@@ -61,5 +61,4 @@ bool PacmanObject::decreaseLives() {
 		return false; //RIP Pacman
 	this->lives -= 1;
 	return true;
-}
 };
