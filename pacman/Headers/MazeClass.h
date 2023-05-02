@@ -1,7 +1,8 @@
 /**
 * @brief
 *
-* @author Adrian Horvath(xhorva14)
+* @authors	Adrian Horvath(xhorva14)
+*			Matus Vrablik(xvrabl05)
 *
 */
 #pragma once
@@ -16,6 +17,9 @@
 
 class MazeClass : public Maze {
 public:
+	MazeClass(int rows, int cols);
+	~MazeClass();
+
 	void createArray(int rows, int cols);
 	int numCols() override;
 	std::list<MazeObject*> ghosts() override;

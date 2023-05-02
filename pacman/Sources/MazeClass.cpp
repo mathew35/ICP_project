@@ -1,12 +1,14 @@
 /**
 * @brief
 *
-* @author Adrian Horvath(xhorva14)
+* @authors	Adrian Horvath(xhorva14)
+*			Matus Vrablik(xvrabl05)
 *
 */
 
 #include "MazeClass.h"
 
+#define BOUNDS 2
 
 void MazeClass::horizontalWall(int rows, int cols) {
 	for (int c = 0; c < cols; c++)
@@ -24,6 +26,16 @@ void MazeClass::verticalWall(int rows, int cols) {
 }
 void MazeClass::insertGhost(Field* field) {
 	this->listOfGhosts.push_back(field->get());
+}
+
+MazeClass::MazeClass(int rows, int cols)
+{
+	this->createArray(rows + BOUNDS, cols + BOUNDS);
+}
+
+MazeClass::~MazeClass()
+{
+	//TODO - delete fieldArray?
 }
 
 void MazeClass::createArray(int rows, int cols) {

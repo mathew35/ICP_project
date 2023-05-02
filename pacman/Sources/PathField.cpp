@@ -1,7 +1,8 @@
 /**
 * @brief
 *
-* @author Adrian Horvath(xhorva14)
+* @authors	Adrian Horvath(xhorva14)
+*			Matus Vrablik(xvrabl05)
 *
 */
 
@@ -100,4 +101,9 @@ void PathField::setObjectFields(MazeObject* object) {
 		GhostObject* ghost = static_cast<GhostObject*>(object);
 		ghost->setSurroundinFieldsGhost(this->bottomField, this->rightField, this->upperField, this->leftField, this);
 	}
+}
+
+char PathField::getType()
+{
+	return this->fieldType;
 }

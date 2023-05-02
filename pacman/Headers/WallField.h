@@ -29,4 +29,7 @@ public:
 	bool isEmpty() override;
 
 	Field* nextField(Field::Direction dir);
+
+	char getType() override;
+
 };

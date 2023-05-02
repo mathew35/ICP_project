@@ -1,7 +1,8 @@
 /**
 * @brief
 *
-* @author Adrian Horvath(xhorva14)
+* @authors	Adrian Horvath(xhorva14)
+*			Matúš Vráblik (xvrabl05)
 *
 */
 
@@ -9,11 +10,8 @@
 
 
 
-MazeConfigure::MazeConfigure() {
-
-}
 void MazeConfigure::startReading(int rows, int cols) {
-	//TODO start reading
+	newMaze = new MazeClass(rows, cols);
 }
 bool MazeConfigure::processLine(std::string line) {
 	this->counLines++;

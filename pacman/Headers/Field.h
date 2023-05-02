@@ -27,5 +27,5 @@ public:
 
 	virtual bool contains(MazeObject* var1) = 0;
 
-
+	virtual char getType() = 0;
 };

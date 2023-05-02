@@ -6,7 +6,6 @@
 */
 #pragma once
 
-#include <iostream>
 #include <QtWidgets/QMainWindow>
 #include "ui_mainwindow.h"
 

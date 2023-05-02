@@ -1,7 +1,8 @@
 /**
 * @brief
 *
-* @author Adrian Horvath(xhorva14)
+* @authors	Adrian Horvath(xhorva14)
+*			Matus Vrablik(xvrabl05)
 *
 */
 
@@ -22,4 +23,9 @@ MazeObject* WallField::get() { return nullptr; }
 bool WallField::isEmpty() { return true; }
 
 Field* WallField::nextField(Field::Direction dir) { return nullptr; }
+
+char WallField::getType()
+{
+	return this->fieldType;
+}
 

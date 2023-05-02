@@ -47,4 +47,6 @@ public:
 
 	void setGhostObject(MazeObject* fieldObject);
 	void PathField::setObjectFields(MazeObject* object);
+
+	char getType() override;
 };
