@@ -6,7 +6,7 @@
 
 #include "mainwindow.h"
 
-#define picSize 200
+#define FIELDSIZE 200
 
 mainwindow::mainwindow(QWidget* parent)
 	: QMainWindow(parent)
@@ -71,14 +71,22 @@ void mainwindow::playGame()
 	ui.newGameWidget->setVisible(false);
 	ui.gameWidget->setVisible(true);
 
+	//TODO - add selection from gridPane to loadMap arguments
+	gameInterface->loadMap();
+
 	int paneHeight = ui.gamePane->height();
 	int paneWidth = ui.gamePane->width();
 	QGraphicsScene* newScene = new QGraphicsScene();
 	for (auto wall : gameInterface->getWalls())
 	{
-		QPixmap pix(":/playerFull.webp");
-		newScene->addRect(QRectF(std::get<1>(wall) * picSize, std::get<0>(wall) * picSize, picSize, picSize), QPen(), QBrush(pix.scaled(picSize, picSize, Qt::KeepAspectRatio)));
+		QPixmap pix(":/wall");
+		QPen pen;
+		pen.setWidth(1);
+		newScene->addRect(QRectF(std::get<1>(wall) * FIELDSIZE, std::get<0>(wall) * FIELDSIZE, FIELDSIZE, FIELDSIZE), pen, QBrush(pix.scaled(FIELDSIZE, FIELDSIZE, Qt::KeepAspectRatio)));
 	}
+	tuple<int, int> player = gameInterface->getPlayer();
+	QPixmap pixPlayer(":/player");
+	newScene->addRect(QRectF(std::get<1>(player) * FIELDSIZE, std::get<0>(player) * FIELDSIZE, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(pixPlayer.scaled(FIELDSIZE, FIELDSIZE, Qt::KeepAspectRatio)));
 	ui.gamePane->setScene(newScene);
 	ui.gamePane->fitInView(0, 0, newScene->width(), newScene->height(), Qt::KeepAspectRatio);
 	//ui.gamePane->update();

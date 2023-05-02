@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/">
-        <file>playerEmpty.webp</file>
-        <file>playerFull.webp</file>
+        <file alias="playerOutline">playerEmpty.webp</file>
+        <file alias="player">playerFull.webp</file>
+        <file alias="wall">wall.jpg</file>
     </qresource>
 </RCC>

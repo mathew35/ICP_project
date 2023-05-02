@@ -26,6 +26,7 @@ public:
 
 	bool canMove(Field::Direction var1) override;
 	Field* getField() override;
+	bool isPacman() override;
 	int getLives() override;
 	bool move(Field::Direction dir) override;
 

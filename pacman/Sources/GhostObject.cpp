@@ -47,6 +47,10 @@ bool GhostObject::canMove(Field::Direction dir) {
 Field* GhostObject::getField() {
 	return this->callerField;
 }
+bool GhostObject::isPacman()
+{
+	return false;
+}
 int GhostObject::getLives() {
 	return 0;
 }

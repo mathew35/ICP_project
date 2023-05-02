@@ -49,6 +49,10 @@ bool PacmanObject::canMove(Field::Direction dir) {
 Field* PacmanObject::getField() {
 	return this->callerField;
 }
+bool PacmanObject::isPacman()
+{
+	return true;
+}
 int PacmanObject::getLives() {
 	return this->lives;
 }

@@ -17,9 +17,7 @@ public:
 
 	virtual Field* getField() = 0;
 
-	virtual bool isPacman() {
-		return false;
-	}
+	virtual bool isPacman() = 0;
 	virtual int getLives() = 0;
 	bool equals(MazeObject* obj);
 };

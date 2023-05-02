@@ -80,7 +80,18 @@ list<tuple<int, int>> GameInterface::getKeys()
 
 tuple<int, int> GameInterface::getPlayer()
 {
-	return tuple<int, int>();
+	for (int x = 0; x < maze->numRows(); x++)
+	{
+		for (int y = 0; y < maze->numCols(); y++)
+		{
+			auto field = maze->getField(x, y);
+			if (field != NULL && field->get() != NULL && field->get()->isPacman())
+			{
+				return tuple(x, y);
+			}
+		}
+	}
+	throw(new exception("Player not found"));
 }
 
 tuple<int, int> GameInterface::getDoor()
