@@ -12,6 +12,12 @@ class GameInterface
 {
 protected:
 	MazeConfigure config;
+	list<tuple<int, int>> ghosts;
+	list<tuple<int, int>> walls;
+	list<tuple<int, int>> keys;
+	tuple<int, int> door;
+	tuple<int, int> player;
+	int lives;
 	Maze* maze;
 
 public:

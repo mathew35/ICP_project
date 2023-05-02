@@ -27,6 +27,45 @@ void GameInterface::loadMap()
 
 	maze = config.createMaze();
 	//TODO - add signal that map is created?
+
+
+	list<tuple<int, int>> walls = {};
+	list<tuple<int, int>> ghosts = {};
+	tuple<int, int> player = tuple(-1, -1);
+	int lives = 0;
+	for (int x = 0; x < maze->numRows(); x++)
+	{
+		for (int y = 0; y < maze->numCols(); y++)
+		{
+			auto field = maze->getField(x, y);
+			//walls
+			if (field == NULL || field->getType() == 'X')
+			{
+				walls.push_back(tuple(x, y));
+			}
+			//ghosts
+			if (field != NULL && field->get() != NULL && !field->get()->isPacman())
+			{
+				ghosts.push_back(tuple(x, y));
+			}
+			//player
+			if (field != NULL && field->get() != NULL && field->get()->isPacman())
+			{
+				player = tuple(x, y);
+				lives = field->get()->getLives();
+			}
+			//door
+			//TODO
+			//keys
+			//TODO
+		}
+	}
+
+	this->walls = walls;
+	this->ghosts = ghosts;
+	if (std::get<0>(player) < 0 || std::get<1>(player) < 0) { throw(new exception("Player not found")); }
+	this->player = player;
+	this->lives = lives;
 }
 
 void GameInterface::startGame()
@@ -53,60 +92,25 @@ tuple<int, int> GameInterface::getMapSize()
 
 list<tuple<int, int>> GameInterface::getWalls()
 {
-	list<tuple<int, int>> walls = {};
-	for (int x = 0; x < maze->numRows(); x++)
-	{
-		for (int y = 0; y < maze->numCols(); y++)
-		{
-			auto field = maze->getField(x, y);
-
-			if (field == NULL || field->getType() == 'X') {
-				walls.push_back(tuple(x, y));
-			}
-		}
-	}
-	return walls;
+	return this->walls;
 }
 
 list<tuple<int, int>> GameInterface::getGhosts()
 {
-	list<tuple<int, int>> ghosts = {};
-	for (int x = 0; x < maze->numRows(); x++)
-	{
-		for (int y = 0; y < maze->numCols(); y++)
-		{
-			auto field = maze->getField(x, y);
-			if (field != NULL && field->get() != NULL && !field->get()->isPacman())
-			{
-				ghosts.push_back(tuple(x, y));
-			}
-		}
-	}
-	return ghosts;
+	return this->ghosts;
 }
 
 list<tuple<int, int>> GameInterface::getKeys()
 {
-	return list<tuple<int, int>>();
+	return this->keys;
 }
 
 tuple<int, int> GameInterface::getPlayer()
 {
-	for (int x = 0; x < maze->numRows(); x++)
-	{
-		for (int y = 0; y < maze->numCols(); y++)
-		{
-			auto field = maze->getField(x, y);
-			if (field != NULL && field->get() != NULL && field->get()->isPacman())
-			{
-				return tuple(x, y);
-			}
-		}
-	}
-	throw(new exception("Player not found"));
+	return this->player;
 }
 
 tuple<int, int> GameInterface::getDoor()
 {
-	return tuple<int, int>();
+	return this->door;
 }
