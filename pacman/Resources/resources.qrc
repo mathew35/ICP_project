@@ -3,5 +3,6 @@
         <file alias="playerOutline">playerEmpty.webp</file>
         <file alias="player">playerFull.webp</file>
         <file alias="wall">wall.jpg</file>
+        <file alias="ghost">ghost.png</file>
     </qresource>
 </RCC>

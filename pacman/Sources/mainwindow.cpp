@@ -77,16 +77,25 @@ void mainwindow::playGame()
 	int paneHeight = ui.gamePane->height();
 	int paneWidth = ui.gamePane->width();
 	QGraphicsScene* newScene = new QGraphicsScene();
+
+	QPixmap pix(":/wall");
+	QPen pen;
+	pen.setWidth(1);
 	for (auto wall : gameInterface->getWalls())
 	{
-		QPixmap pix(":/wall");
-		QPen pen;
-		pen.setWidth(1);
 		newScene->addRect(QRectF(std::get<1>(wall) * FIELDSIZE, std::get<0>(wall) * FIELDSIZE, FIELDSIZE, FIELDSIZE), pen, QBrush(pix.scaled(FIELDSIZE, FIELDSIZE, Qt::KeepAspectRatio)));
 	}
+
 	tuple<int, int> player = gameInterface->getPlayer();
 	QPixmap pixPlayer(":/player");
 	newScene->addRect(QRectF(std::get<1>(player) * FIELDSIZE, std::get<0>(player) * FIELDSIZE, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(pixPlayer.scaled(FIELDSIZE, FIELDSIZE, Qt::KeepAspectRatio)));
+
+	QPixmap pixGhost(":/ghost");
+	for (auto ghost : gameInterface->getGhosts())
+	{
+		newScene->addRect(QRectF(std::get<1>(ghost) * FIELDSIZE, std::get<0>(ghost) * FIELDSIZE, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(pixGhost.scaled(FIELDSIZE, FIELDSIZE, Qt::KeepAspectRatio)));
+	}
+
 	ui.gamePane->setScene(newScene);
 	ui.gamePane->fitInView(0, 0, newScene->width(), newScene->height(), Qt::KeepAspectRatio);
 	//ui.gamePane->update();

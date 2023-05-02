@@ -70,7 +70,19 @@ list<tuple<int, int>> GameInterface::getWalls()
 
 list<tuple<int, int>> GameInterface::getGhosts()
 {
-	return list<tuple<int, int>>();
+	list<tuple<int, int>> ghosts = {};
+	for (int x = 0; x < maze->numRows(); x++)
+	{
+		for (int y = 0; y < maze->numCols(); y++)
+		{
+			auto field = maze->getField(x, y);
+			if (field != NULL && field->get() != NULL && !field->get()->isPacman())
+			{
+				ghosts.push_back(tuple(x, y));
+			}
+		}
+	}
+	return ghosts;
 }
 
 list<tuple<int, int>> GameInterface::getKeys()
