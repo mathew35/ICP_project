@@ -1,7 +1,7 @@
 /**
 * @brief The entry point for the application.
 *
-* @author Matúš Vráblik(xvrabl05)
+* @author Matus Vrablik(xvrabl05)
 *
 */
 

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>600</width>
-    <height>400</height>
+    <width>800</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="contextMenuPolicy">
@@ -17,42 +17,208 @@
    <string>Pacman</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QComboBox" name="comboBox">
+   <widget class="QWidget" name="newGameWidget" native="true">
     <property name="geometry">
      <rect>
-      <x>90</x>
-      <y>60</y>
-      <width>151</width>
-      <height>61</height>
+      <x>0</x>
+      <y>0</y>
+      <width>800</width>
+      <height>560</height>
      </rect>
     </property>
-    <item>
-     <property name="text">
-      <string>Testing Empty</string>
+    <widget class="QPushButton" name="loadMapButton">
+     <property name="geometry">
+      <rect>
+       <x>460</x>
+       <y>340</y>
+       <width>300</width>
+       <height>60</height>
+      </rect>
      </property>
-    </item>
-    <item>
      <property name="text">
-      <string>Testing Second</string>
+      <string>Load map from file</string>
      </property>
-    </item>
-    <item>
+    </widget>
+    <widget class="QPushButton" name="playMapButton">
+     <property name="geometry">
+      <rect>
+       <x>40</x>
+       <y>340</y>
+       <width>300</width>
+       <height>61</height>
+      </rect>
+     </property>
      <property name="text">
-      <string>Testing Third</string>
+      <string>Play selected map</string>
      </property>
-    </item>
+    </widget>
+    <widget class="QPushButton" name="backToMainMenuButton">
+     <property name="geometry">
+      <rect>
+       <x>560</x>
+       <y>490</y>
+       <width>200</width>
+       <height>40</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Back to Main Menu</string>
+     </property>
+    </widget>
+    <widget class="QScrollArea" name="scrollArea">
+     <property name="geometry">
+      <rect>
+       <x>40</x>
+       <y>60</y>
+       <width>721</width>
+       <height>271</height>
+      </rect>
+     </property>
+     <property name="widgetResizable">
+      <bool>true</bool>
+     </property>
+     <widget class="QWidget" name="scrollAreaWidgetContents">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>16</width>
+        <height>269</height>
+       </rect>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <widget class="QWidget" name="gridLayoutWidget">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>721</width>
+         <height>591</height>
+        </rect>
+       </property>
+       <layout class="QGridLayout" name="gridLayout">
+        <property name="sizeConstraint">
+         <enum>QLayout::SetFixedSize</enum>
+        </property>
+        <property name="leftMargin">
+         <number>6</number>
+        </property>
+        <property name="topMargin">
+         <number>6</number>
+        </property>
+        <property name="rightMargin">
+         <number>6</number>
+        </property>
+        <property name="bottomMargin">
+         <number>6</number>
+        </property>
+        <property name="horizontalSpacing">
+         <number>6</number>
+        </property>
+       </layout>
+      </widget>
+     </widget>
+    </widget>
    </widget>
+   <widget class="QWidget" name="mainMenuWidget" native="true">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>800</width>
+      <height>560</height>
+     </rect>
+    </property>
+    <widget class="QPushButton" name="newGameButton">
+     <property name="geometry">
+      <rect>
+       <x>300</x>
+       <y>150</y>
+       <width>200</width>
+       <height>40</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>New Game</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="loadGameButton">
+     <property name="geometry">
+      <rect>
+       <x>300</x>
+       <y>200</y>
+       <width>200</width>
+       <height>40</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Load Game</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="exitButton">
+     <property name="geometry">
+      <rect>
+       <x>300</x>
+       <y>330</y>
+       <width>200</width>
+       <height>40</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Exit</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="gameWidget" native="true">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>800</width>
+      <height>600</height>
+     </rect>
+    </property>
+    <widget class="QGraphicsView" name="gamePane">
+     <property name="geometry">
+      <rect>
+       <x>130</x>
+       <y>0</y>
+       <width>540</width>
+       <height>540</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QGraphicsView" name="gameGuidePane">
+     <property name="geometry">
+      <rect>
+       <x>680</x>
+       <y>10</y>
+       <width>110</width>
+       <height>520</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QGraphicsView" name="gameScorePane">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>110</width>
+       <height>520</height>
+      </rect>
+     </property>
+    </widget>
+   </widget>
+   <zorder>gameWidget</zorder>
+   <zorder>newGameWidget</zorder>
+   <zorder>mainMenuWidget</zorder>
   </widget>
-  <widget class="QMenuBar" name="menuBar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>600</width>
-     <height>21</height>
-    </rect>
-   </property>
-  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
@@ -61,7 +227,16 @@
     <bool>false</bool>
    </attribute>
   </widget>
-  <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>21</height>
+    </rect>
+   </property>
+  </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>

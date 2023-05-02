@@ -31,11 +31,13 @@ find_package(Qt5 REQUIRED COMPONENTS Widgets Core OpenGl Xml)
 set(FORMS_DIR "${CMAKE_SOURCE_DIR}/Forms")
 set(SOURCES_DIR "${CMAKE_SOURCE_DIR}/Sources")
 set(HEADERS_DIR "${CMAKE_SOURCE_DIR}/Headers")
+set(RESOURCES_DIR "${CMAKE_SOURCE_DIR}/Resources")
 
 file(GLOB_RECURSE SOURCES
 	"${SOURCES_DIR}/*.cpp"
 	"${HEADERS_DIR}/*.h"
 	"${FORMS_DIR}/*.ui"
+	"${RESOURCES_DIR}/*"
 )
 
 # Add forms to AUTOIC search path
@@ -43,7 +45,7 @@ set(CMAKE_AUTOUIC_SEARCH_PATHS ${CMAKE_AUTOIC_SEARCH_PATHS} ${FORMS_DIR})
 
 # Add source to this project's executable.
 add_executable (pacman ${SOURCES})
-target_include_directories(pacman PRIVATE ${FORMS_DIR} PRIVATE ${HEADERS_DIR} PRIVATE ${SOURCES_DIR})
+target_include_directories(pacman PRIVATE ${FORMS_DIR} PRIVATE ${HEADERS_DIR} PRIVATE ${SOURCES_DIR} PRIVATE ${RESOURCES_DIR})
 target_link_libraries(pacman PRIVATE Qt5::Widgets)
 set_target_properties(pacman PROPERTIES
 	WIN32_EXECUTABLE ON

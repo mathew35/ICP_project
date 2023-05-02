@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>playerEmpty.webp</file>
+        <file>playerFull.webp</file>
+    </qresource>
+</RCC>

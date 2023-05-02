@@ -1,13 +1,16 @@
 /**
-* Header file for main window of application.
+* @brief Header file for main window of application.
 *
-* @author Matúš Vráblik(xvrabl05)
+* @author Matus Vrablik(xvrabl05)
 *
 */
 #pragma once
 
 #include <QtWidgets/QMainWindow>
+#include <QtWidgets/QGraphicsRectItem>
+#include <QPixmap>
 #include "ui_mainwindow.h"
+#include "GameInterface.h"
 
 class mainwindow : public QMainWindow
 {
@@ -17,7 +20,20 @@ public:
 	mainwindow(QWidget* parent = nullptr);
 	~mainwindow();
 
+private slots:
+	void newButtonClicked();
+	void loadButtonClicked();
+	void exitButtonClicked();
+	void loadMapButtonClicked();
+	void playMapButtonClicked();
+	void backToMainMenuButtonClicked();
+
 private:
 	Ui::mainwindowClass ui;
+
+	void playGame();
+
+protected:
+	GameInterface* gameInterface;
 };
 
