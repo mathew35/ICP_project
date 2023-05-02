@@ -8,9 +8,12 @@
 
 #include "MazeObject.h"
 #include "PathField.h"
+#include "GameInterface.h"
 class PathField;
 
 class GhostObject : public MazeObject {
+private:
+	GameInterface* observer;
 protected:
 	int row;
 	int col;
@@ -29,5 +32,8 @@ public:
 	bool isPacman() override;
 	int getLives() override;
 	bool move(Field::Direction dir) override;
+
+	void attach(GameInterface* o) override;
+	void detach(GameInterface* o) override;
 
 };

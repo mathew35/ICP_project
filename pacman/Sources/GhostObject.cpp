@@ -55,6 +55,18 @@ int GhostObject::getLives() {
 	return 0;
 }
 bool GhostObject::move(Field::Direction dir) {
+	//observer->notifyMove(this->row, this->col, )
 	//TODO move
+		//TODO decrease lives when meet pacman
 	return true;
+}
+void GhostObject::attach(GameInterface* o) {
+	this->observer = o;
+}
+
+void GhostObject::detach(GameInterface* o) {
+	if (observer == o)
+	{
+		this->observer = nullptr;
+	}
 }

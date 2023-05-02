@@ -92,11 +92,13 @@ void GameInterface::loadMap()
 			//ghosts
 			if (field != NULL && field->get() != NULL && !field->get()->isPacman())
 			{
+				field->get()->attach(this);
 				ghosts.push_back(tuple(x, y));
 			}
 			//player
 			if (field != NULL && field->get() != NULL && field->get()->isPacman())
 			{
+				field->get()->attach(this);
 				player = tuple(x, y);
 				lives = field->get()->getLives();
 			}
@@ -159,4 +161,29 @@ tuple<int, int> GameInterface::getPlayer()
 tuple<int, int> GameInterface::getDoor()
 {
 	return this->door;
+}
+
+void GameInterface::notifyMove(int fromX, int fromY, int toX, int toY)
+{
+	//TODO
+}
+
+void GameInterface::notifyPickKey(int x, int y)
+{
+	//TODO
+}
+
+void GameInterface::notifyOpenDoors(int x, int y)
+{
+	//TODO
+}
+
+void GameInterface::notifyLives()
+{
+	//TODO
+}
+
+void GameInterface::notifyEndLevel()
+{
+	//TODO
 }

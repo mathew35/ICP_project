@@ -1,3 +1,4 @@
+#include "PacmanObject.h"
 /**
 * @brief
 *
@@ -57,12 +58,28 @@ int PacmanObject::getLives() {
 	return this->lives;
 }
 bool PacmanObject::move(Field::Direction dir) {
+	//observer->notifyMove(this->row, this->col, )
 	//TODO move
+	//TODO end game when on doors
+	//TODO decrease lives when meet ghost
+	//TODO pick up key
 	return true;
 }
 bool PacmanObject::decreaseLives() {
+	observer->notifyLives();
+	//TODO Pacman dead
 	if (this->lives == 0)
 		return false; //RIP Pacman
 	this->lives -= 1;
 	return true;
+}
+void PacmanObject::attach(GameInterface* o) {
+	this->observer = o;
+}
+
+void PacmanObject::detach(GameInterface* o) {
+	if (observer == o)
+	{
+		this->observer = nullptr;
+	}
 };

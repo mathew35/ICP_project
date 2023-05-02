@@ -1,7 +1,7 @@
-/**
+﻿/**
  * @brief Game interface header file.
  *
- * @author Mat�� Vr�blik (xvrabl05)
+ * @author Matúš Vráblik (xvrabl05)
  */
 #pragma once
 #include "MazeConfigure.h"
@@ -35,5 +35,14 @@ public:
 	tuple<int, int> getPlayer();
 	tuple<int, int> getDoor();
 
+	void notifyMove(int fromX, int fromY, int toX, int toY);
+	void notifyPickKey(int x, int y);
+	void notifyOpenDoors(int x, int y);
+	void notifyLives();
+	void notifyEndLevel();
+
 private:
 };
+
+
+/*Pohyby strety ducha a hráča - životy , ďalej keď vezme kľúč a keď pôjde do dverí a ukončí level/hru*/

@@ -20,4 +20,7 @@ public:
 	virtual bool isPacman() = 0;
 	virtual int getLives() = 0;
 	bool equals(MazeObject* obj);
+
+	virtual void attach(GameInterface* o) = 0;
+	virtual void detach(GameInterface* o) = 0;
 };
