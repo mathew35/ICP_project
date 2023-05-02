@@ -15,6 +15,52 @@ GameInterface::~GameInterface()
 {
 }
 
+void GameInterface::loadMap(std::string file)
+{
+	config.loadMapFromFile(file);
+	maze = config.createMaze();
+	//TODO - add signal that map is created?
+
+
+	list<tuple<int, int>> walls = {};
+	list<tuple<int, int>> ghosts = {};
+	tuple<int, int> player = tuple(-1, -1);
+	int lives = 0;
+	for (int x = 0; x < maze->numRows(); x++)
+	{
+		for (int y = 0; y < maze->numCols(); y++)
+		{
+			auto field = maze->getField(x, y);
+			//walls
+			if (field == NULL || field->getType() == 'X')
+			{
+				walls.push_back(tuple(x, y));
+			}
+			//ghosts
+			if (field != NULL && field->get() != NULL && !field->get()->isPacman())
+			{
+				ghosts.push_back(tuple(x, y));
+			}
+			//player
+			if (field != NULL && field->get() != NULL && field->get()->isPacman())
+			{
+				player = tuple(x, y);
+				lives = field->get()->getLives();
+			}
+			//door
+			//TODO
+			//keys
+			//TODO
+		}
+	}
+
+	this->walls = walls;
+	this->ghosts = ghosts;
+	if (std::get<0>(player) < 0 || std::get<1>(player) < 0) { throw(new exception("Player not found")); }
+	this->player = player;
+	this->lives = lives;
+}
+
 void GameInterface::loadMap()
 {
 	//TODO - add prompt to select file / function to load from file

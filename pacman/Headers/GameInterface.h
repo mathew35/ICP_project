@@ -25,6 +25,7 @@ public:
 	GameInterface();
 	~GameInterface();
 	void loadMap();
+	void loadMap(std::string file);
 	void startGame();
 	int getLives();
 	tuple<int, int> getMapSize();

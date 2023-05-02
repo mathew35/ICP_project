@@ -9,6 +9,22 @@
 #include "MazeConfigure.h"
 
 
+void MazeConfigure::loadMapFromFile(std::string file)
+{
+	using namespace std;
+	ifstream map(file);
+	string lineText;
+	if (!getline(map, lineText, ',')) { return; }
+	int rows = stoi(lineText);
+	if (!getline(map, lineText)) { return; }
+	int cols = stoi(lineText);
+	this->startReading(rows, cols);
+	while (getline(map, lineText))
+	{
+		this->processLine(lineText);
+	}
+	this->stopReading();
+}
 
 void MazeConfigure::startReading(int rows, int cols) {
 	newMaze = new MazeClass(rows, cols);

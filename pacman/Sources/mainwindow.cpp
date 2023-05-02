@@ -51,7 +51,8 @@ void mainwindow::exitButtonClicked()
 
 void mainwindow::loadMapButtonClicked()
 {
-	gameInterface->loadMap();
+	QString file = QFileDialog::getOpenFileName(this, "Choose map file", "C://", "Text file (*.txt)");
+	gameInterface->loadMap(file.toStdString());
 	this->playGame();
 }
 

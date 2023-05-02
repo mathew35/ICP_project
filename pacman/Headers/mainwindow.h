@@ -9,6 +9,7 @@
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QGraphicsRectItem>
 #include <QPixmap>
+#include <QFileDialog>
 #include "ui_mainwindow.h"
 #include "GameInterface.h"
 
