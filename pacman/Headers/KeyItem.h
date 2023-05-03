@@ -14,5 +14,6 @@ protected:
 	int row;
 	int col;
 public:
-
+	KeyItem(int row, int col);
+	~KeyItem();
 };
