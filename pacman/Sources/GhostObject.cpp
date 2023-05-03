@@ -66,6 +66,16 @@ bool GhostObject::move(Field::Direction dir) {
 			prevField = this->callerField;
 		}
 		prevField->fieldObject = nullptr;
+		if (!(nextField->isEmpty()))
+		{
+			MazeObject* object = nextField->get();
+			if (object->isPacman())
+			{
+				PacmanObject* pacman = static_cast<PacmanObject*>(object);
+				pacman->decreaseLives();
+			}
+		}
+		//TODO 2 ghost same field
 		nextField->setGhostObject(this);
 		observer->notifyMove(this->row, this->col, this->row, this->col - 1);
 		this->col = -1;
@@ -77,6 +87,15 @@ bool GhostObject::move(Field::Direction dir) {
 			prevField = this->callerField;
 		}
 		prevField->fieldObject = nullptr;
+		if (!(nextField->isEmpty()))
+		{
+			MazeObject* object = nextField->get();
+			if (object->isPacman())
+			{
+				PacmanObject* pacman = static_cast<PacmanObject*>(object);
+				pacman->decreaseLives();
+			}
+		}
 		nextField->setGhostObject(this);
 		observer->notifyMove(this->row, this->col, this->row - 1, this->col);
 		this->row = -1;
@@ -88,6 +107,15 @@ bool GhostObject::move(Field::Direction dir) {
 			prevField = this->callerField;
 		}
 		prevField->fieldObject = nullptr;
+		if (!(nextField->isEmpty()))
+		{
+			MazeObject* object = nextField->get();
+			if (object->isPacman())
+			{
+				PacmanObject* pacman = static_cast<PacmanObject*>(object);
+				pacman->decreaseLives();
+			}
+		}
 		nextField->setGhostObject(this);
 		observer->notifyMove(this->row, this->col, this->row, this->col + 1);
 		this->col = +1;
@@ -99,6 +127,15 @@ bool GhostObject::move(Field::Direction dir) {
 			prevField = this->callerField;
 		}
 		prevField->fieldObject = nullptr;
+		if (!(nextField->isEmpty()))
+		{
+			MazeObject* object = nextField->get();
+			if (object->isPacman())
+			{
+				PacmanObject* pacman = static_cast<PacmanObject*>(object);
+				pacman->decreaseLives();
+			}
+		}
 		nextField->setGhostObject(this);
 		observer->notifyMove(this->row, this->col, this->row + 1, this->col);
 		this->row = +1;
@@ -106,7 +143,6 @@ bool GhostObject::move(Field::Direction dir) {
 	default:
 		return false;
 	}
-	//TODO decrease lives when meet pacman
 }
 void GhostObject::attach(GameInterface* o) {
 	this->observer = o;

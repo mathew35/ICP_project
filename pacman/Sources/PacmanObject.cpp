@@ -63,45 +63,65 @@ bool PacmanObject::move(Field::Direction dir) {
 	switch (dir)
 	{
 	case Field::L:
-		if (this->leftField->canMove())
+		if (!(this->leftField->canMove()))
 		{
-			nextField = static_cast<PathField*>(this->leftField);
-			prevField = this->callerField;
+			return false;
 		}
+		nextField = static_cast<PathField*>(this->leftField);
+		prevField = this->callerField;
 		prevField->fieldObject = nullptr;
+		if (!(nextField->isEmpty()))
+		{
+			this->decreaseLives();
+		}
 		nextField->setPacmanObject(this);
 		observer->notifyMove(this->row, this->col, this->row, this->col - 1);
 		this->col = -1;
 		return true;
 	case Field::U:
-		if (this->upperField->canMove())
+		if (!(this->upperField->canMove()))
 		{
-			nextField = static_cast<PathField*>(this->upperField);
-			prevField = this->callerField;
+			return false;
 		}
+		nextField = static_cast<PathField*>(this->upperField);
+		prevField = this->callerField;
 		prevField->fieldObject = nullptr;
+		if (!(nextField->isEmpty()))
+		{
+			this->decreaseLives();
+		}
 		nextField->setPacmanObject(this);
 		observer->notifyMove(this->row, this->col, this->row - 1, this->col);
 		this->row = -1;
 		return true;
 	case Field::R:
-		if (this->rightField->canMove())
+		if (!(this->rightField->canMove()))
 		{
-			nextField = static_cast<PathField*>(this->rightField);
-			prevField = this->callerField;
+			return false;
 		}
+		nextField = static_cast<PathField*>(this->rightField);
+		prevField = this->callerField;
 		prevField->fieldObject = nullptr;
+		if (!(nextField->isEmpty()))
+		{
+			this->decreaseLives();
+		}
 		nextField->setPacmanObject(this);
 		observer->notifyMove(this->row, this->col, this->row, this->col + 1);
 		this->col = +1;
 		return true;
 	case Field::D:
-		if (this->bottomField->canMove())
+		if (!(this->bottomField->canMove()))
 		{
-			nextField = static_cast<PathField*>(this->bottomField);
-			prevField = this->callerField;
+			return false;
 		}
+		nextField = static_cast<PathField*>(this->bottomField);
+		prevField = this->callerField;
 		prevField->fieldObject = nullptr;
+		if (!(nextField->isEmpty()))
+		{
+			this->decreaseLives();
+		}
 		nextField->setPacmanObject(this);
 		observer->notifyMove(this->row, this->col, this->row + 1, this->col);
 		this->row = +1;
@@ -110,14 +130,15 @@ bool PacmanObject::move(Field::Direction dir) {
 		return false;
 	}
 	//TODO end game when on doors
-	//TODO decrease lives when meet ghost
 	//TODO pick up key
 }
 bool PacmanObject::decreaseLives() {
 	observer->notifyLives();
 	//TODO Pacman dead
-	if (this->lives == 0)
+	if (this->lives == 0) {
+		observer->notifyGameOver();
 		return false; //RIP Pacman
+	}
 	this->lives -= 1;
 	return true;
 }

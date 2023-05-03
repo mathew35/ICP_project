@@ -40,7 +40,7 @@ public:
 	void notifyOpenDoors(int x, int y);
 	void notifyLives();
 	void notifyEndLevel();
-
+	void notifyGameOver();
 private:
 };
 

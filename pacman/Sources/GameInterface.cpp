@@ -187,3 +187,8 @@ void GameInterface::notifyEndLevel()
 {
 	//TODO
 }
+
+void GameInterface::notifyGameOver()
+{
+	//TODO
+}

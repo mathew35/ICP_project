@@ -11,6 +11,7 @@
 #include "Field.h"
 #include "PacmanObject.h"
 #include "GhostObject.h"
+#include "MazeItem.h"
 
 class PathField : public Field {
 private:
@@ -22,6 +23,8 @@ private:
 	Field* rightField;
 	Field* leftField;
 	char typeOfObject;
+	MazeItem* item = nullptr;
+
 public:
 	void objectMoved();
 
@@ -46,7 +49,14 @@ public:
 	void setPacmanObject(MazeObject* fieldObject);
 
 	void setGhostObject(MazeObject* fieldObject);
+
 	void PathField::setObjectFields(MazeObject* object);
+
+	bool hasItem();
+
+	MazeItem* getItem();
+
+	void setItem(MazeItem* item);
 
 	char getType() override;
 };

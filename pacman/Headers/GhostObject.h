@@ -8,7 +8,6 @@
 
 #include "MazeObject.h"
 #include "PathField.h"
-#include "GameInterface.h"
 class PathField;
 
 class GhostObject : public MazeObject {
