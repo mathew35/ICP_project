@@ -34,7 +34,10 @@ PathField::PathField(int row, int col, char typeOfObject) {
 }
 
 void PathField::setSurroundingFields(Field* bottom, Field* right, Field* upper, Field* left) {
-	//TODO surroundingfields
+	this->bottomField = bottom;
+	this->rightField = right;
+	this->upperField = upper;
+	this->leftField = left;
 }
 
 void PathField::objectMoved() { this->fieldObject = nullptr; }
@@ -82,13 +85,15 @@ Field* PathField::nextField(Field::Direction dirs) {
 void PathField::setPacmanObject(MazeObject* fieldObject) {
 	this->fieldObject = fieldObject;
 	this->typeOfObject = 'S';
-	this->setSurroundingFields(this->bottomField, this->rightField, this->upperField, this->leftField);
+	this->setObjectFields(fieldObject);
+	//this->setSurroundingFields(this->bottomField, this->rightField, this->upperField, this->leftField);
 }
 
 void PathField::setGhostObject(MazeObject* fieldObject) {
 	this->fieldObject = fieldObject;
 	this->typeOfObject = 'G';
-	this->setSurroundingFields(this->bottomField, this->rightField, this->upperField, this->leftField);
+	this->setObjectFields(fieldObject);
+	//this->setSurroundingFields(this->bottomField, this->rightField, this->upperField, this->leftField);
 }
 
 void PathField::setObjectFields(MazeObject* object) {

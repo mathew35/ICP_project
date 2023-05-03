@@ -58,12 +58,60 @@ int PacmanObject::getLives() {
 	return this->lives;
 }
 bool PacmanObject::move(Field::Direction dir) {
-	//observer->notifyMove(this->row, this->col, )
-	//TODO move
+	PathField* nextField;
+	PathField* prevField;
+	switch (dir)
+	{
+	case Field::L:
+		if (this->leftField->canMove())
+		{
+			nextField = static_cast<PathField*>(this->leftField);
+			prevField = this->callerField;
+		}
+		prevField->fieldObject = nullptr;
+		nextField->setPacmanObject(this);
+		observer->notifyMove(this->row, this->col, this->row, this->col - 1);
+		this->col = -1;
+		return true;
+	case Field::U:
+		if (this->upperField->canMove())
+		{
+			nextField = static_cast<PathField*>(this->upperField);
+			prevField = this->callerField;
+		}
+		prevField->fieldObject = nullptr;
+		nextField->setPacmanObject(this);
+		observer->notifyMove(this->row, this->col, this->row - 1, this->col);
+		this->row = -1;
+		return true;
+	case Field::R:
+		if (this->rightField->canMove())
+		{
+			nextField = static_cast<PathField*>(this->rightField);
+			prevField = this->callerField;
+		}
+		prevField->fieldObject = nullptr;
+		nextField->setPacmanObject(this);
+		observer->notifyMove(this->row, this->col, this->row, this->col + 1);
+		this->col = +1;
+		return true;
+	case Field::D:
+		if (this->bottomField->canMove())
+		{
+			nextField = static_cast<PathField*>(this->bottomField);
+			prevField = this->callerField;
+		}
+		prevField->fieldObject = nullptr;
+		nextField->setPacmanObject(this);
+		observer->notifyMove(this->row, this->col, this->row + 1, this->col);
+		this->row = +1;
+		return true;
+	default:
+		return false;
+	}
 	//TODO end game when on doors
 	//TODO decrease lives when meet ghost
 	//TODO pick up key
-	return true;
 }
 bool PacmanObject::decreaseLives() {
 	observer->notifyLives();
