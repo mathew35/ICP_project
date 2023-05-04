@@ -147,7 +147,7 @@
       <string>New Game</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="loadGameButton">
+    <widget class="QPushButton" name="loadGameLogButton">
      <property name="geometry">
       <rect>
        <x>300</x>
@@ -240,7 +240,7 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
-  <include location="resources.qrc"/>
+  <include location="../Resources/resources.qrc"/>
  </resources>
  <connections/>
 </ui>

@@ -6,10 +6,12 @@
 
 #include "GameInterface.h"
 
-GameInterface::GameInterface()
+GameInterface::GameInterface(mainwindow* window)
 {
 	config = new MazeConfigure();
 	maze = NULL;
+	maxLives = -1;
+	lives = -1;
 }
 
 GameInterface::~GameInterface()
@@ -60,6 +62,7 @@ void GameInterface::loadMap(std::string file)
 	if (std::get<0>(player) < 0 || std::get<1>(player) < 0) { throw(new exception("Player not found")); }
 	this->player = player;
 	this->lives = lives;
+	if (this->maxLives == -1) { this->maxLives = lives; }
 }
 
 void GameInterface::loadMap()
@@ -123,15 +126,12 @@ void GameInterface::startGame()
 
 int GameInterface::getLives()
 {
-	auto objects = maze->ghosts();
-	for (const auto obj : objects)
-	{
-		if (obj->isPacman())
-		{
-			return obj->getLives();
-		}
-	}
-	return 0;
+	return this->lives;
+}
+
+int GameInterface::getMaxLives()
+{
+	return this->maxLives;
 }
 
 tuple<int, int> GameInterface::getMapSize()

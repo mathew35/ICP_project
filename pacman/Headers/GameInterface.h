@@ -7,6 +7,7 @@
 #include "MazeConfigure.h"
 class MazeConfigure;
 class Maze;
+class mainwindow;
 
 using namespace std;
 class GameInterface
@@ -19,16 +20,18 @@ protected:
 	tuple<int, int> door;
 	tuple<int, int> player;
 	int lives;
+	int maxLives;
 	Maze* maze;
 
 public:
 
-	GameInterface();
+	GameInterface(mainwindow* window);
 	~GameInterface();
 	void loadMap();
 	void loadMap(std::string file);
 	void startGame();
 	int getLives();
+	int getMaxLives();
 	tuple<int, int> getMapSize();
 	list<tuple<int, int>> getWalls();
 	list<tuple<int, int>> getGhosts();

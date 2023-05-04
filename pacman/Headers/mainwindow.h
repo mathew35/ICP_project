@@ -22,8 +22,8 @@ public:
 	~mainwindow();
 
 private slots:
-	void newButtonClicked();
-	void loadButtonClicked();
+	void newGameButtonClicked();
+	void loadGameLogButtonClicked();
 	void exitButtonClicked();
 	void loadMapButtonClicked();
 	void playMapButtonClicked();
@@ -33,6 +33,10 @@ private:
 	Ui::mainwindowClass ui;
 
 	void playGame();
+	void drawWalls(QGraphicsScene* scene);
+	void drawPlayer(QGraphicsScene* scene);
+	void drawGhosts(QGraphicsScene* scene);
+	void drawLives(QGraphicsScene* scene);
 
 protected:
 	GameInterface* gameInterface;
