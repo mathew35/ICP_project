@@ -8,8 +8,6 @@
 
 
 #include <typeinfo>
-#include "PacmanObject.h"
-#include "GhostObject.h"
 #include "Field.h"
 
 class WallField : public Field {

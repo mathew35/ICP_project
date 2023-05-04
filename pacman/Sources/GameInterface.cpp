@@ -8,6 +8,7 @@
 
 GameInterface::GameInterface()
 {
+	config = new MazeConfigure();
 	maze = NULL;
 }
 
@@ -17,8 +18,8 @@ GameInterface::~GameInterface()
 
 void GameInterface::loadMap(std::string file)
 {
-	config.loadMapFromFile(file);
-	maze = config.createMaze();
+	config->loadMapFromFile(file);
+	maze = config->createMaze();
 	//TODO - add signal that map is created?
 
 
@@ -64,14 +65,14 @@ void GameInterface::loadMap(std::string file)
 void GameInterface::loadMap()
 {
 	//TODO - add prompt to select file / function to load from file
-	config.startReading(4, 3);
-	config.processLine("..G");
-	config.processLine(".X.");
-	config.processLine(".X.");
-	config.processLine(".S.");
-	config.stopReading();
+	config->startReading(4, 3);
+	config->processLine("..G");
+	config->processLine(".X.");
+	config->processLine(".X.");
+	config->processLine(".S.");
+	config->stopReading();
 
-	maze = config.createMaze();
+	maze = config->createMaze();
 	//TODO - add signal that map is created?
 
 

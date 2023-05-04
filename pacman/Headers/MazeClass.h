@@ -9,10 +9,10 @@
 
 #include <list>
 #include <string>
-#include "MazeObject.h"
-#include "Field.h"
 #include "PathField.h"
 #include "WallField.h"
+#include "PacmanObject.h"
+#include "GhostObject.h"
 #include "Maze.h"
 
 class MazeClass : public Maze {

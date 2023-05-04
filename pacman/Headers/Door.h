@@ -10,8 +10,9 @@ private:
 protected:
 	int row;
 	int col;
+	int keys;
 public:
-	Door(int row, int col, GameInterface* o);
+	Door(int row, int col, GameInterface* o, int keys);
 	~Door();
 	bool isOpen();
 	void openDoors();

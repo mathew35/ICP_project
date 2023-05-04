@@ -5,13 +5,14 @@
  */
 #pragma once
 #include "MazeConfigure.h"
-#include "WallField.h"
+class MazeConfigure;
+class Maze;
 
 using namespace std;
 class GameInterface
 {
 protected:
-	MazeConfigure config;
+	MazeConfigure* config;
 	list<tuple<int, int>> ghosts;
 	list<tuple<int, int>> walls;
 	list<tuple<int, int>> keys;

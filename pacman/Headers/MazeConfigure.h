@@ -10,9 +10,9 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-#include "MazeObject.h"
-#include "Maze.h"
 #include "MazeClass.h"
+class MazeClass;
+class Maze;
 
 class MazeConfigure {
 public:

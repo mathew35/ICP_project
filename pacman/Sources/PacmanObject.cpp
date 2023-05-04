@@ -7,9 +7,6 @@
 */
 
 #include "PacmanObject.h"
-#include "PathField.h"
-#include "Field.h"
-
 
 PacmanObject::PacmanObject(int row, int col, PathField* Field) {
 	this->row = row;

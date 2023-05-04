@@ -6,11 +6,12 @@
 */
 #include "Door.h"
 
-Door::Door(int row, int col, GameInterface* o)
+Door::Door(int row, int col, GameInterface* o, int keys = 0)
 {
 	this->row = row;
 	this->col = col;
 	this->observer = o;
+	this->keys = keys;
 }
 
 Door::~Door()
@@ -24,8 +25,8 @@ bool Door::isOpen()
 
 void Door::openDoors()
 {
-	if (observer->getKeys == nullptr)
+	if (observer->getKeys().size() == keys)
 	{
-		openn = true;
+		open = true;
 	}
 }

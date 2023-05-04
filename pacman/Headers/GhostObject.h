@@ -7,8 +7,10 @@
 #pragma once
 
 #include "MazeObject.h"
+#include "PacmanObject.h"
 #include "PathField.h"
 class PathField;
+class GameInterface;
 
 class GhostObject : public MazeObject {
 private:

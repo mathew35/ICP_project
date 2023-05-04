@@ -7,7 +7,8 @@
 #pragma once
 #include <stdbool.h>
 #include "Field.h"
-#include "GameInterface.h"
+class Field;
+class GameInterface;
 
 class MazeObject {
 public:
