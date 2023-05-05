@@ -143,13 +143,9 @@ bool GhostObject::move(Field::Direction dir) {
 }
 void GhostObject::start()
 {
-	std::srand(std::time(nullptr));
 	list<Field::Direction> moveTo;
 	list<Field::Direction> dirs = { Field::Direction::D, Field::Direction::R, Field::Direction::U, Field::Direction::L };
 	list<Field::Direction>::iterator it;
-	//while (true)
-	//{
-	int randomTime = std::rand() % 401 + 200;
 	moveTo.clear();
 	for (Field::Direction d : dirs)
 	{
@@ -159,7 +155,10 @@ void GhostObject::start()
 	}
 
 	int randomPos = std::rand() % (moveTo.size() + 1);
-	if (randomPos == moveTo.size()) { this->start(); return; }
+	if (randomPos == moveTo.size())
+	{
+		return;
+	}
 	int oldRow = this->row;
 	int oldCol = this->col;
 	it = std::next(moveTo.begin(), randomPos);
@@ -167,8 +166,6 @@ void GhostObject::start()
 	int newRow = this->row;
 	int newCol = this->col;
 	this->observer->notifyMove(oldRow, oldCol, newRow, newCol);
-	std::this_thread::sleep_for(std::chrono::milliseconds(randomTime));
-	//}
 }
 
 void GhostObject::setLogger(Logger* logger)

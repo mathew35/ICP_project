@@ -13,6 +13,8 @@ mainwindow::mainwindow(QWidget* parent)
 {
 	ui.setupUi(this);
 	qApp->installEventFilter(this);
+	connect(&keyPressTimer, &QTimer::timeout, this, &mainwindow::processKeyPressEvent);
+	connect(&moveGhostsTimer, &QTimer::timeout, this, &mainwindow::moveGhosts);
 
 	ui.mainMenuWidget->setVisible(true);
 	ui.newGameWidget->setVisible(false);
@@ -114,6 +116,8 @@ void mainwindow::playGame()
 	ui.gameScorePane->setAlignment(Qt::AlignTop);
 	ui.gameScorePane->fitInView(0, 0, newSceneRightSide->width(), newSceneRightSide->height(), Qt::KeepAspectRatio);
 	ui.gamePane->repaint();
+	ui.gamePane->setFocus();
+	this->moveGhostsTimer.start(500);
 	QThread::sleep(1);
 
 	//this->startGame();
@@ -161,21 +165,50 @@ void mainwindow::drawLives(QGraphicsScene* scene)
 	}
 }
 
-void mainwindow::keyPressEvent(QKeyEvent* event)
-{
-	gameInterface->startGame();
-}
-
 bool mainwindow::eventFilter(QObject* obj, QEvent* event)
 {
 	if (event->type() == QEvent::KeyPress)
 	{
-		QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
-		if (keyEvent->key() == Qt::Key_Right) {
-			gameInterface->startGame();
+		if (obj == ui.gamePane)
+		{
+			//this->keyPressTimer.start(500);
+			this->pendingKey = static_cast<QKeyEvent*>(event)->key();
 		}
-
 	}
 	return QObject::eventFilter(obj, event);
+}
+
+void mainwindow::processKeyPressEvent()
+{
+	//block key procesing
+	return;
+	//m_keyPressTimer.stop();
+	int keyEvent = this->pendingKey;
+	if (keyEvent != 0) {
+		//QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
+		if (keyEvent == Qt::Key_Right) {
+			//	gameInterface->startGame();
+			gameInterface->notifyMove(0, 0, 0, 1);
+		}
+		if (keyEvent == Qt::Key_Left) {
+			//	gameInterface->startGame();
+			gameInterface->notifyMove(0, 1, 0, 0);
+		}
+		if (keyEvent == Qt::Key_Up) {
+			//	gameInterface->startGame();
+			gameInterface->notifyMove(1, 0, 0, 0);
+		}
+		if (keyEvent == Qt::Key_Down) {
+			//	gameInterface->startGame();
+			gameInterface->notifyMove(0, 0, 1, 0);
+		}
+		pendingKey = 0;
+	}
+}
+
+void mainwindow::moveGhosts()
+{
+	gameInterface->startGame();
+	processKeyPressEvent();
 }
 

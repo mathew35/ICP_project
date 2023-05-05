@@ -12,6 +12,7 @@
 #include <QFileDialog>
 #include <QThread>
 #include <QKeyEvent>
+#include <QTimer>
 #include "ui_mainwindow.h"
 #include "GameInterface.h"
 
@@ -31,6 +32,8 @@ private slots:
 	void loadMapButtonClicked();
 	void playMapButtonClicked();
 	void backToMainMenuButtonClicked();
+	void processKeyPressEvent();
+	void moveGhosts();
 
 private:
 	Ui::mainwindowClass ui;
@@ -42,15 +45,16 @@ private:
 	void drawGhosts(QGraphicsScene* scene);
 	void drawLives(QGraphicsScene* scene);
 
-	void keyPressEvent(QKeyEvent* event);
-
 	QPixmap* wall;
 	QPixmap* player;
 	QPixmap* playerEmpty;
 	QPixmap* ghost;
 
+	QTimer keyPressTimer;
+	int pendingKey;
+	QTimer moveGhostsTimer;
+
 protected:
 	bool eventFilter(QObject* obj, QEvent* event);
 	GameInterface* gameInterface;
 };
-

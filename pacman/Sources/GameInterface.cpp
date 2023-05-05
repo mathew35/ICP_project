@@ -22,6 +22,11 @@ GameInterface::GameInterface(mainwindow* window)
 
 GameInterface::~GameInterface()
 {
+	delete config;
+	delete this->walls;
+	delete this->ghosts;
+	delete this->keys;
+	delete this->window;
 }
 
 void GameInterface::loadMap(std::string file)
@@ -130,20 +135,40 @@ tuple<int, int> GameInterface::getDoor()
 
 void GameInterface::notifyMove(int fromX, int fromY, int toX, int toY)
 {
-	this->walls->clear();
+	//temporary move for player
+	/*int x = std::get<0>(this->player);
+	int y = std::get<1>(this->player);
+	if (fromX < 1 && toX >= 1) {
+		this->player = tuple(x + 1, y);
+		this->window->updateMap(tuple(fromX, fromY), tuple(toX, toY));
+		return;
+	}
+	if (fromX >= 1 && toX < 1) {
+		this->player = tuple(x - 1, y);
+		this->window->updateMap(tuple(fromX, fromY), tuple(toX, toY));
+		return;
+	}
+	if (fromY < 1 && toY >= 1) {
+		this->player = tuple(x, y + 1);
+		this->window->updateMap(tuple(fromX, fromY), tuple(toX, toY));
+		return;
+	}
+	if (fromY >= 1 && toY < 1) {
+		this->player = tuple(x, y - 1);
+		this->window->updateMap(tuple(fromX, fromY), tuple(toX, toY));
+		return;
+	}
+	return;*/
+
+
 	this->ghosts->clear();
 	this->keys->clear();
+
 	for (int x = 0; x < maze->numRows(); x++)
 	{
 		for (int y = 0; y < maze->numCols(); y++)
 		{
 			auto field = maze->getField(x, y);
-			//walls
-			if (field == NULL || field->getType() == 'X')
-			{
-				this->walls->push_back(tuple(x, y));
-				continue;
-			}
 			//ghosts
 			if (field != NULL && field->get() != NULL && !field->get()->isPacman())
 			{
