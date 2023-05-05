@@ -63,7 +63,7 @@ bool PacmanObject::move(Field::Direction dir) {
 	switch (dir)
 	{
 	case Field::L:
-		if (!(this->leftField->canMove()))
+		if (this->leftField == nullptr || !(this->leftField->canMove()))
 		{
 			return false;
 		}
@@ -80,7 +80,7 @@ bool PacmanObject::move(Field::Direction dir) {
 		this->col = -1;
 		return true;
 	case Field::U:
-		if (!(this->upperField->canMove()))
+		if (this->upperField == nullptr || !(this->upperField->canMove()))
 		{
 			return false;
 		}
@@ -97,7 +97,7 @@ bool PacmanObject::move(Field::Direction dir) {
 		this->row = -1;
 		return true;
 	case Field::R:
-		if (!(this->rightField->canMove()))
+		if (this->rightField == nullptr || !(this->rightField->canMove()))
 		{
 			return false;
 		}
@@ -114,7 +114,7 @@ bool PacmanObject::move(Field::Direction dir) {
 		this->col = +1;
 		return true;
 	case Field::D:
-		if (!(this->bottomField->canMove()))
+		if (this->bottomField == nullptr || !(this->bottomField->canMove()))
 		{
 			return false;
 		}

@@ -180,27 +180,20 @@ bool mainwindow::eventFilter(QObject* obj, QEvent* event)
 
 void mainwindow::processKeyPressEvent()
 {
-	//block key procesing
-	return;
-	//m_keyPressTimer.stop();
 	int keyEvent = this->pendingKey;
 	if (keyEvent != 0) {
 		//QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
 		if (keyEvent == Qt::Key_Right) {
-			//	gameInterface->startGame();
-			gameInterface->notifyMove(0, 0, 0, 1);
+			gameInterface->movePlayer(2);
 		}
 		if (keyEvent == Qt::Key_Left) {
-			//	gameInterface->startGame();
-			gameInterface->notifyMove(0, 1, 0, 0);
+			gameInterface->movePlayer(0);
 		}
 		if (keyEvent == Qt::Key_Up) {
-			//	gameInterface->startGame();
-			gameInterface->notifyMove(1, 0, 0, 0);
+			gameInterface->movePlayer(1);
 		}
 		if (keyEvent == Qt::Key_Down) {
-			//	gameInterface->startGame();
-			gameInterface->notifyMove(0, 0, 1, 0);
+			gameInterface->movePlayer(3);
 		}
 		pendingKey = 0;
 	}

@@ -133,34 +133,14 @@ tuple<int, int> GameInterface::getDoor()
 	return this->door;
 }
 
+void GameInterface::movePlayer(int d)
+{
+	//TODO add checks - onliner is DANGEROUS
+	this->maze->getField(std::get<0>(this->player), std::get<1>(this->player))->get()->move(Field::Direction(d));
+}
+
 void GameInterface::notifyMove(int fromX, int fromY, int toX, int toY)
 {
-	//temporary move for player
-	/*int x = std::get<0>(this->player);
-	int y = std::get<1>(this->player);
-	if (fromX < 1 && toX >= 1) {
-		this->player = tuple(x + 1, y);
-		this->window->updateMap(tuple(fromX, fromY), tuple(toX, toY));
-		return;
-	}
-	if (fromX >= 1 && toX < 1) {
-		this->player = tuple(x - 1, y);
-		this->window->updateMap(tuple(fromX, fromY), tuple(toX, toY));
-		return;
-	}
-	if (fromY < 1 && toY >= 1) {
-		this->player = tuple(x, y + 1);
-		this->window->updateMap(tuple(fromX, fromY), tuple(toX, toY));
-		return;
-	}
-	if (fromY >= 1 && toY < 1) {
-		this->player = tuple(x, y - 1);
-		this->window->updateMap(tuple(fromX, fromY), tuple(toX, toY));
-		return;
-	}
-	return;*/
-
-
 	this->ghosts->clear();
 	this->keys->clear();
 

@@ -42,6 +42,7 @@ public:
 	list<tuple<int, int>> getKeys();
 	tuple<int, int> getPlayer();
 	tuple<int, int> getDoor();
+	void movePlayer(int d);
 
 	void notifyMove(int fromX, int fromY, int toX, int toY);
 	void notifyPickKey(int x, int y);
