@@ -12,6 +12,7 @@ mainwindow::mainwindow(QWidget* parent)
 	: QMainWindow(parent)
 {
 	ui.setupUi(this);
+	qApp->installEventFilter(this);
 
 	ui.mainMenuWidget->setVisible(true);
 	ui.newGameWidget->setVisible(false);
@@ -28,9 +29,25 @@ mainwindow::mainwindow(QWidget* parent)
 	connect(ui.backToMainMenuButton, SIGNAL(clicked()), this, SLOT(backToMainMenuButtonClicked()));
 
 	gameInterface = new GameInterface(this);
+	wall = new QPixmap(":/wall");
+	player = new QPixmap(":/player");
+	playerEmpty = new QPixmap(":/playerEmpty");
+	ghost = new QPixmap(":/ghost");
 }
 
 mainwindow::~mainwindow() {
+	delete gameInterface;
+}
+
+void mainwindow::updateMap(tuple<int, int> from, tuple<int, int> to)
+{
+	QGraphicsScene* scene = new QGraphicsScene();
+	drawGhosts(scene);
+	drawPlayer(scene);
+	drawWalls(scene);
+	ui.gamePane->setScene(scene);
+	ui.gamePane->fitInView(0, 0, scene->width(), scene->height(), Qt::KeepAspectRatio);
+	ui.gamePane->repaint();
 }
 
 
@@ -96,45 +113,69 @@ void mainwindow::playGame()
 	ui.gameScorePane->setScene(newSceneRightSide);
 	ui.gameScorePane->setAlignment(Qt::AlignTop);
 	ui.gameScorePane->fitInView(0, 0, newSceneRightSide->width(), newSceneRightSide->height(), Qt::KeepAspectRatio);
+	ui.gamePane->repaint();
+	QThread::sleep(1);
+
+	//this->startGame();
+	//gameInterface->startGame();
+}
+void mainwindow::startGame()
+{
+	//for (int i = 0; i < 10; i++) {
+		//gameInterface->ghostsMove();
+	//}
 }
 void mainwindow::drawWalls(QGraphicsScene* scene)
 {
-	QPixmap pix(":/wall");
 	QPen pen;
 	pen.setWidth(1);
 	for (auto wall : gameInterface->getWalls())
 	{
-		scene->addRect(QRectF(std::get<1>(wall) * FIELDSIZE, std::get<0>(wall) * FIELDSIZE, FIELDSIZE, FIELDSIZE), pen, QBrush(pix.scaled(FIELDSIZE, FIELDSIZE, Qt::KeepAspectRatio)));
+		scene->addRect(QRectF(std::get<1>(wall) * FIELDSIZE, std::get<0>(wall) * FIELDSIZE, FIELDSIZE, FIELDSIZE), pen, QBrush(this->wall->scaled(FIELDSIZE, FIELDSIZE, Qt::KeepAspectRatio)));
 	}
 }
 
 void mainwindow::drawPlayer(QGraphicsScene* scene)
 {
 	tuple<int, int> player = gameInterface->getPlayer();
-	QPixmap pixPlayer(":/player");
-	scene->addRect(QRectF(std::get<1>(player) * FIELDSIZE, std::get<0>(player) * FIELDSIZE, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(pixPlayer.scaled(FIELDSIZE, FIELDSIZE, Qt::KeepAspectRatio)));
+	scene->addRect(QRectF(std::get<1>(player) * FIELDSIZE, std::get<0>(player) * FIELDSIZE, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(this->player->scaled(FIELDSIZE, FIELDSIZE, Qt::KeepAspectRatio)));
 }
 
 void mainwindow::drawGhosts(QGraphicsScene* scene)
 {
-	QPixmap pixGhost(":/ghost");
 	for (auto ghost : gameInterface->getGhosts())
 	{
-		scene->addRect(QRectF(std::get<1>(ghost) * FIELDSIZE, std::get<0>(ghost) * FIELDSIZE, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(pixGhost.scaled(FIELDSIZE, FIELDSIZE, Qt::KeepAspectRatio)));
+		scene->addRect(QRectF(std::get<1>(ghost) * FIELDSIZE, std::get<0>(ghost) * FIELDSIZE, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(this->ghost->scaled(FIELDSIZE, FIELDSIZE, Qt::KeepAspectRatio)));
 	}
 }
 
 void mainwindow::drawLives(QGraphicsScene* scene)
 {
-	QPixmap pixLive(":/player");
 	for (int i = 0; i < gameInterface->getLives(); i++)
 	{
-		scene->addRect(QRectF(i * FIELDSIZE, 0, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(pixLive.scaled(FIELDSIZE, FIELDSIZE, Qt::KeepAspectRatio)));
+		scene->addRect(QRectF(i * FIELDSIZE, 0, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(this->player->scaled(FIELDSIZE, FIELDSIZE, Qt::KeepAspectRatio)));
 	}
-	QPixmap pixNoLive(":/playerEmpty");
 	for (int i = gameInterface->getLives(); i < gameInterface->getMaxLives(); i++)
 	{
-		scene->addRect(QRectF(i * FIELDSIZE, 0, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(pixNoLive.scaled(FIELDSIZE, FIELDSIZE, Qt::KeepAspectRatio)));
+		scene->addRect(QRectF(i * FIELDSIZE, 0, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(this->playerEmpty->scaled(FIELDSIZE, FIELDSIZE, Qt::KeepAspectRatio)));
 	}
+}
+
+void mainwindow::keyPressEvent(QKeyEvent* event)
+{
+	gameInterface->startGame();
+}
+
+bool mainwindow::eventFilter(QObject* obj, QEvent* event)
+{
+	if (event->type() == QEvent::KeyPress)
+	{
+		QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
+		if (keyEvent->key() == Qt::Key_Right) {
+			gameInterface->startGame();
+		}
+
+	}
+	return QObject::eventFilter(obj, event);
 }
 

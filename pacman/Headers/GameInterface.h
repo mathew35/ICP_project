@@ -5,6 +5,8 @@
  */
 #pragma once
 #include "MazeConfigure.h"
+#include "mainwindow.h"
+#include <tuple>
 class MazeConfigure;
 class Maze;
 class mainwindow;
@@ -14,9 +16,9 @@ class GameInterface
 {
 protected:
 	MazeConfigure* config;
-	list<tuple<int, int>> ghosts;
-	list<tuple<int, int>> walls;
-	list<tuple<int, int>> keys;
+	list<tuple<int, int>>* ghosts;
+	list<tuple<int, int>>* walls;
+	list<tuple<int, int>>* keys;
 	tuple<int, int> door;
 	tuple<int, int> player;
 	int lives;
@@ -46,6 +48,7 @@ public:
 	void notifyEndLevel();
 	void notifyGameOver();
 private:
+	mainwindow* window;
 };
 
 

@@ -23,19 +23,19 @@ void PacmanObject::setSurroundinFieldsPacman(Field* bottom, Field* right, Field*
 }
 
 bool PacmanObject::canMove(Field::Direction dir) {
-	if (dir == Field::D && this->bottomField->canMove())
+	if (this->bottomField != nullptr && dir == Field::D && this->bottomField->canMove())
 	{
 		return true;
 	}
-	else if (dir == Field::R && this->rightField->canMove())
+	else if (this->rightField != nullptr && dir == Field::R && this->rightField->canMove())
 	{
 		return true;
 	}
-	else if (dir == Field::U && this->upperField->canMove())
+	else if (this->upperField != nullptr && dir == Field::U && this->upperField->canMove())
 	{
 		return true;
 	}
-	else if (dir == Field::L && this->leftField->canMove())
+	else if (this->leftField != nullptr && dir == Field::L && this->leftField->canMove())
 	{
 		return true;
 	}
@@ -53,6 +53,9 @@ bool PacmanObject::isPacman()
 }
 int PacmanObject::getLives() {
 	return this->lives;
+}
+void PacmanObject::start()
+{
 }
 bool PacmanObject::move(Field::Direction dir) {
 	PathField* nextField;

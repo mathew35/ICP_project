@@ -9,6 +9,9 @@
 #include "MazeObject.h"
 #include "PacmanObject.h"
 #include "PathField.h"
+#include <chrono>
+#include <thread>
+#include <iostream>
 class PathField;
 class GameInterface;
 
@@ -33,6 +36,7 @@ public:
 	bool isPacman() override;
 	int getLives() override;
 	bool move(Field::Direction dir) override;
+	void start() override;
 
 	void attach(GameInterface* o) override;
 	void detach(GameInterface* o) override;

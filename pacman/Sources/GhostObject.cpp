@@ -23,19 +23,20 @@ void GhostObject::setSurroundinFieldsGhost(Field* bottom, Field* right, Field* u
 }
 
 bool GhostObject::canMove(Field::Direction dir) {
-	if (dir == Field::D && this->bottomField->canMove())
+
+	if (this->bottomField != nullptr && dir == Field::D && this->bottomField->canMove())
 	{
 		return true;
 	}
-	else if (dir == Field::R && this->rightField->canMove())
+	else if (this->rightField != nullptr && dir == Field::R && this->rightField->canMove())
 	{
 		return true;
 	}
-	else if (dir == Field::U && this->upperField->canMove())
+	else if (this->upperField != nullptr && dir == Field::U && this->upperField->canMove())
 	{
 		return true;
 	}
-	else if (dir == Field::L && this->leftField->canMove())
+	else if (this->leftField != nullptr && dir == Field::L && this->leftField->canMove())
 	{
 		return true;
 	}
@@ -55,16 +56,14 @@ int GhostObject::getLives() {
 	return 0;
 }
 bool GhostObject::move(Field::Direction dir) {
-	PathField* nextField;
-	PathField* prevField;
+	PathField* nextField = nullptr;
+	PathField* prevField = nullptr;
 	switch (dir)
 	{
 	case Field::L:
-		if (this->leftField->canMove())
-		{
-			nextField = static_cast<PathField*>(this->leftField);
-			prevField = this->callerField;
-		}
+		if (this->leftField == NULL || !this->leftField->canMove()) { return false; }
+		nextField = static_cast<PathField*>(this->leftField);
+		prevField = this->callerField;
 		prevField->fieldObject = nullptr;
 		if (!(nextField->isEmpty()))
 		{
@@ -77,15 +76,13 @@ bool GhostObject::move(Field::Direction dir) {
 		}
 		//TODO 2 ghost same field
 		nextField->setGhostObject(this);
-		observer->notifyMove(this->row, this->col, this->row, this->col - 1);
-		this->col = -1;
+		this->col -= 1;
+		observer->notifyMove(this->row, this->col - 1, this->row, this->col);
 		return true;
 	case Field::U:
-		if (this->upperField->canMove())
-		{
-			nextField = static_cast<PathField*>(this->upperField);
-			prevField = this->callerField;
-		}
+		if (this->upperField == NULL || !this->upperField->canMove()) { return false; }
+		nextField = static_cast<PathField*>(this->upperField);
+		prevField = this->callerField;
 		prevField->fieldObject = nullptr;
 		if (!(nextField->isEmpty()))
 		{
@@ -97,15 +94,13 @@ bool GhostObject::move(Field::Direction dir) {
 			}
 		}
 		nextField->setGhostObject(this);
+		this->row -= 1;
 		observer->notifyMove(this->row, this->col, this->row - 1, this->col);
-		this->row = -1;
 		return true;
 	case Field::R:
-		if (this->rightField->canMove())
-		{
-			nextField = static_cast<PathField*>(this->rightField);
-			prevField = this->callerField;
-		}
+		if (this->rightField == NULL || !this->rightField->canMove()) { return false; }
+		nextField = static_cast<PathField*>(this->rightField);
+		prevField = this->callerField;
 		prevField->fieldObject = nullptr;
 		if (!(nextField->isEmpty()))
 		{
@@ -117,15 +112,13 @@ bool GhostObject::move(Field::Direction dir) {
 			}
 		}
 		nextField->setGhostObject(this);
+		this->col += 1;
 		observer->notifyMove(this->row, this->col, this->row, this->col + 1);
-		this->col = +1;
 		return true;
 	case Field::D:
-		if (this->bottomField->canMove())
-		{
-			nextField = static_cast<PathField*>(this->bottomField);
-			prevField = this->callerField;
-		}
+		if (this->bottomField == nullptr || !this->bottomField->canMove()) { return false; }
+		nextField = static_cast<PathField*>(this->bottomField);
+		prevField = this->callerField;
 		prevField->fieldObject = nullptr;
 		if (!(nextField->isEmpty()))
 		{
@@ -137,13 +130,43 @@ bool GhostObject::move(Field::Direction dir) {
 			}
 		}
 		nextField->setGhostObject(this);
+		this->row += 1;
 		observer->notifyMove(this->row, this->col, this->row + 1, this->col);
-		this->row = +1;
 		return true;
 	default:
 		return false;
 	}
 }
+void GhostObject::start()
+{
+	std::srand(std::time(nullptr));
+	list<Field::Direction> moveTo;
+	list<Field::Direction> dirs = { Field::Direction::D, Field::Direction::R, Field::Direction::U, Field::Direction::L };
+	list<Field::Direction>::iterator it;
+	//while (true)
+	//{
+	int randomTime = std::rand() % 401 + 200;
+	moveTo.clear();
+	for (Field::Direction d : dirs)
+	{
+		if (this->canMove(d)) {
+			moveTo.push_back(d);
+		}
+	}
+
+	int randomPos = std::rand() % (moveTo.size() + 1);
+	if (randomPos == moveTo.size()) { this->start(); return; }
+	int oldRow = this->row;
+	int oldCol = this->col;
+	it = std::next(moveTo.begin(), randomPos);
+	this->move(*it);
+	int newRow = this->row;
+	int newCol = this->col;
+	this->observer->notifyMove(oldRow, oldCol, newRow, newCol);
+	std::this_thread::sleep_for(std::chrono::milliseconds(randomTime));
+	//}
+}
+
 void GhostObject::attach(GameInterface* o) {
 	this->observer = o;
 }

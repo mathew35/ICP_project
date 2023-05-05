@@ -68,6 +68,8 @@ void MazeClass::insertLine(std::string line) {
 		if (line[i - 1] == 'G')
 		{
 			this->fieldArray[this->numberOfLines][i] = new PathField(this->numberOfLines, i, 'G');
+			this->insertGhost(this->fieldArray[this->numberOfLines][i]);
+
 		}
 	}
 	this->numberOfLines++;
@@ -77,9 +79,10 @@ void MazeClass::setFields() {
 	{
 		for (int c = 0; c < this->numCols() - 1; c++)
 		{
-			if (typeid(this->fieldArray[r][c]) == typeid(PathField*)) {
-				PathField* path = static_cast<PathField*>(this->fieldArray[r][c]);
+			if (typeid((PathField*)this->fieldArray[r][c]) == typeid(PathField*) && this->fieldArray[r][c]!=nullptr){
+				PathField* path = (PathField*)this->fieldArray[r][c];
 				path->setSurroundingFields(this->fieldArray[r + 1][c], this->fieldArray[r][c + 1], this->fieldArray[r - 1][c], this->fieldArray[r][c - 1]);
+				path->setObjectFields(path->get());
 			}
 		}
 	}

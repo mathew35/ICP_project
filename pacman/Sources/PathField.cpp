@@ -42,7 +42,9 @@ void PathField::setSurroundingFields(Field* bottom, Field* right, Field* upper, 
 
 void PathField::objectMoved() { this->fieldObject = nullptr; }
 
-bool PathField::canMove() { return !(this->fieldType == 'X'); }
+bool PathField::canMove() {
+	return !(this->fieldType == 'X');
+}
 
 bool PathField::contains(MazeObject* obj) {
 	if (obj->equals(fieldObject))
@@ -98,12 +100,13 @@ void PathField::setGhostObject(MazeObject* fieldObject) {
 
 void PathField::setObjectFields(MazeObject* object) {
 
-	if (typeid(object) == typeid(PacmanObject)) {
-		PacmanObject* pacman = static_cast<PacmanObject*>(object);;
+	PacmanObject* pacman = (PacmanObject*)object;
+	GhostObject* ghost = (GhostObject*)object;
+	if (object == nullptr) { return; };
+	if (typeid(*pacman) == typeid(PacmanObject)) {
 		pacman->setSurroundinFieldsPacman(this->bottomField, this->rightField, this->upperField, this->leftField, this);
 	}
-	else if (typeid(object) == typeid(GhostObject)) {
-		GhostObject* ghost = static_cast<GhostObject*>(object);
+	else if (typeid(*ghost) == typeid(GhostObject)) {
 		ghost->setSurroundinFieldsGhost(this->bottomField, this->rightField, this->upperField, this->leftField, this);
 	}
 }

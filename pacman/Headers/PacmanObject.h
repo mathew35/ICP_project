@@ -35,6 +35,7 @@ public:
 	Field* getField() override;
 	bool isPacman() override;
 	int getLives() override;
+	void start() override;
 	bool move(Field::Direction dir) override;
 
 	bool decreaseLives();
