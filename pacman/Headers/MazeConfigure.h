@@ -11,11 +11,13 @@
 #include <iostream>
 #include <fstream>
 #include "MazeClass.h"
+#include "Logger.h"
 class MazeClass;
 class Maze;
 
 class MazeConfigure {
 public:
+	MazeConfigure(Logger* logger);
 	void loadMapFromFile(std::string file);
 	void startReading(int rows, int cols);
 	bool processLine(std::string line);
@@ -26,6 +28,7 @@ protected:
 	bool correctLine = true;
 	bool doneReading = false;
 private:
+	Logger* logger;
 	int counLines = 0;
 
 };

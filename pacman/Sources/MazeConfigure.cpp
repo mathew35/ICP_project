@@ -9,6 +9,11 @@
 #include "MazeConfigure.h"
 
 
+MazeConfigure::MazeConfigure(Logger* logger)
+{
+	this->logger = logger;
+}
+
 void MazeConfigure::loadMapFromFile(std::string file)
 {
 	using namespace std;
@@ -18,11 +23,14 @@ void MazeConfigure::loadMapFromFile(std::string file)
 	int rows = stoi(lineText);
 	if (!getline(map, lineText)) { return; }
 	int cols = stoi(lineText);
+	this->logger->printFirstLine(rows, cols);
 	this->startReading(rows, cols);
 	while (getline(map, lineText))
 	{
+		this->logger->printMazeLine(lineText);
 		this->processLine(lineText);
 	}
+	this->logger->printTurnZero();
 	this->stopReading();
 }
 

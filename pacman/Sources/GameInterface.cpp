@@ -8,7 +8,8 @@
 
 GameInterface::GameInterface(mainwindow* window)
 {
-	config = new MazeConfigure();
+	this->logger = new Logger();
+	config = new MazeConfigure(this->logger);
 	maze = NULL;
 	maxLives = -1;
 	lives = -1;
@@ -58,12 +59,14 @@ void GameInterface::loadMap()
 			if (field != NULL && field->get() != NULL && !field->get()->isPacman())
 			{
 				field->get()->attach(this);
+				field->get()->setLogger(this->logger);
 				this->ghosts->push_back(tuple(x, y));
 			}
 			//player
 			if (field != NULL && field->get() != NULL && field->get()->isPacman())
 			{
 				field->get()->attach(this);
+				field->get()->setLogger(this->logger);
 				this->player = tuple(x, y);
 				this->lives = field->get()->getLives();
 				if (this->maxLives < 0) { this->maxLives = this->lives; }

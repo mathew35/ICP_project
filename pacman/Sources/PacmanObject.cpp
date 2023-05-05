@@ -76,6 +76,7 @@ bool PacmanObject::move(Field::Direction dir) {
 		}
 		nextField->setPacmanObject(this);
 		observer->notifyMove(this->row, this->col, this->row, this->col - 1);
+		logger->printMovement(this, this->row, this->col, this->row, this->col - 1);
 		this->col = -1;
 		return true;
 	case Field::U:
@@ -92,6 +93,7 @@ bool PacmanObject::move(Field::Direction dir) {
 		}
 		nextField->setPacmanObject(this);
 		observer->notifyMove(this->row, this->col, this->row - 1, this->col);
+		logger->printMovement(this, this->row, this->col, this->row - 1, this->col);
 		this->row = -1;
 		return true;
 	case Field::R:
@@ -108,6 +110,7 @@ bool PacmanObject::move(Field::Direction dir) {
 		}
 		nextField->setPacmanObject(this);
 		observer->notifyMove(this->row, this->col, this->row, this->col + 1);
+		logger->printMovement(this, this->row, this->col, this->row, this->col + 1);
 		this->col = +1;
 		return true;
 	case Field::D:
@@ -124,23 +127,29 @@ bool PacmanObject::move(Field::Direction dir) {
 		}
 		nextField->setPacmanObject(this);
 		observer->notifyMove(this->row, this->col, this->row + 1, this->col);
+		logger->printMovement(this, this->row, this->col, this->row + 1, this->col);
 		this->row = +1;
 		return true;
 	default:
 		return false;
 	}
 	//TODO end game when on doors
-	//TODO pick up key
+	//TODO pick up key notify + log
 }
 bool PacmanObject::decreaseLives() {
-	observer->notifyLives();
 	//TODO Pacman dead
+	this->lives -= 1;
 	if (this->lives == 0) {
 		observer->notifyGameOver();
 		return false; //RIP Pacman
 	}
-	this->lives -= 1;
+	observer->notifyLives();
+	logger->printLives(lives);
 	return true;
+}
+void PacmanObject::setLogger(Logger* logger)
+{
+	this->logger = logger;
 }
 void PacmanObject::attach(GameInterface* o) {
 	this->observer = o;

@@ -6,10 +6,12 @@
 #pragma once
 #include "MazeConfigure.h"
 #include "mainwindow.h"
+#include "Logger.h"
 #include <tuple>
 class MazeConfigure;
 class Maze;
 class mainwindow;
+class Logger;
 
 using namespace std;
 class GameInterface
@@ -48,6 +50,7 @@ public:
 	void notifyEndLevel();
 	void notifyGameOver();
 private:
+	Logger* logger;
 	mainwindow* window;
 };
 

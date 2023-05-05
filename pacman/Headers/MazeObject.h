@@ -9,6 +9,7 @@
 #include "Field.h"
 class Field;
 class GameInterface;
+class Logger;
 
 class MazeObject {
 public:
@@ -24,6 +25,7 @@ public:
 	bool equals(MazeObject* obj);
 	virtual void start() = 0;
 
+	virtual void setLogger(Logger* logger) = 0;
 	virtual void attach(GameInterface* o) = 0;
 	virtual void detach(GameInterface* o) = 0;
 };

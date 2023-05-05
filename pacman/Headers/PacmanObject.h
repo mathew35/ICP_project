@@ -10,12 +10,15 @@
 #include "PathField.h"
 #include "Field.h"
 #include "GameInterface.h"
+#include "Logger.h"
 class PathField;
 class GameInterface;
+class Logger;
 
 class PacmanObject : public MazeObject {
 private:
 	GameInterface* observer;
+	Logger* logger;
 	int lives = 3;
 protected:
 	int row;
@@ -40,6 +43,7 @@ public:
 
 	bool decreaseLives();
 
+	void setLogger(Logger* logger) override;
 	void attach(GameInterface* o) override;
 	void detach(GameInterface* o) override;
 

@@ -9,14 +9,17 @@
 #include "MazeObject.h"
 #include "PacmanObject.h"
 #include "PathField.h"
+#include "Logger.h"
 #include <chrono>
 #include <thread>
 #include <iostream>
 class PathField;
 class GameInterface;
+class Logger;
 
 class GhostObject : public MazeObject {
 private:
+	Logger* logger;
 	GameInterface* observer;
 protected:
 	int row;
@@ -38,6 +41,7 @@ public:
 	bool move(Field::Direction dir) override;
 	void start() override;
 
+	void setLogger(Logger* logger) override;
 	void attach(GameInterface* o) override;
 	void detach(GameInterface* o) override;
 

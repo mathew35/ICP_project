@@ -78,6 +78,7 @@ bool GhostObject::move(Field::Direction dir) {
 		nextField->setGhostObject(this);
 		this->col -= 1;
 		observer->notifyMove(this->row, this->col - 1, this->row, this->col);
+		logger->printMovement(this, this->row, this->col - 1, this->row, this->col);
 		return true;
 	case Field::U:
 		if (this->upperField == NULL || !this->upperField->canMove()) { return false; }
@@ -96,6 +97,7 @@ bool GhostObject::move(Field::Direction dir) {
 		nextField->setGhostObject(this);
 		this->row -= 1;
 		observer->notifyMove(this->row, this->col, this->row - 1, this->col);
+		logger->printMovement(this, this->row, this->col, this->row - 1, this->col);
 		return true;
 	case Field::R:
 		if (this->rightField == NULL || !this->rightField->canMove()) { return false; }
@@ -114,6 +116,7 @@ bool GhostObject::move(Field::Direction dir) {
 		nextField->setGhostObject(this);
 		this->col += 1;
 		observer->notifyMove(this->row, this->col, this->row, this->col + 1);
+		logger->printMovement(this, this->row, this->col, this->row, this->col + 1);
 		return true;
 	case Field::D:
 		if (this->bottomField == nullptr || !this->bottomField->canMove()) { return false; }
@@ -132,6 +135,7 @@ bool GhostObject::move(Field::Direction dir) {
 		nextField->setGhostObject(this);
 		this->row += 1;
 		observer->notifyMove(this->row, this->col, this->row + 1, this->col);
+		logger->printMovement(this, this->row, this->col, this->row + 1, this->col);
 		return true;
 	default:
 		return false;
@@ -165,6 +169,11 @@ void GhostObject::start()
 	this->observer->notifyMove(oldRow, oldCol, newRow, newCol);
 	std::this_thread::sleep_for(std::chrono::milliseconds(randomTime));
 	//}
+}
+
+void GhostObject::setLogger(Logger* logger)
+{
+	this->logger = logger;
 }
 
 void GhostObject::attach(GameInterface* o) {

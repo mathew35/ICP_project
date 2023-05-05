@@ -6,12 +6,14 @@
 */
 #include "Door.h"
 
-Door::Door(int row, int col, GameInterface* o, int keys = 0)
+Door::Door(int row, int col, GameInterface* o, Logger* logger, int keys = 0)
 {
+	this->open = false;
+	this->logger = logger;
 	this->row = row;
 	this->col = col;
 	this->observer = o;
-	this->keys = keys;
+	this->keys = keys; //TODO fix keys count
 }
 
 Door::~Door()
@@ -28,5 +30,7 @@ void Door::openDoors()
 	if (observer->getKeys().size() == keys)
 	{
 		open = true;
+		logger->printDoor(this->row, this->col);
+		observer->notifyOpenDoors(this->row, this->col);
 	}
 }
