@@ -38,8 +38,8 @@ void GameInterface::loadMap()
 	//TODO - add prompt to select file / function to load from file
 	config->startReading(4, 3);
 	config->processLine("..G");
-	config->processLine(".X.");
-	config->processLine(".X.");
+	config->processLine(".XD");
+	config->processLine("KX.");
 	config->processLine(".S.");
 	config->stopReading();
 
@@ -135,8 +135,16 @@ tuple<int, int> GameInterface::getDoor()
 
 void GameInterface::movePlayer(int d)
 {
-	//TODO add checks - onliner is DANGEROUS
-	this->maze->getField(std::get<0>(this->player), std::get<1>(this->player))->get()->move(Field::Direction(d));
+	//TODO add checks - onliner is DANGEROUS - pacman removed after meeting with ghost
+	PacmanObject* player = (PacmanObject*)this->maze->getField(std::get<0>(this->player), std::get<1>(this->player))->get();
+	try
+	{
+		player->move(Field::Direction(d));
+	}
+	catch (const std::exception&)
+	{
+		throw(new exception("player not found"));
+	}
 }
 
 void GameInterface::notifyMove(int fromX, int fromY, int toX, int toY)
@@ -185,7 +193,12 @@ void GameInterface::notifyOpenDoors(int x, int y)
 
 void GameInterface::notifyLives()
 {
-	//TODO
+	Field* field = this->maze->getField(std::get<0>(this->player), std::get<1>(this->player));
+	if (field != NULL && field->get() != NULL && field->get()->isPacman())
+	{
+		this->lives = field->get()->getLives();
+	}
+	this->window->updateLives();
 }
 
 void GameInterface::notifyEndLevel()

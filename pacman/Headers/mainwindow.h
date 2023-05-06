@@ -24,6 +24,7 @@ public:
 	mainwindow(QWidget* parent = nullptr);
 	~mainwindow();
 	void updateMap(std::tuple<int, int> from, std::tuple<int, int>to);
+	void updateLives();
 
 private slots:
 	void newGameButtonClicked();

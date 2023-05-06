@@ -52,6 +52,16 @@ void mainwindow::updateMap(tuple<int, int> from, tuple<int, int> to)
 	ui.gamePane->repaint();
 }
 
+void mainwindow::updateLives()
+{
+	QGraphicsScene* scene = new QGraphicsScene();
+	drawLives(scene);
+	ui.gameScorePane->setScene(scene);
+	//ui.gameScorePane->setAlignment(Qt::AlignTop);
+	ui.gameScorePane->fitInView(0, 0, scene->width(), scene->height(), Qt::KeepAspectRatio);
+	ui.gameScorePane->repaint();
+}
+
 
 void mainwindow::newGameButtonClicked()
 {
@@ -116,6 +126,7 @@ void mainwindow::playGame()
 	ui.gameScorePane->setAlignment(Qt::AlignTop);
 	ui.gameScorePane->fitInView(0, 0, newSceneRightSide->width(), newSceneRightSide->height(), Qt::KeepAspectRatio);
 	ui.gamePane->repaint();
+	ui.gameScorePane->repaint();
 	ui.gamePane->setFocus();
 	this->moveGhostsTimer.start(500);
 	QThread::sleep(1);
