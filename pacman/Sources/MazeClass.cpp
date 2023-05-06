@@ -31,6 +31,7 @@ void MazeClass::insertGhost(Field* field) {
 MazeClass::MazeClass(int rows, int cols)
 {
 	this->createArray(rows + BOUNDS, cols + BOUNDS);
+	this->keys = 0;
 }
 
 MazeClass::~MazeClass()
@@ -73,6 +74,7 @@ void MazeClass::insertLine(std::string line) {
 			continue;
 		case 'K':
 			this->fieldArray[this->numberOfLines][i] = new PathField(this->numberOfLines, i, 'K');
+			this->keys += 1;
 			continue;
 		default:
 			break;
@@ -89,6 +91,13 @@ void MazeClass::setFields() {
 			if (typeid((PathField*)this->fieldArray[r][c]) == typeid(PathField*) && this->fieldArray[r][c] != nullptr) {
 				PathField* path = (PathField*)this->fieldArray[r][c];
 				path->setSurroundingFields(this->fieldArray[r + 1][c], this->fieldArray[r][c + 1], this->fieldArray[r - 1][c], this->fieldArray[r][c - 1]);
+				MazeObject* obj = path->get();
+				if (obj != nullptr && typeid(*(DoorObject*)obj) == typeid(DoorObject))
+				{
+					this->door = (DoorObject*)obj;
+					this->door->setKeys(keys);
+					continue;
+				}
 				path->setObjectFields(path->get());
 			}
 		}

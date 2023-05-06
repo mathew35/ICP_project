@@ -22,6 +22,7 @@ protected:
 	list<tuple<int, int>>* walls;
 	list<tuple<int, int>>* keys;
 	tuple<int, int> door;
+	bool doorOpen = false;
 	tuple<int, int> player;
 	int lives;
 	int maxLives;
@@ -43,6 +44,7 @@ public:
 	list<tuple<int, int>> getKeys();
 	tuple<int, int> getPlayer();
 	tuple<int, int> getDoor();
+	bool isDoorOpen();
 	void movePlayer(int d);
 
 	void notifyMove(int fromX, int fromY, int toX, int toY);

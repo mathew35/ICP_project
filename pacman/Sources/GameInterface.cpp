@@ -38,14 +38,13 @@ void GameInterface::loadMap()
 	//TODO - add prompt to select file / function to load from file
 	config->startReading(4, 3);
 	config->processLine("..G");
-	config->processLine(".X.");
+	config->processLine(".XT");
 	config->processLine(".X.");
 	config->processLine(".S.");
 	config->stopReading();
 
 	maze = config->createMaze();
 	//TODO - add signal that map is created?
-
 	this->walls = new list<tuple<int, int>>();
 	this->ghosts = new list<tuple<int, int>>();
 	this->keys = new list<tuple<int, int>>();
@@ -60,26 +59,44 @@ void GameInterface::loadMap()
 				this->walls->push_back(tuple(x, y));
 				continue;
 			}
+			MazeObject* obj = field->get();
+			if (obj == nullptr) { continue; }
+			GhostObject* ghost = (GhostObject*)obj;
+			PacmanObject* player = (PacmanObject*)obj;
+			DoorObject* Door = (DoorObject*)obj;
 			//ghosts
-			if (field != NULL && field->get() != NULL && !field->get()->isPacman())
+			if (typeid(*ghost) == typeid(GhostObject))
 			{
 				field->get()->attach(this);
 				field->get()->setLogger(this->logger);
 				this->ghosts->push_back(tuple(x, y));
+				continue;
 			}
 			//player
-			if (field != NULL && field->get() != NULL && field->get()->isPacman())
+			if (typeid(*player) == typeid(PacmanObject))
 			{
 				field->get()->attach(this);
 				field->get()->setLogger(this->logger);
 				this->player = tuple(x, y);
 				this->lives = field->get()->getLives();
 				if (this->maxLives < 0) { this->maxLives = this->lives; }
+				continue;
 			}
 			//door
-			//TODO
+			if (typeid(*Door) == typeid(DoorObject))
+			{
+				field->get()->attach(this);
+				field->get()->setLogger(this->logger);
+				field->get()->start();
+				this->door = tuple(x, y);
+				continue;
+			}
 			//keys
-			//TODO
+			//if (field != NULL && field->getType() == 'K')
+			//{
+				//TODO
+				//continue;
+			//}
 		}
 	}
 	if (std::get<0>(this->player) < 0 || std::get<1>(player) < 0) { throw(new exception("Player not found")); }
@@ -145,6 +162,11 @@ tuple<int, int> GameInterface::getDoor()
 	return this->door;
 }
 
+bool GameInterface::isDoorOpen()
+{
+	return this->doorOpen;
+}
+
 void GameInterface::movePlayer(int d)
 {
 	//TODO add checks - onliner is DANGEROUS - pacman removed after meeting with ghost
@@ -200,7 +222,8 @@ void GameInterface::notifyPickKey(int x, int y)
 
 void GameInterface::notifyOpenDoors(int x, int y)
 {
-	//TODO
+	this->doorOpen = true;
+	this->window->updateMap(tuple(x, y), tuple(x, y));
 }
 
 void GameInterface::notifyLives()

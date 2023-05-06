@@ -17,7 +17,7 @@ protected:
 	int keys;
 	PathField* callerField;
 public:
-	DoorObject(int row, int col, PathField* field, int keys);
+	DoorObject(int row, int col, PathField* field);
 	~DoorObject();
 	void setKeys(int keys);
 	bool isOpen();

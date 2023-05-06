@@ -6,12 +6,12 @@
 */
 #include "DoorObject.h"
 
-DoorObject::DoorObject(int row, int col, PathField* field, int keys = 0)
+DoorObject::DoorObject(int row, int col, PathField* field)
 {
 	this->open = false;
 	this->row = row;
 	this->col = col;
-	this->keys = keys;
+	this->keys = 0;
 	this->callerField = field;
 }
 

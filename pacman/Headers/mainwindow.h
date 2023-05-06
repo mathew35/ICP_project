@@ -46,11 +46,14 @@ private:
 	void drawPlayer(QGraphicsScene* scene);
 	void drawGhosts(QGraphicsScene* scene);
 	void drawLives(QGraphicsScene* scene);
+	void drawDoors(QGraphicsScene* scene);
 
 	QPixmap* wall;
 	QPixmap* player;
 	QPixmap* playerEmpty;
 	QPixmap* ghost;
+	QPixmap* doorOpen;
+	QPixmap* doorClosed;
 
 	QTimer keyPressTimer;
 	int pendingKey;

@@ -35,6 +35,8 @@ mainwindow::mainwindow(QWidget* parent)
 	player = new QPixmap(":/player");
 	playerEmpty = new QPixmap(":/playerEmpty");
 	ghost = new QPixmap(":/ghost");
+	doorOpen = new QPixmap(":/doorOpen");
+	doorClosed = new QPixmap(":/doorClosed");
 }
 
 mainwindow::~mainwindow() {
@@ -47,6 +49,7 @@ void mainwindow::updateMap(tuple<int, int> from, tuple<int, int> to)
 	drawGhosts(scene);
 	drawPlayer(scene);
 	drawWalls(scene);
+	drawDoors(scene);
 	ui.gamePane->setScene(scene);
 	ui.gamePane->fitInView(0, 0, scene->width(), scene->height(), Qt::KeepAspectRatio);
 	ui.gamePane->repaint();
@@ -117,6 +120,7 @@ void mainwindow::playGame()
 	this->drawWalls(newSceneMain);
 	this->drawPlayer(newSceneMain);
 	this->drawGhosts(newSceneMain);
+	this->drawDoors(newSceneMain);
 	ui.gamePane->setScene(newSceneMain);
 	ui.gamePane->fitInView(0, 0, newSceneMain->width(), newSceneMain->height(), Qt::KeepAspectRatio);
 
@@ -129,6 +133,7 @@ void mainwindow::playGame()
 	ui.gameScorePane->repaint();
 	ui.gamePane->setFocus();
 	this->moveGhostsTimer.start(500);
+	gameInterface->startGame();
 	QThread::sleep(1);
 
 	//this->startGame();
@@ -183,6 +188,20 @@ void mainwindow::drawLives(QGraphicsScene* scene)
 	for (int i = gameInterface->getLives(); i < gameInterface->getMaxLives(); i++)
 	{
 		scene->addRect(QRectF(i * FIELDSIZE, 0, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(this->playerEmpty->scaled(FIELDSIZE, FIELDSIZE, Qt::KeepAspectRatio)));
+	}
+}
+
+void mainwindow::drawDoors(QGraphicsScene* scene)
+{
+	int x = std::get<1>(gameInterface->getDoor());
+	int y = std::get<0>(gameInterface->getDoor());
+	if (gameInterface->isDoorOpen())
+	{
+		scene->addRect(QRectF(x * FIELDSIZE, y * FIELDSIZE, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(this->doorOpen->scaled(FIELDSIZE, FIELDSIZE, Qt::KeepAspectRatio)));
+	}
+	else
+	{
+		scene->addRect(QRectF(x * FIELDSIZE, y * FIELDSIZE, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(this->doorClosed->scaled(FIELDSIZE, FIELDSIZE, Qt::KeepAspectRatio)));
 	}
 }
 
