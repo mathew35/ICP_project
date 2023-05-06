@@ -16,6 +16,9 @@ project ("main")
 # C++ 17 required standard
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+list(APPEND CMAKE_CXX_FLAGS "-fsanitize=address -fno-omit-frame-pointer -g")
+list(APPEND LINK_FLAGS_DEBUG "-fsanitize=address")
+list(APPEND LINK_FLAGS_RELEASE "-fsanitize=address")
 
 # QT inclusion
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -26,7 +29,7 @@ set(CMAKE_AUTOUIC ON)
 
 
 # Find Qt package
-find_package(Qt5 REQUIRED COMPONENTS Widgets Core OpenGl Xml)
+find_package(Qt5 REQUIRED COMPONENTS Widgets Core OpenGL Xml)
 
 # Include our code
 set(FORMS_DIR "${CMAKE_SOURCE_DIR}/Forms")
