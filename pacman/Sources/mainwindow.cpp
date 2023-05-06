@@ -33,14 +33,13 @@ mainwindow::mainwindow(QWidget* parent)
 	gameInterface = new GameInterface(this);
 	wall = new QPixmap(":/wall");
 	player = new QPixmap(":/player");
-	playerEmpty = new QPixmap(":/playerEmpty");
+	playerEmpty = new QPixmap(":/playerOutline");
 	ghost = new QPixmap(":/ghost");
 	doorOpen = new QPixmap(":/doorOpen");
 	doorClosed = new QPixmap(":/doorClosed");
 }
 
 mainwindow::~mainwindow() {
-	delete gameInterface;
 }
 
 void mainwindow::updateMap(tuple<int, int> from, tuple<int, int> to)
