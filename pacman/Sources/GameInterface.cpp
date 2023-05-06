@@ -123,7 +123,7 @@ void GameInterface::movePlayer(int d)
 	}
 	catch (const std::exception&)
 	{
-		throw(new exception("player not found"));
+		//throw(new exception("player not found"));
 	}
 }
 
@@ -222,6 +222,6 @@ void GameInterface::updateVariables()
 			//}
 		}
 	}
-	if (std::get<0>(this->player) < 0 || std::get<1>(player) < 0) { throw(new exception("Player not found")); }
+	//if (std::get<0>(this->player) < 0 || std::get<1>(player) < 0) { throw(new exception("Player not found")); }
 
 }
