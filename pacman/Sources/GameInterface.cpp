@@ -170,6 +170,8 @@ void GameInterface::notifyGameOver()
 void GameInterface::updateVariables()
 {
 	int walls = this->walls->empty();
+	delete this->ghosts;
+	delete this->keys;
 	this->ghosts = new list<tuple<int, int>>();
 	this->keys = new list<tuple<int, int>>();
 	for (int x = 0; x < maze->numRows(); x++)
