@@ -12,6 +12,23 @@ GhostObject::GhostObject(int row, int col, PathField* Field) {
 	this->row = row;
 	this->col = col;
 	this->callerField = Field;
+	this->bottomField = nullptr;
+	this->upperField = nullptr;
+	this->rightField = nullptr;
+	this->leftField = nullptr;
+	this->logger = nullptr;
+	this->observer = nullptr;
+}
+
+GhostObject::~GhostObject()
+{
+	delete logger;
+	delete observer;
+	delete callerField;
+	delete bottomField;
+	delete upperField;
+	delete rightField;
+	delete leftField;
 }
 
 void GhostObject::setSurroundinFieldsGhost(Field* bottom, Field* right, Field* upper, Field* left, PathField* curPath) {

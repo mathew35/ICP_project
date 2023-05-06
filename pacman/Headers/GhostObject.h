@@ -31,6 +31,7 @@ protected:
 	Field* leftField;
 public:
 	GhostObject(int row, int col, PathField* field);
+	~GhostObject();
 
 	void setSurroundinFieldsGhost(Field* bottom, Field* right, Field* upper, Field* left, PathField* curPath);
 

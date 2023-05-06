@@ -36,7 +36,19 @@ MazeClass::MazeClass(int rows, int cols)
 
 MazeClass::~MazeClass()
 {
-	//TODO - delete fieldArray?
+	delete door;
+	for (int i = 0; i < rows; i++)
+	{
+		for (int j = 0; j < cols; j++)
+		{
+			delete[] fieldArray[i][j];
+		}
+		delete[] fieldArray[i];
+	}
+	for (MazeObject* obj : listOfGhosts)
+	{
+		delete obj;
+	}
 }
 
 void MazeClass::createArray(int rows, int cols) {

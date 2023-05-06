@@ -18,6 +18,7 @@ class Maze;
 class MazeConfigure {
 public:
 	MazeConfigure(Logger* logger);
+	~MazeConfigure();
 	void loadMapFromFile(std::string file);
 	void startReading(int rows, int cols);
 	bool processLine(std::string line);

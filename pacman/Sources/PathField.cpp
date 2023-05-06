@@ -48,6 +48,19 @@ PathField::PathField(int row, int col, char typeOfObject) {
 
 }
 
+PathField::~PathField()
+{
+	delete bottomField;
+	delete upperField;
+	delete rightField;
+	delete leftField;
+	for (MazeObject* obj : *fieldObjectList)
+	{
+		delete obj;
+	}
+	delete fieldObjectList;
+}
+
 void PathField::setSurroundingFields(Field* bottom, Field* right, Field* upper, Field* left) {
 	this->bottomField = bottom;
 	this->rightField = right;

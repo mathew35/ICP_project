@@ -22,6 +22,13 @@ GameInterface::GameInterface(mainwindow* window)
 
 GameInterface::~GameInterface()
 {
+	delete config;
+	delete ghosts;
+	delete walls;
+	delete keys;
+	delete maze;
+	delete logger;
+	delete window;
 }
 
 void GameInterface::loadMap(std::string file)

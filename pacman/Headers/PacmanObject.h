@@ -31,6 +31,7 @@ protected:
 
 public:
 	PacmanObject(int row, int col, PathField* field);
+	~PacmanObject();
 
 	void setSurroundinFieldsPacman(Field* bottom, Field* right, Field* upper, Field* left, PathField* curPath);
 

@@ -34,6 +34,8 @@ public:
 
 	PathField(int row, int col, char typeOfObject);
 
+	~PathField();
+
 	void setSurroundingFields(Field* bottom, Field* right, Field* upper, Field* left);
 
 	bool canMove() override;
