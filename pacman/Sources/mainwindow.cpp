@@ -40,12 +40,6 @@ mainwindow::mainwindow(QWidget* parent)
 }
 
 mainwindow::~mainwindow() {
-	delete wall;
-	delete player;
-	delete playerEmpty;
-	delete ghost;
-	delete doorOpen;
-	delete doorClosed;
 	delete gameInterface;
 }
 

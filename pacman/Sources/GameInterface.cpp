@@ -23,10 +23,6 @@ GameInterface::GameInterface(mainwindow* window)
 GameInterface::~GameInterface()
 {
 	delete config;
-	delete ghosts;
-	delete walls;
-	delete keys;
-	delete maze;
 	delete logger;
 	delete window;
 }
@@ -67,7 +63,6 @@ void GameInterface::endGame()
 	delete this->ghosts;
 	delete this->walls;
 	delete this->keys;
-	delete this->maze;
 }
 
 int GameInterface::getLives()
@@ -170,10 +165,18 @@ void GameInterface::notifyGameOver()
 void GameInterface::updateVariables()
 {
 	int walls = this->walls->empty();
-	delete this->ghosts;
-	delete this->keys;
-	this->ghosts = new list<tuple<int, int>>();
-	this->keys = new list<tuple<int, int>>();
+	if (!this->ghosts->empty())
+	{
+		this->ghosts->clear();
+		//delete this->ghosts;
+		//this->ghosts = new list<tuple<int, int>>();
+	}
+	if (!this->keys->empty())
+	{
+		this->keys->clear();
+		//delete this->keys;
+		//this->keys = new list<tuple<int, int>>();
+	}
 	for (int x = 0; x < maze->numRows(); x++)
 	{
 		for (int y = 0; y < maze->numCols(); y++)

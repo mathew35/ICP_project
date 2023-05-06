@@ -22,13 +22,6 @@ GhostObject::GhostObject(int row, int col, PathField* Field) {
 
 GhostObject::~GhostObject()
 {
-	delete logger;
-	delete observer;
-	delete callerField;
-	delete bottomField;
-	delete upperField;
-	delete rightField;
-	delete leftField;
 }
 
 void GhostObject::setSurroundinFieldsGhost(Field* bottom, Field* right, Field* upper, Field* left, PathField* curPath) {
@@ -96,6 +89,8 @@ bool GhostObject::move(Field::Direction dir) {
 		this->col -= 1;
 		observer->notifyMove(this->row, this->col - 1, this->row, this->col);
 		logger->printMovement(this, this->row, this->col - 1, this->row, this->col);
+		nextField = nullptr;
+		prevField = nullptr;
 		return true;
 	case Field::U:
 		if (this->upperField == NULL || !this->upperField->canMove()) { return false; }

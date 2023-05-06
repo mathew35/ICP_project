@@ -17,6 +17,7 @@ private:
 	int col;
 public:
 	WallField(int row, int col);
+	~WallField();
 
 	bool canMove() override;
 

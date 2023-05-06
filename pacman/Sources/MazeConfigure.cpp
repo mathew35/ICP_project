@@ -11,14 +11,12 @@
 
 MazeConfigure::MazeConfigure(Logger* logger)
 {
-	logger = logger;
-	newMaze = nullptr;
+	this->logger = logger;
+	this->newMaze = nullptr;
 }
 
 MazeConfigure::~MazeConfigure()
 {
-	delete newMaze;
-	delete logger;
 }
 
 void MazeConfigure::loadMapFromFile(std::string file)

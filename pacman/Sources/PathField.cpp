@@ -50,10 +50,6 @@ PathField::PathField(int row, int col, char typeOfObject) {
 
 PathField::~PathField()
 {
-	delete bottomField;
-	delete upperField;
-	delete rightField;
-	delete leftField;
 	for (MazeObject* obj : *fieldObjectList)
 	{
 		delete obj;

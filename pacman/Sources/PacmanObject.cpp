@@ -16,13 +16,6 @@ PacmanObject::PacmanObject(int row, int col, PathField* Field) {
 
 PacmanObject::~PacmanObject()
 {
-	delete logger;
-	delete observer;
-	delete callerField;
-	delete bottomField;
-	delete upperField;
-	delete leftField;
-	delete rightField;
 }
 
 void PacmanObject::setSurroundinFieldsPacman(Field* bottom, Field* right, Field* upper, Field* left, PathField* curPath) {
