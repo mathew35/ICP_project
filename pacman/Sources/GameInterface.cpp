@@ -24,7 +24,6 @@ GameInterface::~GameInterface()
 {
 	delete config;
 	delete logger;
-	delete window;
 }
 
 void GameInterface::loadMap(std::string file)

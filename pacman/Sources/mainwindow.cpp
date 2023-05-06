@@ -43,6 +43,7 @@ mainwindow::mainwindow(QWidget* parent)
 	doorOpen = map->scaled(FIELDSIZE, FIELDSIZE, Qt::KeepAspectRatio);
 	map = new QPixmap(":/doorClosed");
 	doorClosed = map->scaled(FIELDSIZE, FIELDSIZE, Qt::KeepAspectRatio);
+	delete map;
 }
 
 mainwindow::~mainwindow() {
