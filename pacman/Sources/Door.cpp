@@ -13,11 +13,16 @@ Door::Door(int row, int col, GameInterface* o, Logger* logger, int keys = 0)
 	this->row = row;
 	this->col = col;
 	this->observer = o;
-	this->keys = keys; //TODO fix keys count
+	this->keys = keys;
 }
 
 Door::~Door()
 {
+}
+
+void Door::setKeys(int keys)
+{
+	this->keys = keys;
 }
 
 bool Door::isOpen()
