@@ -31,12 +31,18 @@ mainwindow::mainwindow(QWidget* parent)
 	connect(ui.backToMainMenuButton, SIGNAL(clicked()), this, SLOT(backToMainMenuButtonClicked()));
 
 	gameInterface = new GameInterface(this);
-	wall = new QPixmap(":/wall");
-	player = new QPixmap(":/player");
-	playerEmpty = new QPixmap(":/playerOutline");
-	ghost = new QPixmap(":/ghost");
-	doorOpen = new QPixmap(":/doorOpen");
-	doorClosed = new QPixmap(":/doorClosed");
+	QPixmap* map = new QPixmap(":/wall");
+	wall = map->scaled(FIELDSIZE, FIELDSIZE, Qt::KeepAspectRatio);
+	map = new QPixmap(":/player");
+	player = map->scaled(FIELDSIZE, FIELDSIZE, Qt::KeepAspectRatio);
+	map = new QPixmap(":/playerOutline");
+	playerEmpty = map->scaled(FIELDSIZE, FIELDSIZE, Qt::KeepAspectRatio);
+	map = new QPixmap(":/ghost");
+	ghost = map->scaled(FIELDSIZE, FIELDSIZE, Qt::KeepAspectRatio);
+	map = new QPixmap(":/doorOpen");
+	doorOpen = map->scaled(FIELDSIZE, FIELDSIZE, Qt::KeepAspectRatio);
+	map = new QPixmap(":/doorClosed");
+	doorClosed = map->scaled(FIELDSIZE, FIELDSIZE, Qt::KeepAspectRatio);
 }
 
 mainwindow::~mainwindow() {
@@ -161,21 +167,21 @@ void mainwindow::drawWalls(QGraphicsScene* scene)
 	pen.setWidth(1);
 	for (auto wall : gameInterface->getWalls())
 	{
-		scene->addRect(QRectF(std::get<1>(wall) * FIELDSIZE, std::get<0>(wall) * FIELDSIZE, FIELDSIZE, FIELDSIZE), pen, QBrush(this->wall->scaled(FIELDSIZE, FIELDSIZE, Qt::KeepAspectRatio)));
+		scene->addRect(QRectF(std::get<1>(wall) * FIELDSIZE, std::get<0>(wall) * FIELDSIZE, FIELDSIZE, FIELDSIZE), pen, QBrush(this->wall));
 	}
 }
 
 void mainwindow::drawPlayer(QGraphicsScene* scene)
 {
 	tuple<int, int> player = gameInterface->getPlayer();
-	scene->addRect(QRectF(std::get<1>(player) * FIELDSIZE, std::get<0>(player) * FIELDSIZE, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(this->player->scaled(FIELDSIZE, FIELDSIZE, Qt::KeepAspectRatio)));
+	scene->addRect(QRectF(std::get<1>(player) * FIELDSIZE, std::get<0>(player) * FIELDSIZE, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(this->player));
 }
 
 void mainwindow::drawGhosts(QGraphicsScene* scene)
 {
 	for (auto ghost : gameInterface->getGhosts())
 	{
-		scene->addRect(QRectF(std::get<1>(ghost) * FIELDSIZE, std::get<0>(ghost) * FIELDSIZE, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(this->ghost->scaled(FIELDSIZE, FIELDSIZE, Qt::KeepAspectRatio)));
+		scene->addRect(QRectF(std::get<1>(ghost) * FIELDSIZE, std::get<0>(ghost) * FIELDSIZE, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(this->ghost));
 	}
 }
 
@@ -183,11 +189,11 @@ void mainwindow::drawLives(QGraphicsScene* scene)
 {
 	for (int i = 0; i < gameInterface->getLives(); i++)
 	{
-		scene->addRect(QRectF(i * FIELDSIZE, 0, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(this->player->scaled(FIELDSIZE, FIELDSIZE, Qt::KeepAspectRatio)));
+		scene->addRect(QRectF(i * FIELDSIZE, 0, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(player));
 	}
 	for (int i = gameInterface->getLives(); i < gameInterface->getMaxLives(); i++)
 	{
-		scene->addRect(QRectF(i * FIELDSIZE, 0, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(this->playerEmpty->scaled(FIELDSIZE, FIELDSIZE, Qt::KeepAspectRatio)));
+		scene->addRect(QRectF(i * FIELDSIZE, 0, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(playerEmpty));
 	}
 }
 
@@ -197,11 +203,11 @@ void mainwindow::drawDoors(QGraphicsScene* scene)
 	int y = std::get<0>(gameInterface->getDoor());
 	if (gameInterface->isDoorOpen())
 	{
-		scene->addRect(QRectF(x * FIELDSIZE, y * FIELDSIZE, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(this->doorOpen->scaled(FIELDSIZE, FIELDSIZE, Qt::KeepAspectRatio)));
+		scene->addRect(QRectF(x * FIELDSIZE, y * FIELDSIZE, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(this->doorOpen));
 	}
 	else
 	{
-		scene->addRect(QRectF(x * FIELDSIZE, y * FIELDSIZE, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(this->doorClosed->scaled(FIELDSIZE, FIELDSIZE, Qt::KeepAspectRatio)));
+		scene->addRect(QRectF(x * FIELDSIZE, y * FIELDSIZE, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(this->doorClosed));
 	}
 }
 
