@@ -4,5 +4,7 @@
         <file alias="player">playerFull.webp</file>
         <file alias="wall">wall.jpg</file>
         <file alias="ghost">ghost.png</file>
+        <file alias="doorClosed">doorClosed.png</file>
+        <file alias="doorOpen">doorOpen.png</file>
     </qresource>
 </RCC>
