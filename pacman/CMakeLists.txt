@@ -52,6 +52,6 @@ add_executable (pacman ${SOURCES})
 target_include_directories(pacman PRIVATE ${FORMS_DIR} PRIVATE ${HEADERS_DIR} PRIVATE ${SOURCES_DIR} PRIVATE ${RESOURCES_DIR})
 target_link_libraries(pacman PRIVATE Qt5::Widgets)
 set_target_properties(pacman PROPERTIES
-	WIN32_EXECUTABLE OFF
+	WIN32_EXECUTABLE ON
 	MACOSX_BUNDLE ON
 )
