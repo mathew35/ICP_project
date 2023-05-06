@@ -56,6 +56,7 @@ public:
 private:
 	Logger* logger;
 	mainwindow* window;
+	void updateVariables();
 };
 
 

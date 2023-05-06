@@ -45,61 +45,7 @@ void GameInterface::loadMap()
 
 	maze = config->createMaze();
 	//TODO - add signal that map is created?
-	this->walls = new list<tuple<int, int>>();
-	this->ghosts = new list<tuple<int, int>>();
-	this->keys = new list<tuple<int, int>>();
-	for (int x = 0; x < maze->numRows(); x++)
-	{
-		for (int y = 0; y < maze->numCols(); y++)
-		{
-			auto field = maze->getField(x, y);
-			//walls
-			if (field == NULL || field->getType() == 'X')
-			{
-				this->walls->push_back(tuple(x, y));
-				continue;
-			}
-			MazeObject* obj = field->get();
-			if (obj == nullptr) { continue; }
-			GhostObject* ghost = (GhostObject*)obj;
-			PacmanObject* player = (PacmanObject*)obj;
-			DoorObject* Door = (DoorObject*)obj;
-			//ghosts
-			if (typeid(*ghost) == typeid(GhostObject))
-			{
-				field->get()->attach(this);
-				field->get()->setLogger(this->logger);
-				this->ghosts->push_back(tuple(x, y));
-				continue;
-			}
-			//player
-			if (typeid(*player) == typeid(PacmanObject))
-			{
-				field->get()->attach(this);
-				field->get()->setLogger(this->logger);
-				this->player = tuple(x, y);
-				this->lives = field->get()->getLives();
-				if (this->maxLives < 0) { this->maxLives = this->lives; }
-				continue;
-			}
-			//door
-			if (typeid(*Door) == typeid(DoorObject))
-			{
-				field->get()->attach(this);
-				field->get()->setLogger(this->logger);
-				field->get()->start();
-				this->door = tuple(x, y);
-				continue;
-			}
-			//keys
-			//if (field != NULL && field->getType() == 'K')
-			//{
-				//TODO
-				//continue;
-			//}
-		}
-	}
-	if (std::get<0>(this->player) < 0 || std::get<1>(player) < 0) { throw(new exception("Player not found")); }
+	updateVariables();
 }
 
 void GameInterface::startGame()
@@ -183,35 +129,7 @@ void GameInterface::movePlayer(int d)
 
 void GameInterface::notifyMove(int fromX, int fromY, int toX, int toY)
 {
-	this->ghosts = new list<tuple<int, int>>();
-	//this->keys->clear();
-
-	for (int x = 0; x < maze->numRows(); x++)
-	{
-		for (int y = 0; y < maze->numCols(); y++)
-		{
-			auto field = maze->getField(x, y);
-			//ghosts
-			if (field != NULL && field->get() != NULL && !field->get()->isPacman())
-			{
-				field->get()->attach(this);
-				this->ghosts->push_back(tuple(x, y));
-			}
-			//player
-			if (field != NULL && field->get() != NULL && field->get()->isPacman())
-			{
-				field->get()->attach(this);
-				this->player = tuple(x, y);
-				this->lives = field->get()->getLives();
-				if (this->maxLives < 0) { this->maxLives = this->lives; }
-			}
-			//door
-			//TODO
-			//keys
-			//TODO
-		}
-	}
-	if (std::get<0>(this->player) < 0 || std::get<1>(player) < 0) { throw(new exception("Player not found")); }
+	updateVariables();
 	this->window->updateMap(tuple(fromX, fromY), tuple(toX, toY));
 }
 
@@ -245,4 +163,65 @@ void GameInterface::notifyGameOver()
 {
 	this->endGame();
 	this->window->updateEndGame();
+}
+
+void GameInterface::updateVariables()
+{
+	int walls = this->walls->empty();
+	this->ghosts = new list<tuple<int, int>>();
+	this->keys = new list<tuple<int, int>>();
+	for (int x = 0; x < maze->numRows(); x++)
+	{
+		for (int y = 0; y < maze->numCols(); y++)
+		{
+			auto field = maze->getField(x, y);
+			//walls
+			if (walls && (field == nullptr || field->getType() == 'X'))
+			{
+				this->walls->push_back(tuple(x, y));
+				continue;
+			}
+			if (field == nullptr) { continue; }
+			MazeObject* obj = field->get();
+			if (obj == nullptr) { continue; }
+			GhostObject* ghost = (GhostObject*)obj;
+			PacmanObject* player = (PacmanObject*)obj;
+			DoorObject* Door = (DoorObject*)obj;
+			//ghosts
+			if (typeid(*ghost) == typeid(GhostObject))
+			{
+				field->get()->attach(this);
+				field->get()->setLogger(this->logger);
+				this->ghosts->push_back(tuple(x, y));
+				continue;
+			}
+			//player
+			if (typeid(*player) == typeid(PacmanObject))
+			{
+				field->get()->attach(this);
+				field->get()->setLogger(this->logger);
+				this->player = tuple(x, y);
+				this->lives = field->get()->getLives();
+				if (this->maxLives < 0) { this->maxLives = this->lives; }
+				continue;
+			}
+			//door
+			if (typeid(*Door) == typeid(DoorObject))
+			{
+				field->get()->attach(this);
+				field->get()->setLogger(this->logger);
+				field->get()->start();
+				this->door = tuple(x, y);
+				continue;
+			}
+			//keys
+			//if (field != NULL && field->getType() == 'K')
+			//{
+				//TODO
+				//continue;
+			//}
+		}
+	}
+	if (std::get<0>(this->player) < 0 || std::get<1>(player) < 0) { throw(new exception("Player not found")); }
+
 }
