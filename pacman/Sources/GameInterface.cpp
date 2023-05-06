@@ -93,6 +93,18 @@ void GameInterface::startGame()
 	}
 }
 
+void GameInterface::endGame()
+{
+	delete this->logger;
+	this->logger = new Logger();
+	delete this->config;
+	this->config = new MazeConfigure(this->logger);
+	delete this->ghosts;
+	delete this->walls;
+	delete this->keys;
+	delete this->maze;
+}
+
 int GameInterface::getLives()
 {
 	return this->lives;
@@ -149,8 +161,8 @@ void GameInterface::movePlayer(int d)
 
 void GameInterface::notifyMove(int fromX, int fromY, int toX, int toY)
 {
-	this->ghosts->clear();
-	this->keys->clear();
+	this->ghosts = new list<tuple<int, int>>();
+	//this->keys->clear();
 
 	for (int x = 0; x < maze->numRows(); x++)
 	{
@@ -208,5 +220,6 @@ void GameInterface::notifyEndLevel()
 
 void GameInterface::notifyGameOver()
 {
-	//TODO
+	this->endGame();
+	this->window->updateEndGame();
 }

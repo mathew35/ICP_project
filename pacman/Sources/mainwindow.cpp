@@ -140,6 +140,16 @@ void mainwindow::startGame()
 		//gameInterface->ghostsMove();
 	//}
 }
+
+void mainwindow::updateEndGame()
+{
+	this->keyPressTimer.stop();
+	this->moveGhostsTimer.stop();
+
+	ui.gameWidget->setVisible(false);
+	ui.mainMenuWidget->setVisible(true);
+}
+
 void mainwindow::drawWalls(QGraphicsScene* scene)
 {
 	QPen pen;

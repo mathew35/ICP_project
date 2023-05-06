@@ -71,7 +71,7 @@ bool GhostObject::move(Field::Direction dir) {
 			if (object->isPacman())
 			{
 				PacmanObject* pacman = static_cast<PacmanObject*>(object);
-				pacman->decreaseLives();
+				if (!pacman->decreaseLives()) { return false; }
 			}
 		}
 		//TODO 2 ghost same field
@@ -91,7 +91,7 @@ bool GhostObject::move(Field::Direction dir) {
 			if (object->isPacman())
 			{
 				PacmanObject* pacman = static_cast<PacmanObject*>(object);
-				pacman->decreaseLives();
+				if (!pacman->decreaseLives()) { return false; }
 			}
 		}
 		nextField->setGhostObject(this);
@@ -110,13 +110,13 @@ bool GhostObject::move(Field::Direction dir) {
 			if (object->isPacman())
 			{
 				PacmanObject* pacman = static_cast<PacmanObject*>(object);
-				pacman->decreaseLives();
+				if (!pacman->decreaseLives()) { return false; }
 			}
 		}
 		nextField->setGhostObject(this);
 		this->col += 1;
 		observer->notifyMove(this->row, this->col, this->row, this->col + 1);
-		logger->printMovement(this, this->row, this->col, this->row, this->col + 1);
+		//logger->printMovement(this, this->row, this->col, this->row, this->col + 1);
 		return true;
 	case Field::D:
 		if (this->bottomField == nullptr || !this->bottomField->canMove()) { return false; }
@@ -129,7 +129,7 @@ bool GhostObject::move(Field::Direction dir) {
 			if (object->isPacman())
 			{
 				PacmanObject* pacman = static_cast<PacmanObject*>(object);
-				pacman->decreaseLives();
+				if (!pacman->decreaseLives()) { return false; }
 			}
 		}
 		nextField->setGhostObject(this);
@@ -162,7 +162,7 @@ void GhostObject::start()
 	int oldRow = this->row;
 	int oldCol = this->col;
 	it = std::next(moveTo.begin(), randomPos);
-	this->move(*it);
+	if (!this->move(*it)) { return; }
 	int newRow = this->row;
 	int newCol = this->col;
 	this->observer->notifyMove(oldRow, oldCol, newRow, newCol);

@@ -25,6 +25,7 @@ public:
 	~mainwindow();
 	void updateMap(std::tuple<int, int> from, std::tuple<int, int>to);
 	void updateLives();
+	void updateEndGame();
 
 private slots:
 	void newGameButtonClicked();

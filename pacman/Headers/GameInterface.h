@@ -34,6 +34,7 @@ public:
 	void loadMap();
 	void loadMap(std::string file);
 	void startGame();
+	void endGame();
 	int getLives();
 	int getMaxLives();
 	tuple<int, int> getMapSize();
