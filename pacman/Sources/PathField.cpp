@@ -16,7 +16,7 @@ PathField::PathField(int row, int col) {
 	this->fieldType = '.';
 	this->typeOfObject = 0;
 	this->fieldObject = nullptr;
-}
+}//TODO add key and door MazeItem
 
 PathField::PathField(int row, int col, char typeOfObject) {
 	this->col = col;

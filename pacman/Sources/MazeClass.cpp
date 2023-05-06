@@ -53,23 +53,30 @@ void MazeClass::createArray(int rows, int cols) {
 void MazeClass::insertLine(std::string line) {
 	for (int i = 1; i < this->numCols() - 1; i++)
 	{
-		if (line[i - 1] == '.')
+		switch (line[i - 1])
 		{
+		case '.':
 			this->fieldArray[this->numberOfLines][i] = new PathField(this->numberOfLines, i);
-		}
-		if (line[i - 1] == 'X')
-		{
+			continue;
+		case 'X':
 			this->fieldArray[this->numberOfLines][i] = new WallField(this->numberOfLines, i);
-		}
-		if (line[i - 1] == 'S')
-		{
+			continue;
+		case 'S':
 			this->fieldArray[this->numberOfLines][i] = new PathField(this->numberOfLines, i, 'S');
-		}
-		if (line[i - 1] == 'G')
-		{
+			continue;
+		case 'G':
 			this->fieldArray[this->numberOfLines][i] = new PathField(this->numberOfLines, i, 'G');
 			this->insertGhost(this->fieldArray[this->numberOfLines][i]);
-
+			continue;
+		case 'T':
+			this->fieldArray[this->numberOfLines][i] = new PathField(this->numberOfLines, i, 'T');
+			continue;
+		case 'K':
+			this->fieldArray[this->numberOfLines][i] = new PathField(this->numberOfLines, i, 'K');
+			continue;
+		default:
+			break;
+			//TODO
 		}
 	}
 	this->numberOfLines++;
@@ -79,13 +86,21 @@ void MazeClass::setFields() {
 	{
 		for (int c = 0; c < this->numCols() - 1; c++)
 		{
-			if (typeid((PathField*)this->fieldArray[r][c]) == typeid(PathField*) && this->fieldArray[r][c]!=nullptr){
+			if (typeid((PathField*)this->fieldArray[r][c]) == typeid(PathField*) && this->fieldArray[r][c] != nullptr) {
 				PathField* path = (PathField*)this->fieldArray[r][c];
 				path->setSurroundingFields(this->fieldArray[r + 1][c], this->fieldArray[r][c + 1], this->fieldArray[r - 1][c], this->fieldArray[r][c - 1]);
 				path->setObjectFields(path->get());
 			}
 		}
 	}
+}
+Door* MazeClass::getDoor()
+{
+	return this->door;
+}
+int MazeClass::getKeys()
+{
+	return this->keys;
 }
 int MazeClass::numCols() {
 	return this->cols;

@@ -16,6 +16,7 @@ protected:
 public:
 	Door(int row, int col, GameInterface* o, Logger* logger, int keys);
 	~Door();
+	void setKeys(int keys);
 	bool isOpen();
 	void openDoors();
 };
