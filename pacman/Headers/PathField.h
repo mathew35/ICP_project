@@ -8,6 +8,7 @@
 
 
 #include <typeinfo>
+#include <list>
 #include "Field.h"
 #include "PacmanObject.h"
 #include "GhostObject.h"
@@ -29,7 +30,7 @@ private:
 public:
 	void objectMoved();
 
-	MazeObject* fieldObject;
+	std::list<MazeObject*>* fieldObjectList;
 
 	PathField(int row, int col);
 

@@ -15,7 +15,7 @@ PathField::PathField(int row, int col) {
 	this->row = row;
 	this->fieldType = '.';
 	this->typeOfObject = 0;
-	this->fieldObject = nullptr;
+	this->fieldObjectList = new list<MazeObject*>();
 }//TODO add key and door MazeItem
 
 PathField::PathField(int row, int col, char typeOfObject) {
@@ -23,13 +23,14 @@ PathField::PathField(int row, int col, char typeOfObject) {
 	this->row = row;
 	this->fieldType = '.';
 	this->typeOfObject = typeOfObject;
+	this->fieldObjectList = new list<MazeObject*>();
 	switch (typeOfObject)
 	{
 	case 'S':
-		this->fieldObject = new PacmanObject(row, col, this);
+		this->fieldObjectList->emplace_back(new PacmanObject(row, col, this));
 		break;
 	case 'G':
-		this->fieldObject = new GhostObject(row, col, this);
+		this->fieldObjectList->emplace_back(new GhostObject(row, col, this));
 		break;
 	case 'T':
 		//this->fieldObject->push_front(new Door(row, col, this));
@@ -50,14 +51,15 @@ void PathField::setSurroundingFields(Field* bottom, Field* right, Field* upper, 
 	this->leftField = left;
 }
 
-void PathField::objectMoved() { this->fieldObject = nullptr; }
+void PathField::objectMoved() { this->fieldObjectList->pop_back(); }
 
 bool PathField::canMove() {
 	return !(this->fieldType == 'X');
 }
 
 bool PathField::contains(MazeObject* obj) {
-	if (obj->equals(fieldObject))
+	list<MazeObject*>::iterator lastElem = fieldObjectList->end();
+	if (obj->equals(*lastElem))
 	{
 		return true;
 	}
@@ -67,10 +69,11 @@ bool PathField::contains(MazeObject* obj) {
 	}
 }
 
-MazeObject* PathField::get() { return fieldObject; }
+MazeObject* PathField::get() { return !fieldObjectList->empty() ? fieldObjectList->back() : nullptr; }
 
 bool PathField::isEmpty() {
-	if (this->fieldObject == nullptr)
+	//TODO - posible logic break
+	if (this->fieldObjectList->empty())
 	{
 		return true;
 	}
@@ -95,14 +98,14 @@ Field* PathField::nextField(Field::Direction dirs) {
 }
 
 void PathField::setPacmanObject(MazeObject* fieldObject) {
-	this->fieldObject = fieldObject;
+	this->fieldObjectList->emplace_back(fieldObject);
 	this->typeOfObject = 'S';
 	this->setObjectFields(fieldObject);
 	//this->setSurroundingFields(this->bottomField, this->rightField, this->upperField, this->leftField);
 }
 
 void PathField::setGhostObject(MazeObject* fieldObject) {
-	this->fieldObject = fieldObject;
+	this->fieldObjectList->emplace_back(fieldObject);
 	this->typeOfObject = 'G';
 	this->setObjectFields(fieldObject);
 	//this->setSurroundingFields(this->bottomField, this->rightField, this->upperField, this->leftField);

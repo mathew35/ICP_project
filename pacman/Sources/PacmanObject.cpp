@@ -69,7 +69,7 @@ bool PacmanObject::move(Field::Direction dir) {
 		}
 		nextField = static_cast<PathField*>(this->leftField);
 		prevField = this->callerField;
-		prevField->fieldObject = nullptr;
+		if (!prevField->fieldObjectList->empty()) { prevField->fieldObjectList->pop_back(); }
 		if (!(nextField->isEmpty()))
 		{
 			this->decreaseLives();
@@ -86,7 +86,7 @@ bool PacmanObject::move(Field::Direction dir) {
 		}
 		nextField = static_cast<PathField*>(this->upperField);
 		prevField = this->callerField;
-		prevField->fieldObject = nullptr;
+		if (!prevField->fieldObjectList->empty()) { prevField->fieldObjectList->pop_back(); }
 		if (!(nextField->isEmpty()))
 		{
 			this->decreaseLives();
@@ -103,7 +103,7 @@ bool PacmanObject::move(Field::Direction dir) {
 		}
 		nextField = static_cast<PathField*>(this->rightField);
 		prevField = this->callerField;
-		prevField->fieldObject = nullptr;
+		if (!prevField->fieldObjectList->empty()) { prevField->fieldObjectList->pop_back(); }
 		if (!(nextField->isEmpty()))
 		{
 			this->decreaseLives();
@@ -120,7 +120,7 @@ bool PacmanObject::move(Field::Direction dir) {
 		}
 		nextField = static_cast<PathField*>(this->bottomField);
 		prevField = this->callerField;
-		prevField->fieldObject = nullptr;
+		if (!prevField->fieldObjectList->empty()) { prevField->fieldObjectList->pop_back(); }
 		if (!(nextField->isEmpty()))
 		{
 			this->decreaseLives();

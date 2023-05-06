@@ -64,7 +64,7 @@ bool GhostObject::move(Field::Direction dir) {
 		if (this->leftField == NULL || !this->leftField->canMove()) { return false; }
 		nextField = static_cast<PathField*>(this->leftField);
 		prevField = this->callerField;
-		prevField->fieldObject = nullptr;
+		if (!prevField->fieldObjectList->empty()) { prevField->fieldObjectList->pop_back(); }
 		if (!(nextField->isEmpty()))
 		{
 			MazeObject* object = nextField->get();
@@ -84,7 +84,7 @@ bool GhostObject::move(Field::Direction dir) {
 		if (this->upperField == NULL || !this->upperField->canMove()) { return false; }
 		nextField = static_cast<PathField*>(this->upperField);
 		prevField = this->callerField;
-		prevField->fieldObject = nullptr;
+		if (!prevField->fieldObjectList->empty()) { prevField->fieldObjectList->pop_back(); }
 		if (!(nextField->isEmpty()))
 		{
 			MazeObject* object = nextField->get();
@@ -103,7 +103,7 @@ bool GhostObject::move(Field::Direction dir) {
 		if (this->rightField == NULL || !this->rightField->canMove()) { return false; }
 		nextField = static_cast<PathField*>(this->rightField);
 		prevField = this->callerField;
-		prevField->fieldObject = nullptr;
+		if (!prevField->fieldObjectList->empty()) { prevField->fieldObjectList->pop_back(); }
 		if (!(nextField->isEmpty()))
 		{
 			MazeObject* object = nextField->get();
@@ -122,7 +122,7 @@ bool GhostObject::move(Field::Direction dir) {
 		if (this->bottomField == nullptr || !this->bottomField->canMove()) { return false; }
 		nextField = static_cast<PathField*>(this->bottomField);
 		prevField = this->callerField;
-		prevField->fieldObject = nullptr;
+		if (!prevField->fieldObjectList->empty()) { prevField->fieldObjectList->pop_back(); }
 		if (!(nextField->isEmpty()))
 		{
 			MazeObject* object = nextField->get();
