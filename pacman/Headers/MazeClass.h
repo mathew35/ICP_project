@@ -13,9 +13,9 @@
 #include "WallField.h"
 #include "PacmanObject.h"
 #include "GhostObject.h"
-#include "Door.h"
+#include "DoorObject.h"
 #include "Maze.h"
-class Door;
+class DoorObject;
 
 class MazeClass : public Maze {
 public:
@@ -30,7 +30,7 @@ public:
 
 	void insertLine(std::string line);
 	void setFields();
-	Door* getDoor();
+	DoorObject* getDoor();
 	int getKeys();
 private:
 	int numberOfLines = 1;
@@ -40,7 +40,7 @@ private:
 	int rows;
 	int cols;
 	int keys;
-	Door* door;
+	DoorObject* door;
 
 	void insertGhost(Field* field);
 	void horizontalWall(int rows, int cols);

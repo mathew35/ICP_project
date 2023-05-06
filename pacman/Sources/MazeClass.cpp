@@ -94,7 +94,7 @@ void MazeClass::setFields() {
 		}
 	}
 }
-Door* MazeClass::getDoor()
+DoorObject* MazeClass::getDoor()
 {
 	return this->door;
 }

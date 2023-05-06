@@ -124,21 +124,6 @@ void PathField::setObjectFields(MazeObject* object) {
 	}
 }
 
-bool PathField::hasItem()
-{
-	return !(this->item == nullptr);
-}
-
-MazeItem* PathField::getItem()
-{
-	return this->item;
-}
-
-void PathField::setItem(MazeItem* item)
-{
-	this->item = item;
-}
-
 char PathField::getType()
 {
 	return this->fieldType;
