@@ -12,6 +12,7 @@
 #include "PacmanObject.h"
 #include "GhostObject.h"
 #include "MazeItem.h"
+#include "Door.h"
 
 class PathField : public Field {
 private:

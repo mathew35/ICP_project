@@ -23,14 +23,24 @@ PathField::PathField(int row, int col, char typeOfObject) {
 	this->row = row;
 	this->fieldType = '.';
 	this->typeOfObject = typeOfObject;
-	if (typeOfObject == 'S')
+	switch (typeOfObject)
 	{
+	case 'S':
 		this->fieldObject = new PacmanObject(row, col, this);
-	}
-	else if (typeOfObject == 'G')
-	{
+		break;
+	case 'G':
 		this->fieldObject = new GhostObject(row, col, this);
+		break;
+	case 'T':
+		//this->fieldObject->push_front(new Door(row, col, this));
+		break;
+	case 'K':
+		//this->setItem(new Door(row, col, this));
+		break;
+	default:
+		break;
 	}
+
 }
 
 void PathField::setSurroundingFields(Field* bottom, Field* right, Field* upper, Field* left) {

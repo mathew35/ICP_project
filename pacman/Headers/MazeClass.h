@@ -15,6 +15,7 @@
 #include "GhostObject.h"
 #include "Door.h"
 #include "Maze.h"
+class Door;
 
 class MazeClass : public Maze {
 public:
