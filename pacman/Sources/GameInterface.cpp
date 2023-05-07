@@ -27,11 +27,11 @@ GameInterface::~GameInterface()
 	delete this->logger;
 	this->logger = nullptr;
 	this->window = nullptr;
-	delete[] this->walls;
+	delete this->walls;
 	this->walls = nullptr;
-	delete[] this->ghosts;
+	delete this->ghosts;
 	this->ghosts = nullptr;
-	delete[] this->keys;
+	delete this->keys;
 	this->keys = nullptr;
 }
 
