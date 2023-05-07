@@ -223,7 +223,7 @@ bool mainwindow::eventFilter(QObject* obj, QEvent* event)
 	{
 		if (obj == ui.gamePane)
 		{
-			//this->keyPressTimer.start(500);
+			this->keyPressTimer.start(500);
 			this->pendingKey = static_cast<QKeyEvent*>(event)->key();
 		}
 	}
@@ -254,6 +254,5 @@ void mainwindow::processKeyPressEvent()
 void mainwindow::moveGhosts()
 {
 	gameInterface->startGame();
-	processKeyPressEvent();
 }
 
