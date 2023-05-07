@@ -17,6 +17,7 @@ MazeConfigure::MazeConfigure(Logger* logger)
 
 MazeConfigure::~MazeConfigure()
 {
+	delete this->newMaze;
 }
 
 void MazeConfigure::loadMapFromFile(std::string file)

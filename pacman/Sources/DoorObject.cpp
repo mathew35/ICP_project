@@ -17,8 +17,6 @@ DoorObject::DoorObject(int row, int col, PathField* field)
 
 DoorObject::~DoorObject()
 {
-	delete logger;
-	delete observer;
 	delete callerField;
 }
 
