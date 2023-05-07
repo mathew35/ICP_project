@@ -133,20 +133,23 @@ void mainwindow::playGame()
 	this->drawPlayer(newSceneMain);
 	this->drawGhosts(newSceneMain);
 	this->drawDoors(newSceneMain);
+	delete ui.gamePane->scene();
 	ui.gamePane->setScene(newSceneMain);
 	ui.gamePane->fitInView(0, 0, newSceneMain->width(), newSceneMain->height(), Qt::KeepAspectRatio);
+	ui.gamePane->repaint();
+	ui.gamePane->setFocus();
+
 
 	QGraphicsScene* newSceneRightSide = new QGraphicsScene();
 	this->drawLives(newSceneRightSide);
+	delete ui.gameScorePane->scene();
 	ui.gameScorePane->setScene(newSceneRightSide);
 	ui.gameScorePane->setAlignment(Qt::AlignTop);
 	ui.gameScorePane->fitInView(0, 0, newSceneRightSide->width(), newSceneRightSide->height(), Qt::KeepAspectRatio);
-	ui.gamePane->repaint();
 	ui.gameScorePane->repaint();
-	ui.gamePane->setFocus();
+
 	this->moveGhostsTimer.start(500);
 	gameInterface->startGame();
-	QThread::sleep(1);
 
 	//this->startGame();
 	//gameInterface->startGame();
