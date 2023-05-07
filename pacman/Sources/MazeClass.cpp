@@ -91,9 +91,9 @@ void MazeClass::insertLine(std::string line) {
 	this->numberOfLines++;
 }
 void MazeClass::setFields() {
-	for (int r = 1; r < this->numRows() - 1; r++)
+	for (int r = 1; r < this->numRows() - 2; r++)
 	{
-		for (int c = 1; c < this->numCols() - 1; c++)
+		for (int c = 1; c < this->numCols() - 2; c++)
 		{
 			if (typeid((PathField*)this->fieldArray[r][c]) == typeid(PathField*) && this->fieldArray[r][c] != nullptr) {
 				PathField* path = (PathField*)this->fieldArray[r][c];
