@@ -13,7 +13,7 @@ class Logger;
 
 class MazeObject {
 public:
-
+	virtual ~MazeObject() = default;
 	virtual bool canMove(Field::Direction var1) = 0;
 
 	virtual bool move(Field::Direction var1) = 0;
