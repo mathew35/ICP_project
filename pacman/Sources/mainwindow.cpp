@@ -71,6 +71,8 @@ mainwindow::~mainwindow() {
 	for (auto& key : keyItems) {
 		delete key.second;
 	}
+	keyPressTimer.stop();
+	moveGhostsTimer.stop();
 }
 
 void mainwindow::updateMap(tuple<int, int> from, tuple<int, int> to)
