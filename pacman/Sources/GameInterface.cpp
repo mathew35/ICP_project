@@ -14,6 +14,7 @@ GameInterface::GameInterface(mainwindow* window)
 	maxLives = -1;
 	lives = -1;
 	player = tuple(-1, -1);
+	door = tuple(-1, -1);
 	this->walls = new list<tuple<int, int>>();
 	this->ghosts = new list<tuple<int, int>>();
 	this->keys = new list<tuple<int, int>>();
@@ -224,7 +225,7 @@ void GameInterface::updateVariables()
 				continue;
 			}
 			//door
-			if (typeid(*Door) == typeid(DoorObject))
+			if (this->door == tuple(-1,-1) && typeid(*Door) == typeid(DoorObject))
 			{
 				field->get()->attach(this);
 				field->get()->setLogger(this->logger);

@@ -45,7 +45,7 @@ private:
 	void startGame();
 	bool updatePlayerItem();
 	void updateGhostItems();
-	void drawLives(QGraphicsScene* scene);
+	void updateLiveItems();
 	void updateDoorItem();
 
 	QPixmap wall;
@@ -59,6 +59,7 @@ private:
 	map<tuple<int, int>, QGraphicsItem*> ghostItems;
 	QGraphicsRectItem* doorItem;
 	map<tuple<int, int>, QGraphicsItem*> keyItems;
+	list<QGraphicsRectItem*> liveItems;
 
 	QTimer keyPressTimer;
 	int pendingKey;

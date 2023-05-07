@@ -69,20 +69,12 @@ void mainwindow::updateMap(tuple<int, int> from, tuple<int, int> to)
 	updatePlayerItem();
 	updateDoorItem();
 	//updateKeyItems():
-	ui.gamePane->repaint();
-	//drawGhosts(scene);
-	//drawPlayer(scene);
-	//drawWalls(scene);
-	//drawDoors(scene);
+	ui.gamePane->update();
 }
 
 void mainwindow::updateLives()
 {
-	QGraphicsScene* scene = new QGraphicsScene();
-	drawLives(scene);
-	delete ui.gameScorePane->scene();
-	ui.gameScorePane->setScene(scene);
-	ui.gameScorePane->fitInView(0, 0, scene->width(), scene->height(), Qt::KeepAspectRatio);
+	updateLiveItems();
 	ui.gameScorePane->update();
 }
 
@@ -157,15 +149,12 @@ void mainwindow::playGame()
 	ui.gamePane->update();
 	ui.gamePane->setFocus();
 
-	auto lives = gameInterface->getLives();
 	auto maxLives = gameInterface->getMaxLives();
-	for (int i = 0; i < lives; i++)
+	for (int i = 0; i < maxLives; i++)
 	{
-		QGraphicsItem* liveItem = ui.gameScorePane->scene()->addRect(QRectF(i * FIELDSIZE, 0, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(this->player));
-	}
-	for (int i = lives; i < maxLives; i++)
-	{
-		QGraphicsItem* noLiveItem = ui.gameScorePane->scene()->addRect(QRectF(i * FIELDSIZE, 0, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(this->playerEmpty));
+		QGraphicsRectItem* liveItem = ui.gameScorePane->scene()->addRect(QRectF(0, 0, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(this->player));
+		liveItem->setPos(i * FIELDSIZE, 0);
+		this->liveItems.push_back(liveItem);
 	}
 	ui.gameScorePane->fitInView(0, 0, ui.gameScorePane->scene()->width(), ui.gameScorePane->scene()->height(), Qt::KeepAspectRatio);
 	ui.gameScorePane->update();
@@ -264,15 +253,19 @@ void mainwindow::updateGhostItems()
 	}
 }
 
-void mainwindow::drawLives(QGraphicsScene* scene)
+void mainwindow::updateLiveItems()
 {
-	for (int i = 0; i < gameInterface->getLives(); i++)
+	int count = 1;
+	for (auto& live : this->liveItems)
 	{
-		scene->addRect(QRectF(i * FIELDSIZE, 0, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(player));
-	}
-	for (int i = gameInterface->getLives(); i < gameInterface->getMaxLives(); i++)
-	{
-		scene->addRect(QRectF(i * FIELDSIZE, 0, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(playerEmpty));
+		if (count <= gameInterface->getLives())
+		{
+			live->setBrush(QBrush(player));
+		}
+		else {
+			live->setBrush(QBrush(playerEmpty));
+		}
+		count++;
 	}
 }
 
