@@ -27,15 +27,15 @@ PathField::PathField(int row, int col, char typeOfObject) {
 	switch (typeOfObject)
 	{
 	case 'S':
-		this->fieldObjectList->emplace_back(new PacmanObject(row, col, this));
+		this->fieldObjectList->push_back(new PacmanObject(row, col, this));
 		this->typeOfObject = 'S';
 		break;
 	case 'G':
-		this->fieldObjectList->emplace_back(new GhostObject(row, col, this));
+		this->fieldObjectList->push_back(new GhostObject(row, col, this));
 		this->typeOfObject = 'G';
 		break;
 	case 'T':
-		this->fieldObjectList->emplace_front(new DoorObject(row, col, this));
+		this->fieldObjectList->push_front(new DoorObject(row, col, this));
 		this->typeOfObject = 'T';
 		break;
 	case 'K':
