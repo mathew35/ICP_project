@@ -49,10 +49,10 @@ MazeClass::~MazeClass()
 void MazeClass::createArray(int rows, int cols) {
 	this->cols = cols;
 	this->rows = rows;
-	this->fieldArray = new Field * *[cols];
+	this->fieldArray = new Field * *[rows];
 
 	for (int i = 0; i < rows; ++i) {
-		this->fieldArray[i] = new Field * [rows];
+		this->fieldArray[i] = new Field * [cols];
 		for (int j = 0; j < cols; ++j) {
 			this->fieldArray[i][j] = nullptr;
 		}
