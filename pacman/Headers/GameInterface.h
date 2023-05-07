@@ -26,6 +26,7 @@ protected:
 	tuple<int, int> player;
 	int lives;
 	int maxLives;
+	int maxKeys;
 	Maze* maze;
 
 public:
@@ -38,6 +39,7 @@ public:
 	void endGame();
 	int getLives();
 	int getMaxLives();
+	int getMaxKeys();
 	tuple<int, int> getMapSize();
 	list<tuple<int, int>> getWalls();
 	list<tuple<int, int>> getGhosts();

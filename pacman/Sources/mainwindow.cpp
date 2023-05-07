@@ -1,7 +1,8 @@
 /**
  * @brief MainWindow class file
  *
- * @author Matúš Vráblik (xvrabl05)
+ * @author Matus Vrablik (xvrabl05)
+ *
  */
 
 #include "mainwindow.h"
@@ -51,6 +52,12 @@ mainwindow::mainwindow(QWidget* parent)
 	map = new QPixmap(":/doorClosed");
 	doorClosed = map->scaled(FIELDSIZE, FIELDSIZE, Qt::KeepAspectRatio);
 	delete map;
+	map = new QPixmap(":/key");
+	key = map->scaled(FIELDSIZE, FIELDSIZE, Qt::KeepAspectRatio);
+	delete map;
+	map = new QPixmap(":/keyEmpty");
+	keyEmpty = map->scaled(FIELDSIZE, FIELDSIZE, Qt::KeepAspectRatio);
+	delete map;
 	ui->gamePane->setScene(new QGraphicsScene());
 	ui->gameScorePane->setScene(new QGraphicsScene());
 	ui->gameScorePane->setAlignment(Qt::AlignTop);
@@ -71,6 +78,21 @@ mainwindow::~mainwindow() {
 	for (auto& key : keyItems) {
 		delete key.second;
 	}
+	for (auto& live : liveItems) {
+		delete live;
+	}
+	for (auto& key : keyScoreItems) {
+		delete key;
+	}
+	wallItems.clear();
+	ghostItems.clear();
+	keyItems.clear();
+	liveItems.clear();
+	keyScoreItems.clear();
+	delete this->playerItem;
+	delete this->doorItem;
+	this->playerItem = nullptr;
+	this->doorItem = nullptr;
 	keyPressTimer.stop();
 	moveGhostsTimer.stop();
 }
@@ -80,13 +102,19 @@ void mainwindow::updateMap(tuple<int, int> from, tuple<int, int> to)
 	updateGhostItems();
 	updatePlayerItem();
 	updateDoorItem();
-	//updateKeyItems():
+	if (tuple(-1, -1) == to) { updateKeyItems(from); }
 	ui->gamePane->update();
 }
 
 void mainwindow::updateLives()
 {
 	updateLiveItems();
+	ui->gameScorePane->update();
+}
+
+void mainwindow::updateKeys()
+{
+	updateKeyScoreItems();
 	ui->gameScorePane->update();
 }
 
@@ -152,8 +180,15 @@ void mainwindow::playGame()
 	QGraphicsRectItem* doorItem = ui->gamePane->scene()->addRect(QRectF(x * FIELDSIZE, y * FIELDSIZE, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(this->doorClosed));
 	doorItem->setZValue(z);
 	this->doorItem = doorItem;
-	//TODO keys
-
+	z = 0;
+	for (auto& key : gameInterface->getKeys())
+	{
+		int x = std::get<1>(key);
+		int y = std::get<0>(key);
+		QGraphicsItem* keyItem = ui->gamePane->scene()->addRect(QRectF(x * FIELDSIZE, y * FIELDSIZE, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(this->key));
+		keyItem->setZValue(z);
+		this->keyItems[key] = keyItem;
+	}
 	updatePlayerItem();
 	updateGhostItems();
 
@@ -168,21 +203,17 @@ void mainwindow::playGame()
 		liveItem->setPos(i * FIELDSIZE, 0);
 		this->liveItems.push_back(liveItem);
 	}
+	auto maxKeys = gameInterface->getMaxKeys();
+	for (int i = 0; i < maxKeys; i++)
+	{
+		QGraphicsRectItem* keyItem = ui->gameScorePane->scene()->addRect(QRectF(i * FIELDSIZE, FIELDSIZE, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(this->keyEmpty));
+		keyItem->setPos(i * FIELDSIZE, 0);
+		this->keyScoreItems.push_back(keyItem);
+	}
 	ui->gameScorePane->fitInView(0, 0, ui->gameScorePane->scene()->width(), ui->gameScorePane->scene()->height(), Qt::KeepAspectRatio);
 	ui->gameScorePane->update();
 
 	this->moveGhostsTimer.start(500);
-	// TODO keypresstimer - doesnt work properly
-
-	//gameInterface->startGame();
-	//this->startGame();
-	//gameInterface->startGame();
-}
-void mainwindow::startGame()
-{
-	//for (int i = 0; i < 10; i++) {
-		//gameInterface->ghostsMove();
-	//}
 }
 
 void mainwindow::updateEndGame()
@@ -192,6 +223,20 @@ void mainwindow::updateEndGame()
 
 	ui->gameWidget->setVisible(false);
 	ui->mainMenuWidget->setVisible(true);
+	delete ui->gamePane->scene();
+	ui->gamePane->setScene(new QGraphicsScene);
+	delete ui->gameScorePane->scene();
+	ui->gameScorePane->setScene(new QGraphicsScene);
+	delete gameInterface;
+	gameInterface = new GameInterface(this);
+	ui->mainMenuWidget->setFocus();
+	wallItems.clear();
+	ghostItems.clear();
+	keyItems.clear();
+	liveItems.clear();
+	keyScoreItems.clear();
+	this->playerItem = nullptr;
+	this->doorItem = nullptr;
 }
 
 bool mainwindow::updatePlayerItem()
@@ -293,6 +338,30 @@ void mainwindow::updateDoorItem()
 	else
 	{
 		this->doorItem->setBrush(QBrush(this->doorClosed));
+	}
+}
+
+void mainwindow::updateKeyItems(tuple<int, int>from)
+{
+	auto it = this->keyItems.find(tuple(std::get<0>(from), std::get<1>(from)));
+	if (it == this->keyItems.end()) { throw new exception(); }
+	ui->gamePane->scene()->removeItem(it->second);
+	this->keyItems.erase(tuple(std::get<0>(from), std::get<1>(from)));
+}
+
+void mainwindow::updateKeyScoreItems()
+{
+	int count = gameInterface->getMaxKeys();
+	for (auto& key : this->keyScoreItems)
+	{
+		if (count > gameInterface->getKeys().size())
+		{
+			key->setBrush(QBrush(this->key));
+		}
+		else {
+			key->setBrush(QBrush(keyEmpty));
+		}
+		count--;
 	}
 }
 

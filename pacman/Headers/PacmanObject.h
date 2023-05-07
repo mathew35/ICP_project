@@ -11,15 +11,18 @@
 #include "Field.h"
 #include "GameInterface.h"
 #include "Logger.h"
+#include "KeyObject.h"
 class PathField;
 class GameInterface;
 class Logger;
+class KeyObject;
 
 class PacmanObject : public MazeObject {
 private:
 	GameInterface* observer;
 	Logger* logger;
 	int lives = 3;
+	std::list<KeyObject*> keys;
 protected:
 	int row;
 	int col;

@@ -1,8 +1,7 @@
 /**
-* @brief DoorObject header file.
+* @brief KeyObject header file.
 *
-* @authors	Matus Vrablik(xvrabl05)
-*			Adrian Horvath(xhorva14)
+* @author Matus Vrablik(xvrabl05)
 *
 */
 #pragma once
@@ -13,29 +12,24 @@
 #include "PathField.h"
 class PathField;
 
-class DoorObject : public MazeObject {
+class KeyObject : public MazeObject {
 private:
-	bool open;
 	Logger* logger;
 	GameInterface* observer;
 protected:
 	int row;
 	int col;
-	int keys;
 	PathField* callerField;
 public:
-	DoorObject(int row, int col, PathField* field);
-	~DoorObject();
-	void setKeys(int keys);
-	bool isOpen();
-	void openDoors();
+	KeyObject(int row, int col, PathField* field);
+	~KeyObject();
 
 	bool canMove(Field::Direction dir) override { return false; }
 	bool move(Field::Direction dir) override { return false; }
 	Field* getField() override;
 	bool isPacman() override { return false; }
 	int getLives() override { return 0; }
-	void start() override;
+	void start() override {};
 
 	void setLogger(Logger* logger) override;
 	void attach(GameInterface* o) override;

@@ -13,6 +13,7 @@ GameInterface::GameInterface(mainwindow* window)
 	maze = NULL;
 	maxLives = -1;
 	lives = -1;
+	maxKeys = -1;
 	player = tuple(-1, -1);
 	door = tuple(-1, -1);
 	this->walls = new list<tuple<int, int>>();
@@ -46,7 +47,7 @@ void GameInterface::loadMap()
 	config->startReading(4, 3);
 	config->processLine("..G");
 	config->processLine(".XT");
-	config->processLine(".X.");
+	config->processLine("KX.");
 	config->processLine(".S.");
 	config->stopReading();
 
@@ -70,11 +71,11 @@ void GameInterface::endGame()
 	delete this->config;
 	this->config = new MazeConfigure(this->logger);
 	delete this->ghosts;
-	this->ghosts = nullptr;
+	this->ghosts = new list<tuple<int, int>>();
 	delete this->walls;
-	this->walls = nullptr;
+	this->walls = new list<tuple<int, int>>();
 	delete this->keys;
-	this->keys = nullptr;
+	this->keys = new list<tuple<int, int>>();
 }
 
 int GameInterface::getLives()
@@ -85,6 +86,11 @@ int GameInterface::getLives()
 int GameInterface::getMaxLives()
 {
 	return this->maxLives;
+}
+
+int GameInterface::getMaxKeys()
+{
+	return this->maxKeys;
 }
 
 tuple<int, int> GameInterface::getMapSize()
@@ -104,6 +110,7 @@ list<tuple<int, int>> GameInterface::getGhosts()
 
 list<tuple<int, int>> GameInterface::getKeys()
 {
+	if (this->keys->empty()) { return list<tuple<int, int>>(); }
 	return *this->keys;
 }
 
@@ -137,7 +144,10 @@ void GameInterface::notifyMove(int fromX, int fromY, int toX, int toY)
 
 void GameInterface::notifyPickKey(int x, int y)
 {
-	//TODO
+	this->keys->remove(tuple(x, y));
+	this->maze->getField(std::get<0>(this->door), std::get<1>(this->door))->get()->start();
+	this->window->updateKeys();
+	this->window->updateMap(tuple(x, y), tuple(-1, -1));
 }
 
 void GameInterface::notifyOpenDoors(int x, int y)
@@ -202,6 +212,7 @@ void GameInterface::updateVariables()
 			GhostObject* ghost = (GhostObject*)obj;
 			PacmanObject* player = (PacmanObject*)obj;
 			DoorObject* Door = (DoorObject*)obj;
+			KeyObject* Key = (KeyObject*)obj;
 			//ghosts
 			if (typeid(*ghost) == typeid(GhostObject))
 			{
@@ -225,18 +236,23 @@ void GameInterface::updateVariables()
 			{
 				field->get()->attach(this);
 				field->get()->setLogger(this->logger);
-				field->get()->start();
 				this->door = tuple(x, y);
 				continue;
 			}
 			//keys
-			//if (field != NULL && field->getType() == 'K')
-			//{
-				//TODO
-				//continue;
-			//}
+			if (typeid(*Key) == typeid(KeyObject))
+			{
+				field->get()->attach(this);
+				field->get()->setLogger(this->logger);
+				this->keys->push_back(tuple(x, y));
+				continue;
+			}
 		}
 	}
-	//if (std::get<0>(this->player) < 0 || std::get<1>(player) < 0) { throw(new exception("Player not found")); }
+	if (maxKeys == -1)
+	{
+		this->maze->getField(std::get<0>(this->door), std::get<1>(this->door))->get()->start();
+		maxKeys = keys->size();
+	}
 
 }

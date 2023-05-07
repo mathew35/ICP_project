@@ -104,9 +104,10 @@ void MazeClass::setFields() {
 				if (obj != nullptr && typeid(*(DoorObject*)obj) == typeid(DoorObject))
 				{
 					this->door = (DoorObject*)obj;
-					this->door->setKeys(keys);
+					this->door->setKeys(this->keys);
 					continue;
 				}
+				if (obj != nullptr && typeid(*(KeyObject*)obj) == typeid(KeyObject)) { continue; }
 				path->setObjectFields(path->get());
 			}
 		}

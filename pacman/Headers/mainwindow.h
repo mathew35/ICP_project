@@ -26,6 +26,7 @@ public:
 	~mainwindow();
 	void updateMap(std::tuple<int, int> from, std::tuple<int, int>to);
 	void updateLives();
+	void updateKeys();
 	void updateEndGame();
 
 private slots:
@@ -42,11 +43,12 @@ private:
 	Ui::mainwindowClass* ui;
 
 	void playGame();
-	void startGame();
 	bool updatePlayerItem();
 	void updateGhostItems();
 	void updateLiveItems();
 	void updateDoorItem();
+	void updateKeyItems(tuple<int, int>);
+	void updateKeyScoreItems();
 
 	QPixmap wall;
 	QPixmap player;
@@ -54,12 +56,15 @@ private:
 	QPixmap ghost;
 	QPixmap doorOpen;
 	QPixmap doorClosed;
+	QPixmap key;
+	QPixmap keyEmpty;
 	map<tuple<int, int>, QGraphicsItem*> wallItems;
 	QGraphicsRectItem* playerItem;
 	map<tuple<int, int>, QGraphicsItem*> ghostItems;
 	QGraphicsRectItem* doorItem;
 	map<tuple<int, int>, QGraphicsItem*> keyItems;
 	list<QGraphicsRectItem*> liveItems;
+	list<QGraphicsRectItem*> keyScoreItems;
 
 	QTimer keyPressTimer;
 	int pendingKey;

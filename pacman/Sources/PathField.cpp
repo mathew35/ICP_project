@@ -39,7 +39,7 @@ PathField::PathField(int row, int col, char typeOfObject) {
 		this->typeOfObject = 'T';
 		break;
 	case 'K':
-		//this->setItem(new Door(row, col, this));
+		this->fieldObjectList->push_front(new KeyObject(row, col, this));
 		this->typeOfObject = 'K';
 		break;
 	default:

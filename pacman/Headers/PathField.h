@@ -13,6 +13,7 @@
 #include "PacmanObject.h"
 #include "GhostObject.h"
 #include "DoorObject.h"
+#include "KeyObject.h"
 
 class PathField : public Field {
 private:

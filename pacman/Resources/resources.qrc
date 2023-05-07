@@ -6,5 +6,7 @@
         <file alias="doorOpen">doorOpen.png</file>
         <file alias="playerOutline">playerEmpty.png</file>
         <file alias="player">playerFull.png</file>
+        <file alias="key">key.png</file>
+        <file alias="keyEmpty">keyEmpty.png</file>
     </qresource>
 </RCC>

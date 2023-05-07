@@ -31,7 +31,7 @@ bool DoorObject::isOpen()
 
 void DoorObject::openDoors()
 {
-	if (observer->getKeys().size() == keys)
+	if (observer->getKeys().size() == 0)
 	{
 		open = true;
 		logger->printDoor(this->row, this->col);

@@ -16,6 +16,10 @@ PacmanObject::PacmanObject(int row, int col, PathField* Field) {
 
 PacmanObject::~PacmanObject()
 {
+	for (KeyObject* key : this->keys)
+	{
+		delete key;
+	}
 }
 
 void PacmanObject::setSurroundinFieldsPacman(Field* bottom, Field* right, Field* upper, Field* left, PathField* curPath) {
@@ -74,7 +78,7 @@ bool PacmanObject::move(Field::Direction dir) {
 	case Field::L:
 		if (this->leftField == nullptr || !(this->leftField->canMove())) { return false; }
 		nextField = static_cast<PathField*>(this->leftField);
-		this->col = -1;
+		this->col -= 1;
 		nextCol = this->col;
 		break;
 	case Field::U:
@@ -106,7 +110,7 @@ bool PacmanObject::move(Field::Direction dir) {
 		MazeObject* object = nextField->get();
 		GhostObject* ghost = (GhostObject*)object;
 		DoorObject* door = (DoorObject*)object;
-		//KeyObject* key = (KeyObject*)object;
+		KeyObject* key = (KeyObject*)object;
 		if (typeid(*door) == typeid(DoorObject)) {
 			if (door->isOpen())
 			{
@@ -120,9 +124,12 @@ bool PacmanObject::move(Field::Direction dir) {
 			// is this return ok?
 			if (!this->decreaseLives()) { return false; }
 		}
-		//if (typeid(*door) == typeid(KeyObject))
-		//{
-		//}
+		if (typeid(*key) == typeid(KeyObject))
+		{
+			this->observer->notifyPickKey(nextRow, nextCol);
+			nextField->fieldObjectList->pop_back();
+			this->keys.emplace_back(key);
+		}
 	}
 	nextField->setPacmanObject(this);
 	observer->notifyMove(prevRow, prevCol, nextRow, nextCol);
