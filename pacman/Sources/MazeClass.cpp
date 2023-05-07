@@ -45,6 +45,7 @@ MazeClass::~MazeClass()
 		delete[] fieldArray[i];
 	}
 	delete[] fieldArray;
+	fieldArray = nullptr;
 }
 
 void MazeClass::createArray(int rows, int cols) {
