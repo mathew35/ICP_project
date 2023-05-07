@@ -120,7 +120,7 @@ bool GameInterface::isDoorOpen()
 
 void GameInterface::movePlayer(int d)
 {
-	//TODO add checks - onliner is DANGEROUS - pacman removed after meeting with ghost
+	//TODO add checks - oneliner is DANGEROUS - pacman removed after meeting with ghost
 	PacmanObject* player = (PacmanObject*)this->maze->getField(std::get<0>(this->player), std::get<1>(this->player))->get();
 	try
 	{
@@ -128,7 +128,7 @@ void GameInterface::movePlayer(int d)
 	}
 	catch (const std::exception&)
 	{
-		//throw(new exception("player not found"));
+		throw(new exception());
 	}
 }
 

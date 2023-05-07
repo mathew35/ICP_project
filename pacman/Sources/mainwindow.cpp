@@ -62,19 +62,20 @@ void mainwindow::updateMap(tuple<int, int> from, tuple<int, int> to)
 	drawPlayer(scene);
 	drawWalls(scene);
 	drawDoors(scene);
+	delete ui.gamePane->scene();
 	ui.gamePane->setScene(scene);
 	ui.gamePane->fitInView(0, 0, scene->width(), scene->height(), Qt::KeepAspectRatio);
-	ui.gamePane->repaint();
+	ui.gamePane->update();
 }
 
 void mainwindow::updateLives()
 {
 	QGraphicsScene* scene = new QGraphicsScene();
 	drawLives(scene);
+	delete ui.gameScorePane->scene();
 	ui.gameScorePane->setScene(scene);
-	//ui.gameScorePane->setAlignment(Qt::AlignTop);
 	ui.gameScorePane->fitInView(0, 0, scene->width(), scene->height(), Qt::KeepAspectRatio);
-	ui.gameScorePane->repaint();
+	ui.gameScorePane->update();
 }
 
 
@@ -125,8 +126,6 @@ void mainwindow::playGame()
 	//TODO - add selection from gridPane to loadMap arguments
 	gameInterface->loadMap();
 
-	int paneHeight = ui.gamePane->height();
-	int paneWidth = ui.gamePane->width();
 	QGraphicsScene* newSceneMain = new QGraphicsScene();
 
 	this->drawWalls(newSceneMain);
@@ -136,7 +135,7 @@ void mainwindow::playGame()
 	delete ui.gamePane->scene();
 	ui.gamePane->setScene(newSceneMain);
 	ui.gamePane->fitInView(0, 0, newSceneMain->width(), newSceneMain->height(), Qt::KeepAspectRatio);
-	ui.gamePane->repaint();
+	ui.gamePane->update();
 	ui.gamePane->setFocus();
 
 
@@ -146,7 +145,7 @@ void mainwindow::playGame()
 	ui.gameScorePane->setScene(newSceneRightSide);
 	ui.gameScorePane->setAlignment(Qt::AlignTop);
 	ui.gameScorePane->fitInView(0, 0, newSceneRightSide->width(), newSceneRightSide->height(), Qt::KeepAspectRatio);
-	ui.gameScorePane->repaint();
+	ui.gameScorePane->update();
 
 	this->moveGhostsTimer.start(500);
 	gameInterface->startGame();
@@ -172,11 +171,9 @@ void mainwindow::updateEndGame()
 
 void mainwindow::drawWalls(QGraphicsScene* scene)
 {
-	QPen pen;
-	pen.setWidth(1);
 	for (auto wall : gameInterface->getWalls())
 	{
-		scene->addRect(QRectF(std::get<1>(wall) * FIELDSIZE, std::get<0>(wall) * FIELDSIZE, FIELDSIZE, FIELDSIZE), pen, QBrush(this->wall));
+		scene->addRect(QRectF(std::get<1>(wall) * FIELDSIZE, std::get<0>(wall) * FIELDSIZE, FIELDSIZE, FIELDSIZE), QPen(), QBrush(this->wall));
 	}
 }
 
