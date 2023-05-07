@@ -142,7 +142,7 @@ void mainwindow::playGame()
 		wallItem->setZValue(z);
 		this->wallItems[wall] = wallItem;
 	}
-	auto& door = gameInterface->getDoor();
+	auto door = gameInterface->getDoor();
 	int x = std::get<1>(door);
 	int y = std::get<0>(door);
 	QGraphicsRectItem* doorItem = ui.gamePane->scene()->addRect(QRectF(x * FIELDSIZE, y * FIELDSIZE, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(this->doorClosed));
@@ -196,7 +196,7 @@ void mainwindow::updateEndGame()
 bool mainwindow::updatePlayerItem()
 {
 	int z = 1;
-	auto& player = gameInterface->getPlayer();
+	auto player = gameInterface->getPlayer();
 	int x = std::get<1>(player);
 	int y = std::get<0>(player);
 	if (this->playerItem == nullptr)
