@@ -126,14 +126,7 @@ void GameInterface::movePlayer(int d)
 {
 	//TODO add checks - oneliner is DANGEROUS - pacman removed after meeting with ghost
 	PacmanObject* player = (PacmanObject*)this->maze->getField(std::get<0>(this->player), std::get<1>(this->player))->get();
-	try
-	{
-		player->move(Field::Direction(d));
-	}
-	catch (const std::exception&)
-	{
-		throw(new exception());
-	}
+	player->move(Field::Direction(d));
 }
 
 void GameInterface::notifyMove(int fromX, int fromY, int toX, int toY)
@@ -166,6 +159,9 @@ void GameInterface::notifyLives()
 void GameInterface::notifyEndLevel()
 {
 	//TODO
+	this->endGame();
+	this->window->updateEndGame();
+
 }
 
 void GameInterface::notifyGameOver()
@@ -225,7 +221,7 @@ void GameInterface::updateVariables()
 				continue;
 			}
 			//door
-			if (this->door == tuple(-1,-1) && typeid(*Door) == typeid(DoorObject))
+			if (this->door == tuple(-1, -1) && typeid(*Door) == typeid(DoorObject))
 			{
 				field->get()->attach(this);
 				field->get()->setLogger(this->logger);

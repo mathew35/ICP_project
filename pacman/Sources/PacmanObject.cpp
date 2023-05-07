@@ -62,81 +62,72 @@ void PacmanObject::start()
 {
 }
 bool PacmanObject::move(Field::Direction dir) {
-	PathField* nextField;
-	PathField* prevField;
+	PathField* nextField = nullptr;
+	PathField* prevField = nullptr;
+	int prevRow = this->row;
+	int prevCol = this->col;
+	int nextRow = this->row;
+	int nextCol = this->col;
+
 	switch (dir)
 	{
 	case Field::L:
-		if (this->leftField == nullptr || !(this->leftField->canMove()))
-		{
-			return false;
-		}
+		if (this->leftField == nullptr || !(this->leftField->canMove())) { return false; }
 		nextField = static_cast<PathField*>(this->leftField);
-		prevField = this->callerField;
-		if (!prevField->fieldObjectList->empty()) { prevField->fieldObjectList->pop_back(); }
-		if (!(nextField->isEmpty()))
-		{
-			this->decreaseLives();
-		}
-		nextField->setPacmanObject(this);
-		observer->notifyMove(this->row, this->col, this->row, this->col - 1);
-		logger->printMovement(this, this->row, this->col, this->row, this->col - 1);
 		this->col = -1;
-		return true;
+		nextCol = this->col;
+		break;
 	case Field::U:
-		if (this->upperField == nullptr || !(this->upperField->canMove()))
-		{
-			return false;
-		}
+		if (this->upperField == nullptr || !(this->upperField->canMove())) { return false; }
 		nextField = static_cast<PathField*>(this->upperField);
-		prevField = this->callerField;
-		if (!prevField->fieldObjectList->empty()) { prevField->fieldObjectList->pop_back(); }
-		if (!(nextField->isEmpty()))
-		{
-			this->decreaseLives();
-		}
-		nextField->setPacmanObject(this);
-		observer->notifyMove(this->row, this->col, this->row - 1, this->col);
-		logger->printMovement(this, this->row, this->col, this->row - 1, this->col);
-		this->row = -1;
-		return true;
+		this->row -= 1;
+		nextRow = this->row;
+		break;
 	case Field::R:
-		if (this->rightField == nullptr || !(this->rightField->canMove()))
-		{
-			return false;
-		}
+		if (this->rightField == nullptr || !(this->rightField->canMove())) { return false; }
 		nextField = static_cast<PathField*>(this->rightField);
-		prevField = this->callerField;
-		if (!prevField->fieldObjectList->empty()) { prevField->fieldObjectList->pop_back(); }
-		if (!(nextField->isEmpty()))
-		{
-			this->decreaseLives();
-		}
-		nextField->setPacmanObject(this);
-		observer->notifyMove(this->row, this->col, this->row, this->col + 1);
-		logger->printMovement(this, this->row, this->col, this->row, this->col + 1);
-		this->col = +1;
-		return true;
+		this->col += 1;
+		nextCol = this->col;
+		break;
 	case Field::D:
-		if (this->bottomField == nullptr || !(this->bottomField->canMove()))
-		{
-			return false;
-		}
+		if (this->bottomField == nullptr || !(this->bottomField->canMove())) { return false; }
 		nextField = static_cast<PathField*>(this->bottomField);
-		prevField = this->callerField;
-		if (!prevField->fieldObjectList->empty()) { prevField->fieldObjectList->pop_back(); }
-		if (!(nextField->isEmpty()))
-		{
-			this->decreaseLives();
-		}
-		nextField->setPacmanObject(this);
-		observer->notifyMove(this->row, this->col, this->row + 1, this->col);
-		logger->printMovement(this, this->row, this->col, this->row + 1, this->col);
-		this->row = +1;
-		return true;
+		this->row += 1;
+		nextRow = this->row;
+		break;
 	default:
 		return false;
 	}
+
+	prevField = this->callerField;
+	if (!prevField->fieldObjectList->empty()) { prevField->fieldObjectList->pop_back(); }
+	if (!(nextField->isEmpty()))
+	{
+		MazeObject* object = nextField->get();
+		GhostObject* ghost = (GhostObject*)object;
+		DoorObject* door = (DoorObject*)object;
+		//KeyObject* key = (KeyObject*)object;
+		if (typeid(*door) == typeid(DoorObject)) {
+			if (door->isOpen())
+			{
+				//TODO end game here
+				this->observer->notifyEndLevel();
+				return false;
+			}
+		}
+		else if (typeid(*ghost) == typeid(GhostObject))
+		{
+			// is this return ok?
+			if (!this->decreaseLives()) { return false; }
+		}
+		//if (typeid(*door) == typeid(KeyObject))
+		//{
+		//}
+	}
+	nextField->setPacmanObject(this);
+	observer->notifyMove(prevRow, prevCol, nextRow, nextCol);
+	logger->printMovement(this, prevRow, prevCol, nextRow, nextCol);
+
 	//TODO end game when on doors
 	//TODO pick up key notify + log
 }

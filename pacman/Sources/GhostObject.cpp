@@ -68,7 +68,6 @@ int GhostObject::getLives() {
 bool GhostObject::move(Field::Direction dir) {
 	PathField* nextField = nullptr;
 	PathField* prevField = nullptr;
-	Field* field = nullptr;
 	int prevRow = this->row;
 	int prevCol = this->col;
 	int nextRow = this->row;
