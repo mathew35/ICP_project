@@ -69,8 +69,11 @@ void GameInterface::endGame()
 	delete this->config;
 	this->config = new MazeConfigure(this->logger);
 	delete this->ghosts;
+	this->ghosts = nullptr;
 	delete this->walls;
+	this->walls = nullptr;
 	delete this->keys;
+	this->keys = nullptr;
 }
 
 int GameInterface::getLives()

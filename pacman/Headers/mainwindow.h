@@ -16,6 +16,7 @@
 #include "ui_mainwindow.h"
 #include "GameInterface.h"
 
+using namespace std;
 class mainwindow : public QMainWindow
 {
 	Q_OBJECT
@@ -42,11 +43,10 @@ private:
 
 	void playGame();
 	void startGame();
-	void drawWalls(QGraphicsScene* scene);
-	void drawPlayer(QGraphicsScene* scene);
-	void drawGhosts(QGraphicsScene* scene);
+	bool updatePlayerItem();
+	void updateGhostItems();
 	void drawLives(QGraphicsScene* scene);
-	void drawDoors(QGraphicsScene* scene);
+	void updateDoorItem();
 
 	QPixmap wall;
 	QPixmap player;
@@ -54,6 +54,11 @@ private:
 	QPixmap ghost;
 	QPixmap doorOpen;
 	QPixmap doorClosed;
+	map<tuple<int, int>, QGraphicsItem*> wallItems;
+	QGraphicsRectItem* playerItem;
+	map<tuple<int, int>, QGraphicsItem*> ghostItems;
+	QGraphicsRectItem* doorItem;
+	map<tuple<int, int>, QGraphicsItem*> keyItems;
 
 	QTimer keyPressTimer;
 	int pendingKey;

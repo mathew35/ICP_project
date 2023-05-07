@@ -13,6 +13,7 @@ mainwindow::mainwindow(QWidget* parent)
 {
 	ui.setupUi(this);
 	qApp->installEventFilter(this);
+	keyPressTimer.stop();
 	connect(&keyPressTimer, &QTimer::timeout, this, &mainwindow::processKeyPressEvent);
 	connect(&moveGhostsTimer, &QTimer::timeout, this, &mainwindow::moveGhosts);
 
@@ -49,23 +50,30 @@ mainwindow::mainwindow(QWidget* parent)
 	map = new QPixmap(":/doorClosed");
 	doorClosed = map->scaled(FIELDSIZE, FIELDSIZE, Qt::KeepAspectRatio);
 	delete map;
+	ui.gamePane->setScene(new QGraphicsScene());
+	ui.gameScorePane->setScene(new QGraphicsScene());
+	ui.gameScorePane->setAlignment(Qt::AlignTop);
+
+	this->playerItem = nullptr;
+	this->doorItem = nullptr;
 }
 
 mainwindow::~mainwindow() {
 	delete gameInterface;
+	//TODO  delete maps
 }
 
 void mainwindow::updateMap(tuple<int, int> from, tuple<int, int> to)
 {
-	QGraphicsScene* scene = new QGraphicsScene();
-	drawGhosts(scene);
-	drawPlayer(scene);
-	drawWalls(scene);
-	drawDoors(scene);
-	delete ui.gamePane->scene();
-	ui.gamePane->setScene(scene);
-	ui.gamePane->fitInView(0, 0, scene->width(), scene->height(), Qt::KeepAspectRatio);
-	ui.gamePane->update();
+	updateGhostItems();
+	updatePlayerItem();
+	updateDoorItem();
+	//updateKeyItems():
+	ui.gamePane->repaint();
+	//drawGhosts(scene);
+	//drawPlayer(scene);
+	//drawWalls(scene);
+	//drawDoors(scene);
 }
 
 void mainwindow::updateLives()
@@ -125,31 +133,47 @@ void mainwindow::playGame()
 
 	//TODO - add selection from gridPane to loadMap arguments
 	gameInterface->loadMap();
+	int z = 0;
+	for (auto& wall : gameInterface->getWalls())
+	{
+		int x = std::get<1>(wall);
+		int y = std::get<0>(wall);
+		QGraphicsItem* wallItem = ui.gamePane->scene()->addRect(QRectF(x * FIELDSIZE, y * FIELDSIZE, FIELDSIZE, FIELDSIZE), QPen(), QBrush(this->wall));
+		wallItem->setZValue(z);
+		this->wallItems[wall] = wallItem;
+	}
+	auto& door = gameInterface->getDoor();
+	int x = std::get<1>(door);
+	int y = std::get<0>(door);
+	QGraphicsRectItem* doorItem = ui.gamePane->scene()->addRect(QRectF(x * FIELDSIZE, y * FIELDSIZE, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(this->doorClosed));
+	doorItem->setZValue(z);
+	this->doorItem = doorItem;
+	//TODO keys
 
-	QGraphicsScene* newSceneMain = new QGraphicsScene();
+	updatePlayerItem();
+	updateGhostItems();
 
-	this->drawWalls(newSceneMain);
-	this->drawPlayer(newSceneMain);
-	this->drawGhosts(newSceneMain);
-	this->drawDoors(newSceneMain);
-	delete ui.gamePane->scene();
-	ui.gamePane->setScene(newSceneMain);
-	ui.gamePane->fitInView(0, 0, newSceneMain->width(), newSceneMain->height(), Qt::KeepAspectRatio);
+	ui.gamePane->fitInView(0, 0, ui.gamePane->scene()->width(), ui.gamePane->scene()->height(), Qt::KeepAspectRatio);
 	ui.gamePane->update();
 	ui.gamePane->setFocus();
 
-
-	QGraphicsScene* newSceneRightSide = new QGraphicsScene();
-	this->drawLives(newSceneRightSide);
-	delete ui.gameScorePane->scene();
-	ui.gameScorePane->setScene(newSceneRightSide);
-	ui.gameScorePane->setAlignment(Qt::AlignTop);
-	ui.gameScorePane->fitInView(0, 0, newSceneRightSide->width(), newSceneRightSide->height(), Qt::KeepAspectRatio);
+	auto lives = gameInterface->getLives();
+	auto maxLives = gameInterface->getMaxLives();
+	for (int i = 0; i < lives; i++)
+	{
+		QGraphicsItem* liveItem = ui.gameScorePane->scene()->addRect(QRectF(i * FIELDSIZE, 0, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(this->player));
+	}
+	for (int i = lives; i < maxLives; i++)
+	{
+		QGraphicsItem* noLiveItem = ui.gameScorePane->scene()->addRect(QRectF(i * FIELDSIZE, 0, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(this->playerEmpty));
+	}
+	ui.gameScorePane->fitInView(0, 0, ui.gameScorePane->scene()->width(), ui.gameScorePane->scene()->height(), Qt::KeepAspectRatio);
 	ui.gameScorePane->update();
 
 	this->moveGhostsTimer.start(500);
-	gameInterface->startGame();
+	// TODO keypresstimer - doesnt work properly
 
+	//gameInterface->startGame();
 	//this->startGame();
 	//gameInterface->startGame();
 }
@@ -169,25 +193,74 @@ void mainwindow::updateEndGame()
 	ui.mainMenuWidget->setVisible(true);
 }
 
-void mainwindow::drawWalls(QGraphicsScene* scene)
+bool mainwindow::updatePlayerItem()
 {
-	for (auto wall : gameInterface->getWalls())
+	int z = 1;
+	auto& player = gameInterface->getPlayer();
+	int x = std::get<1>(player);
+	int y = std::get<0>(player);
+	if (this->playerItem == nullptr)
 	{
-		scene->addRect(QRectF(std::get<1>(wall) * FIELDSIZE, std::get<0>(wall) * FIELDSIZE, FIELDSIZE, FIELDSIZE), QPen(), QBrush(this->wall));
+		QGraphicsRectItem* playerItem = ui.gamePane->scene()->addRect(QRectF(0, 0, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(this->player));
+		playerItem->setPos(x * FIELDSIZE, y * FIELDSIZE);
+		playerItem->setZValue(z);
+		this->playerItem = playerItem;
+		return true;
 	}
-}
-
-void mainwindow::drawPlayer(QGraphicsScene* scene)
-{
-	tuple<int, int> player = gameInterface->getPlayer();
-	scene->addRect(QRectF(std::get<1>(player) * FIELDSIZE, std::get<0>(player) * FIELDSIZE, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(this->player));
-}
-
-void mainwindow::drawGhosts(QGraphicsScene* scene)
-{
-	for (auto ghost : gameInterface->getGhosts())
+	if (this->playerItem->pos().x() / FIELDSIZE == x && this->playerItem->pos().y() / FIELDSIZE == y)
 	{
-		scene->addRect(QRectF(std::get<1>(ghost) * FIELDSIZE, std::get<0>(ghost) * FIELDSIZE, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(this->ghost));
+		return false;
+	}
+
+	this->playerItem->setPos(x * FIELDSIZE, y * FIELDSIZE);
+	return true;
+}
+
+void mainwindow::updateGhostItems()
+{
+	int z = 2;
+	if (this->ghostItems.empty())
+	{
+		for (auto ghost : gameInterface->getGhosts())
+		{
+			int x = std::get<1>(ghost);
+			int y = std::get<0>(ghost);
+			QGraphicsItem* ghostItem = ui.gamePane->scene()->addRect(QRectF(0, 0, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(this->ghost));
+			ghostItem->setPos(x * FIELDSIZE, y * FIELDSIZE);
+			ghostItem->setZValue(z);
+			this->ghostItems[tuple(x, y)] = ghostItem;
+		}
+		return;
+	}
+	list<tuple<int, int>> ghosts = gameInterface->getGhosts();
+	list<tuple<int, int>> toRemove;
+	for (auto& ghostItem : this->ghostItems)
+	{
+		int x = std::get<1>(ghostItem.first);
+		int y = std::get<0>(ghostItem.first);
+		bool found = false;
+		for (auto ghost : ghosts)
+		{
+			if (ghost == tuple(x, y)) {
+				ghosts.remove(ghost);
+				found = true;
+				break;
+			}
+		}
+		if (!found)
+		{
+			toRemove.push_back(ghostItem.first);
+		}
+	}
+	for (auto key : toRemove)
+	{
+		QGraphicsItem* tmp = this->ghostItems.find(key)->second;
+		this->ghostItems.erase(key);
+		int x = std::get<1>(ghosts.back());
+		int y = std::get<0>(ghosts.back());
+		ghosts.pop_back();
+		tmp->setPos(x * FIELDSIZE, y * FIELDSIZE);
+		this->ghostItems[tuple(x, y)] = tmp;
 	}
 }
 
@@ -203,17 +276,18 @@ void mainwindow::drawLives(QGraphicsScene* scene)
 	}
 }
 
-void mainwindow::drawDoors(QGraphicsScene* scene)
+void mainwindow::updateDoorItem()
 {
+	if (this->doorItem == nullptr) { return; }
 	int x = std::get<1>(gameInterface->getDoor());
 	int y = std::get<0>(gameInterface->getDoor());
 	if (gameInterface->isDoorOpen())
 	{
-		scene->addRect(QRectF(x * FIELDSIZE, y * FIELDSIZE, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(this->doorOpen));
+		this->doorItem->setBrush(QBrush(this->doorOpen));
 	}
 	else
 	{
-		scene->addRect(QRectF(x * FIELDSIZE, y * FIELDSIZE, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(this->doorClosed));
+		this->doorItem->setBrush(QBrush(this->doorClosed));
 	}
 }
 
