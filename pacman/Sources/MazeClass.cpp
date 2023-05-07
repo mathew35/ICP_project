@@ -38,12 +38,13 @@ MazeClass::~MazeClass()
 {
 	for (int i = 0; i < rows; i++)
 	{
-		//for (int j = 0; j < cols; j++)
-		//{
-		//	delete[] fieldArray[i][j];
-		//}
+		for (int j = 0; j < cols; j++)
+		{
+			delete fieldArray[i][j];
+		}
 		delete[] fieldArray[i];
 	}
+	delete[] fieldArray;
 }
 
 void MazeClass::createArray(int rows, int cols) {
