@@ -17,7 +17,7 @@ DoorObject::DoorObject(int row, int col, PathField* field)
 
 DoorObject::~DoorObject()
 {
-	delete callerField;
+	callerField = nullptr;
 }
 
 void DoorObject::setKeys(int keys)
