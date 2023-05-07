@@ -17,6 +17,9 @@ Logger::Logger()
 	}
 	this->m_filename = newFilename;
 	this->m_logFile.open(m_filename);
+	if (m_logFile.fail()) {
+		throw new std::exception();
+	}
 }
 
 Logger::~Logger()
