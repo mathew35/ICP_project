@@ -14,6 +14,10 @@ WallField::WallField(int row, int col) {
 	this->fieldType = 'X';
 }
 
+WallField::~WallField()
+{
+}
+
 bool WallField::canMove() { return false; }
 
 bool WallField::contains(MazeObject* obj) { return false; }

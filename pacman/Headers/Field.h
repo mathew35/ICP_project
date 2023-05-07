@@ -9,6 +9,7 @@ class MazeObject;
 
 class Field {
 public:
+	virtual ~Field() = default;
 	//TODO Fix Direction
 	enum Direction {
 		L,
