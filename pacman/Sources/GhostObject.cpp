@@ -68,90 +68,58 @@ int GhostObject::getLives() {
 bool GhostObject::move(Field::Direction dir) {
 	PathField* nextField = nullptr;
 	PathField* prevField = nullptr;
+	Field* field = nullptr;
+	int prevRow = this->row;
+	int prevCol = this->col;
+	int nextRow = this->row;
+	int nextCol = this->col;
+
 	switch (dir)
 	{
 	case Field::L:
 		if (this->leftField == NULL || !this->leftField->canMove()) { return false; }
 		nextField = static_cast<PathField*>(this->leftField);
-		prevField = this->callerField;
-		if (!prevField->fieldObjectList->empty()) { prevField->fieldObjectList->pop_back(); }
-		if (!(nextField->isEmpty()))
-		{
-			MazeObject* object = nextField->get();
-			if (object->isPacman())
-			{
-				PacmanObject* pacman = static_cast<PacmanObject*>(object);
-				if (!pacman->decreaseLives()) { return false; }
-			}
-		}
 		//TODO 2 ghost same field
-		nextField->setGhostObject(this);
 		this->col -= 1;
-		observer->notifyMove(this->row, this->col - 1, this->row, this->col);
-		logger->printMovement(this, this->row, this->col - 1, this->row, this->col);
-		nextField = nullptr;
-		prevField = nullptr;
-		return true;
+		nextCol = this->col;
+		break;
 	case Field::U:
 		if (this->upperField == NULL || !this->upperField->canMove()) { return false; }
 		nextField = static_cast<PathField*>(this->upperField);
-		prevField = this->callerField;
-		if (!prevField->fieldObjectList->empty()) { prevField->fieldObjectList->pop_back(); }
-		if (!(nextField->isEmpty()))
-		{
-			MazeObject* object = nextField->get();
-			if (object->isPacman())
-			{
-				PacmanObject* pacman = static_cast<PacmanObject*>(object);
-				if (!pacman->decreaseLives()) { return false; }
-			}
-		}
-		nextField->setGhostObject(this);
 		this->row -= 1;
-		observer->notifyMove(this->row, this->col, this->row - 1, this->col);
-		logger->printMovement(this, this->row, this->col, this->row - 1, this->col);
-		return true;
+		nextRow = this->row;
+		break;
 	case Field::R:
 		if (this->rightField == NULL || !this->rightField->canMove()) { return false; }
 		nextField = static_cast<PathField*>(this->rightField);
-		prevField = this->callerField;
-		if (!prevField->fieldObjectList->empty()) { prevField->fieldObjectList->pop_back(); }
-		if (!(nextField->isEmpty()))
-		{
-			MazeObject* object = nextField->get();
-			if (object->isPacman())
-			{
-				PacmanObject* pacman = static_cast<PacmanObject*>(object);
-				if (!pacman->decreaseLives()) { return false; }
-			}
-		}
-		nextField->setGhostObject(this);
 		this->col += 1;
-		observer->notifyMove(this->row, this->col, this->row, this->col + 1);
-		//logger->printMovement(this, this->row, this->col, this->row, this->col + 1);
-		return true;
+		nextCol = this->col;
+		break;
 	case Field::D:
 		if (this->bottomField == nullptr || !this->bottomField->canMove()) { return false; }
 		nextField = static_cast<PathField*>(this->bottomField);
-		prevField = this->callerField;
-		if (!prevField->fieldObjectList->empty()) { prevField->fieldObjectList->pop_back(); }
-		if (!(nextField->isEmpty()))
-		{
-			MazeObject* object = nextField->get();
-			if (object->isPacman())
-			{
-				PacmanObject* pacman = static_cast<PacmanObject*>(object);
-				if (!pacman->decreaseLives()) { return false; }
-			}
-		}
-		nextField->setGhostObject(this);
 		this->row += 1;
-		observer->notifyMove(this->row, this->col, this->row + 1, this->col);
-		logger->printMovement(this, this->row, this->col, this->row + 1, this->col);
-		return true;
+		nextRow = this->row;
+		break;
 	default:
 		return false;
 	}
+	prevField = this->callerField;
+	if (!prevField->fieldObjectList->empty()) { prevField->fieldObjectList->pop_back(); }
+	if (!(nextField->isEmpty()))
+	{
+		MazeObject* object = nextField->get();
+		if (object->isPacman())
+		{
+			PacmanObject* pacman = static_cast<PacmanObject*>(object);
+			//has to end here ? cant finish function ?
+			if (!pacman->decreaseLives()) { return false; }
+		}
+	}
+	nextField->setGhostObject(this);
+	observer->notifyMove(prevRow, prevCol, nextRow, nextCol);
+	logger->printMovement(this, prevRow, prevCol, nextRow, nextCol);
+	return true;
 }
 void GhostObject::start()
 {
