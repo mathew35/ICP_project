@@ -11,25 +11,26 @@
 mainwindow::mainwindow(QWidget* parent)
 	: QMainWindow(parent)
 {
-	ui.setupUi(this);
+	ui = new Ui::mainwindowClass();
+	ui->setupUi(this);
 	qApp->installEventFilter(this);
 	keyPressTimer.stop();
 	connect(&keyPressTimer, &QTimer::timeout, this, &mainwindow::processKeyPressEvent);
 	connect(&moveGhostsTimer, &QTimer::timeout, this, &mainwindow::moveGhosts);
 
-	ui.mainMenuWidget->setVisible(true);
-	ui.newGameWidget->setVisible(false);
-	ui.gameWidget->setVisible(false);
+	ui->mainMenuWidget->setVisible(true);
+	ui->newGameWidget->setVisible(false);
+	ui->gameWidget->setVisible(false);
 
 	// mainMenuWidget
-	connect(ui.exitButton, SIGNAL(clicked()), this, SLOT(exitButtonClicked()));
-	connect(ui.newGameButton, SIGNAL(clicked()), this, SLOT(newGameButtonClicked()));
-	connect(ui.loadGameLogButton, SIGNAL(clicked()), this, SLOT(loadGameLogButtonClicked()));
+	connect(ui->exitButton, SIGNAL(clicked()), this, SLOT(exitButtonClicked()));
+	connect(ui->newGameButton, SIGNAL(clicked()), this, SLOT(newGameButtonClicked()));
+	connect(ui->loadGameLogButton, SIGNAL(clicked()), this, SLOT(loadGameLogButtonClicked()));
 
 	// newGameWidget
-	connect(ui.loadMapButton, SIGNAL(clicked()), this, SLOT(loadMapButtonClicked()));
-	connect(ui.playMapButton, SIGNAL(clicked()), this, SLOT(playMapButtonClicked()));
-	connect(ui.backToMainMenuButton, SIGNAL(clicked()), this, SLOT(backToMainMenuButtonClicked()));
+	connect(ui->loadMapButton, SIGNAL(clicked()), this, SLOT(loadMapButtonClicked()));
+	connect(ui->playMapButton, SIGNAL(clicked()), this, SLOT(playMapButtonClicked()));
+	connect(ui->backToMainMenuButton, SIGNAL(clicked()), this, SLOT(backToMainMenuButtonClicked()));
 
 	gameInterface = new GameInterface(this);
 	QPixmap* map = new QPixmap(":/wall");
@@ -50,9 +51,9 @@ mainwindow::mainwindow(QWidget* parent)
 	map = new QPixmap(":/doorClosed");
 	doorClosed = map->scaled(FIELDSIZE, FIELDSIZE, Qt::KeepAspectRatio);
 	delete map;
-	ui.gamePane->setScene(new QGraphicsScene());
-	ui.gameScorePane->setScene(new QGraphicsScene());
-	ui.gameScorePane->setAlignment(Qt::AlignTop);
+	ui->gamePane->setScene(new QGraphicsScene());
+	ui->gameScorePane->setScene(new QGraphicsScene());
+	ui->gameScorePane->setAlignment(Qt::AlignTop);
 
 	this->playerItem = nullptr;
 	this->doorItem = nullptr;
@@ -60,7 +61,16 @@ mainwindow::mainwindow(QWidget* parent)
 
 mainwindow::~mainwindow() {
 	delete gameInterface;
-	//TODO  delete maps
+	delete ui;
+	for (auto& wall : wallItems) {
+		delete wall.second;
+	}
+	for (auto& ghost : ghostItems) {
+		delete ghost.second;
+	}
+	for (auto& key : keyItems) {
+		delete key.second;
+	}
 }
 
 void mainwindow::updateMap(tuple<int, int> from, tuple<int, int> to)
@@ -69,20 +79,20 @@ void mainwindow::updateMap(tuple<int, int> from, tuple<int, int> to)
 	updatePlayerItem();
 	updateDoorItem();
 	//updateKeyItems():
-	ui.gamePane->update();
+	ui->gamePane->update();
 }
 
 void mainwindow::updateLives()
 {
 	updateLiveItems();
-	ui.gameScorePane->update();
+	ui->gameScorePane->update();
 }
 
 
 void mainwindow::newGameButtonClicked()
 {
-	ui.mainMenuWidget->setVisible(false);
-	ui.newGameWidget->setVisible(true);
+	ui->mainMenuWidget->setVisible(false);
+	ui->newGameWidget->setVisible(true);
 }
 
 void mainwindow::loadGameLogButtonClicked()
@@ -114,14 +124,14 @@ void mainwindow::playMapButtonClicked()
 
 void mainwindow::backToMainMenuButtonClicked()
 {
-	ui.newGameWidget->setVisible(false);
-	ui.mainMenuWidget->setVisible(true);
+	ui->newGameWidget->setVisible(false);
+	ui->mainMenuWidget->setVisible(true);
 }
 
 void mainwindow::playGame()
 {
-	ui.newGameWidget->setVisible(false);
-	ui.gameWidget->setVisible(true);
+	ui->newGameWidget->setVisible(false);
+	ui->gameWidget->setVisible(true);
 
 	//TODO - add selection from gridPane to loadMap arguments
 	gameInterface->loadMap();
@@ -130,14 +140,14 @@ void mainwindow::playGame()
 	{
 		int x = std::get<1>(wall);
 		int y = std::get<0>(wall);
-		QGraphicsItem* wallItem = ui.gamePane->scene()->addRect(QRectF(x * FIELDSIZE, y * FIELDSIZE, FIELDSIZE, FIELDSIZE), QPen(), QBrush(this->wall));
+		QGraphicsItem* wallItem = ui->gamePane->scene()->addRect(QRectF(x * FIELDSIZE, y * FIELDSIZE, FIELDSIZE, FIELDSIZE), QPen(), QBrush(this->wall));
 		wallItem->setZValue(z);
 		this->wallItems[wall] = wallItem;
 	}
 	auto door = gameInterface->getDoor();
 	int x = std::get<1>(door);
 	int y = std::get<0>(door);
-	QGraphicsRectItem* doorItem = ui.gamePane->scene()->addRect(QRectF(x * FIELDSIZE, y * FIELDSIZE, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(this->doorClosed));
+	QGraphicsRectItem* doorItem = ui->gamePane->scene()->addRect(QRectF(x * FIELDSIZE, y * FIELDSIZE, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(this->doorClosed));
 	doorItem->setZValue(z);
 	this->doorItem = doorItem;
 	//TODO keys
@@ -145,19 +155,19 @@ void mainwindow::playGame()
 	updatePlayerItem();
 	updateGhostItems();
 
-	ui.gamePane->fitInView(0, 0, ui.gamePane->scene()->width(), ui.gamePane->scene()->height(), Qt::KeepAspectRatio);
-	ui.gamePane->update();
-	ui.gamePane->setFocus();
+	ui->gamePane->fitInView(0, 0, ui->gamePane->scene()->width(), ui->gamePane->scene()->height(), Qt::KeepAspectRatio);
+	ui->gamePane->update();
+	ui->gamePane->setFocus();
 
 	auto maxLives = gameInterface->getMaxLives();
 	for (int i = 0; i < maxLives; i++)
 	{
-		QGraphicsRectItem* liveItem = ui.gameScorePane->scene()->addRect(QRectF(0, 0, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(this->player));
+		QGraphicsRectItem* liveItem = ui->gameScorePane->scene()->addRect(QRectF(0, 0, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(this->player));
 		liveItem->setPos(i * FIELDSIZE, 0);
 		this->liveItems.push_back(liveItem);
 	}
-	ui.gameScorePane->fitInView(0, 0, ui.gameScorePane->scene()->width(), ui.gameScorePane->scene()->height(), Qt::KeepAspectRatio);
-	ui.gameScorePane->update();
+	ui->gameScorePane->fitInView(0, 0, ui->gameScorePane->scene()->width(), ui->gameScorePane->scene()->height(), Qt::KeepAspectRatio);
+	ui->gameScorePane->update();
 
 	this->moveGhostsTimer.start(500);
 	// TODO keypresstimer - doesnt work properly
@@ -178,8 +188,8 @@ void mainwindow::updateEndGame()
 	this->keyPressTimer.stop();
 	this->moveGhostsTimer.stop();
 
-	ui.gameWidget->setVisible(false);
-	ui.mainMenuWidget->setVisible(true);
+	ui->gameWidget->setVisible(false);
+	ui->mainMenuWidget->setVisible(true);
 }
 
 bool mainwindow::updatePlayerItem()
@@ -190,7 +200,7 @@ bool mainwindow::updatePlayerItem()
 	int y = std::get<0>(player);
 	if (this->playerItem == nullptr)
 	{
-		QGraphicsRectItem* playerItem = ui.gamePane->scene()->addRect(QRectF(0, 0, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(this->player));
+		QGraphicsRectItem* playerItem = ui->gamePane->scene()->addRect(QRectF(0, 0, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(this->player));
 		playerItem->setPos(x * FIELDSIZE, y * FIELDSIZE);
 		playerItem->setZValue(z);
 		this->playerItem = playerItem;
@@ -214,7 +224,7 @@ void mainwindow::updateGhostItems()
 		{
 			int x = std::get<1>(ghost);
 			int y = std::get<0>(ghost);
-			QGraphicsItem* ghostItem = ui.gamePane->scene()->addRect(QRectF(0, 0, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(this->ghost));
+			QGraphicsItem* ghostItem = ui->gamePane->scene()->addRect(QRectF(0, 0, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(this->ghost));
 			ghostItem->setPos(x * FIELDSIZE, y * FIELDSIZE);
 			ghostItem->setZValue(z);
 			this->ghostItems[tuple(x, y)] = ghostItem;
@@ -288,7 +298,7 @@ bool mainwindow::eventFilter(QObject* obj, QEvent* event)
 {
 	if (event->type() == QEvent::KeyPress)
 	{
-		if (obj == ui.gamePane)
+		if (obj == ui->gamePane)
 		{
 			this->keyPressTimer.start(500);
 			this->pendingKey = static_cast<QKeyEvent*>(event)->key();

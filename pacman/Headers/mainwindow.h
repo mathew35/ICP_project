@@ -39,7 +39,7 @@ private slots:
 	void moveGhosts();
 
 private:
-	Ui::mainwindowClass ui;
+	Ui::mainwindowClass* ui;
 
 	void playGame();
 	void startGame();
