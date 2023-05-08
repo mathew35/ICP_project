@@ -4,7 +4,7 @@
 * @author Adrian Horvath(xhorva14)
 *
 */
-#include "ReplyMode.h"
+#include "ReplayMode.h"
 
 
 void ReplyMode::setMazeSize(std::string line)

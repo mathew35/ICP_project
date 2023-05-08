@@ -12,7 +12,7 @@
 #include <fstream>
 #include <sstream>
 
-class ReplyMode {
+class ReplayMode {
 private:
 	int turns;
 	std::list<std::string> Maze;
@@ -28,8 +28,8 @@ private:
 	void parseLogsFromFile(std::string filePath);
 
 public:
-	ReplyMode(std::string filePath, bool fromStart = true);
-	~ReplyMode();
+	ReplayMode(std::string filePath, bool fromStart = true);
+	~ReplayMode();
 	bool parseLogsFromTurn(bool reverse = false);
 };
 

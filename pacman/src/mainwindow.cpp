@@ -75,6 +75,7 @@ mainwindow::mainwindow(QWidget* parent)
 	this->doorItem = nullptr;
 	this->stepsItem = nullptr;
 	this->pause = false;
+	this->replayer = nullptr;
 }
 
 mainwindow::~mainwindow() {
@@ -136,11 +137,90 @@ void mainwindow::newGameButtonClicked()
 	ui->newGameWidget->setVisible(true);
 }
 
+void mainwindow::replayStep(int step)
+{
+	this->steps = step;
+	this->updateSteps();
+}
+
+void mainwindow::replayLive(int prev, int curr)
+{
+	int count = 1;
+	for (auto& live : this->liveItems)
+	{
+		if (count <= curr)
+		{
+			live->setBrush(QBrush(player));
+		}
+		else {
+			live->setBrush(QBrush(playerEmpty));
+		}
+		count++;
+	}
+}
+
+void mainwindow::replayGhostMove(int prevRow, int prevCol, int nextRow, int nextCol)
+{
+	//TODO
+}
+
+void mainwindow::replayPacmanMove(int prevRow, int prevCol, int nextRow, int nextCol)
+{
+	//TODO
+}
+
+void mainwindow::replayKey(int Row, int Col)
+{
+	auto it = this->keyItems.find(tuple(Col, Row));
+	bool found = true;
+	if (it == this->keyItems.end())
+	{
+		found = false;
+		QGraphicsItem* keyItem = ui->gamePane->scene()->addRect(QRectF(Col * FIELDSIZE, Row * FIELDSIZE, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(this->key));
+		keyItem->setZValue(0);
+		this->keyItems[tuple(Col, Row)] = keyItem;
+		ui->gamePane->update();
+	}
+
+	if (found)
+	{
+		ui->gamePane->scene()->removeItem(it->second);
+		this->keyItems.erase(tuple(Col, Row));
+	}
+
+	int count = gameInterface->getMaxKeys();
+	for (auto& key : this->keyScoreItems)
+	{
+		if (count > this->keyItems.size())
+		{
+			key->setBrush(QBrush(this->key));
+		}
+		else {
+			key->setBrush(QBrush(keyEmpty));
+		}
+		count--;
+	}
+	ui->gameScorePane->update();
+}
+
+void mainwindow::replayDoor(bool open)
+{
+	if (open)
+	{
+		this->doorItem->setBrush(QBrush(this->doorOpen));
+	}
+	else
+	{
+		this->doorItem->setBrush(QBrush(this->doorClosed));
+	}
+	ui->gameScorePane->update();
+}
+
 void mainwindow::loadGameLogButtonClicked()
 {
-	QString file = QFileDialog::getOpenFileName(this, "Choose map file", "C://", "Text file (*.txt)");
+	this->file = QFileDialog::getOpenFileName(this, "Choose map file", "C://", "Text file (*.txt)");
 	//guard no file selected
-	if (file == NULL) { return; }
+	if (this->file == NULL) { return; }
 	ui->mainMenuWidget->setVisible(false);
 	ui->replayWidget->setVisible(true);
 }
@@ -174,12 +254,18 @@ void mainwindow::backToMainMenuButtonClicked()
 
 void mainwindow::replayStartButtonClicked()
 {
-	//TODO
+	this->replayer = new ReplayMode(this->file.toStdString(), this, true);
+	ui->replayWidget->setVisible(false);
+	ui->gameWidget->setVisible(true);
+	this->startReplay();
 }
 
 void mainwindow::replayEndButtonClicked()
 {
-	//TODO
+	this->replayer = new ReplayMode(this->file.toStdString(), this, false);
+	ui->replayWidget->setVisible(false);
+	ui->gameWidget->setVisible(true);
+	this->startReplay();
 }
 
 void mainwindow::playGame()
@@ -459,6 +545,15 @@ void mainwindow::updateSteps()
 	}
 	this->stepsItem->setPlainText("Steps: " + QString::number(this->steps));
 	ui->gameScorePane->update();
+}
+
+void mainwindow::startReplay()
+{
+	list<string> maze = this->replayer->getMaze();
+	gameInterface->loadReplay(maze);
+	this->playGame();
+	this->moveGhostsTimer.stop();
+	ui->gamePane->clearFocus();
 }
 
 bool mainwindow::eventFilter(QObject* obj, QEvent* event)

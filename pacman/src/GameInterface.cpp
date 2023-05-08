@@ -44,6 +44,18 @@ void GameInterface::loadMap(std::string file)
 	updateVariables();
 }
 
+void GameInterface::loadReplay(list<string> maze)
+{
+	config->startReading();
+	for (auto line : maze)
+	{
+		config->processLine(line);
+	}
+	config->stopReading();
+	maze = config->createMaze();
+	updateVariables();
+}
+
 void GameInterface::loadMap()
 {
 	config->startReading(4, 3);

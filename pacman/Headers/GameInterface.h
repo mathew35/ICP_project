@@ -35,6 +35,7 @@ public:
 	~GameInterface();
 	void loadMap();
 	void loadMap(std::string file);
+	void loadReplay(list<string> maze);
 	void startGame();
 	void endGame();
 	int getLives();

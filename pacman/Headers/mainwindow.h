@@ -16,6 +16,7 @@
 #include <QColor>
 #include "ui_mainwindow.h"
 #include "GameInterface.h"
+#include "ReplayMode.h"	
 
 using namespace std;
 class mainwindow : public QMainWindow
@@ -32,6 +33,13 @@ public:
 	void setEndScreen(bool win);
 	void setPauseScreen();
 	void clearAfterGame();
+
+	void replayStep(int step);
+	void replayLive(int prev, int curr);
+	void replayGhostMove(int prevRow, int prevCol, int nextRow, int nextCol);
+	void replayPacmanMove(int prevRow, int prevCol, int nextRow, int nextCol);
+	void replayKey(int Row, int Col);
+	void replayDoor(bool open);
 
 private slots:
 	void newGameButtonClicked();
@@ -56,6 +64,7 @@ private:
 	void updateKeyItems(tuple<int, int>);
 	void updateKeyScoreItems();
 	void updateSteps();
+	void startReplay();
 
 	QPixmap wall;
 	QPixmap player;
@@ -80,6 +89,9 @@ private:
 	int pendingKey;
 	bool pause;
 	QTimer moveGhostsTimer;
+
+	ReplayMode* replayer;
+	QString file;
 
 protected:
 	bool eventFilter(QObject* obj, QEvent* event);
