@@ -1,5 +1,5 @@
 /**
-* @brief
+* @brief	WallField implementation
 *
 * @authors	Adrian Horvath(xhorva14)
 *			Matus Vrablik(xvrabl05)

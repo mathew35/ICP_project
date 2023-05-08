@@ -1,14 +1,12 @@
 /**
-* @brief
+* @brief	PathField implementation
 *
 * @authors	Adrian Horvath(xhorva14)
 *			Matus Vrablik(xvrabl05)
 *
 */
 
-
 #include "PathField.h"
-
 
 PathField::PathField(int row, int col) {
 	this->col = col;
@@ -16,7 +14,7 @@ PathField::PathField(int row, int col) {
 	this->fieldType = '.';
 	this->typeOfObject = 0;
 	this->fieldObjectList = new list<MazeObject*>();
-}//TODO add key and door MazeItem
+}
 
 PathField::PathField(int row, int col, char typeOfObject) {
 	this->col = col;
@@ -102,7 +100,6 @@ list<MazeObject*>* PathField::getObjectList()
 	return fieldObjectList;
 }
 bool PathField::isEmpty() {
-	//TODO - posible logic break
 	if (this->fieldObjectList->empty())
 	{
 		return true;
@@ -131,14 +128,12 @@ void PathField::setPacmanObject(MazeObject* fieldObject) {
 	this->fieldObjectList->emplace_back(fieldObject);
 	this->typeOfObject = 'S';
 	this->setObjectFields(fieldObject);
-	//this->setSurroundingFields(this->bottomField, this->rightField, this->upperField, this->leftField);
 }
 
 void PathField::setGhostObject(MazeObject* fieldObject) {
 	this->fieldObjectList->emplace_back(fieldObject);
 	this->typeOfObject = 'G';
 	this->setObjectFields(fieldObject);
-	//this->setSurroundingFields(this->bottomField, this->rightField, this->upperField, this->leftField);
 }
 
 void PathField::setObjectFields(MazeObject* object) {

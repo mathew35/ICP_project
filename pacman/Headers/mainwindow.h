@@ -1,5 +1,5 @@
 /**
-* @brief Header file for main window of application.
+* @brief Header file for main window of application
 *
 * @author Matus Vrablik(xvrabl05)
 *
@@ -13,6 +13,7 @@
 #include <QThread>
 #include <QKeyEvent>
 #include <QTimer>
+#include <QColor>
 #include "ui_mainwindow.h"
 #include "GameInterface.h"
 
@@ -28,6 +29,8 @@ public:
 	void updateLives();
 	void updateKeys();
 	void updateEndGame();
+	void setScreen(bool win);
+	void clearAfterGame();
 
 private slots:
 	void newGameButtonClicked();
@@ -49,6 +52,7 @@ private:
 	void updateDoorItem();
 	void updateKeyItems(tuple<int, int>);
 	void updateKeyScoreItems();
+	void updateSteps();
 
 	QPixmap wall;
 	QPixmap player;
@@ -65,6 +69,9 @@ private:
 	map<tuple<int, int>, QGraphicsItem*> keyItems;
 	list<QGraphicsRectItem*> liveItems;
 	list<QGraphicsRectItem*> keyScoreItems;
+
+	QGraphicsTextItem* stepsItem;
+	int steps = 0;
 
 	QTimer keyPressTimer;
 	int pendingKey;

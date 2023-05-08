@@ -1,5 +1,5 @@
 /**
-* @brief
+* @brief	GhostObject implementation
 *
 * @author Adrian Horvath(xhorva14)
 *
@@ -56,18 +56,21 @@ bool GhostObject::canMove(Field::Direction dir) {
 		return false;
 	}
 	return true;
-
 }
+
 Field* GhostObject::getField() {
 	return this->callerField;
 }
+
 bool GhostObject::isPacman()
 {
 	return false;
 }
+
 int GhostObject::getLives() {
 	return 0;
 }
+
 bool GhostObject::move(Field::Direction dir) {
 	PathField* nextField = nullptr;
 	PathField* prevField = nullptr;
@@ -81,7 +84,6 @@ bool GhostObject::move(Field::Direction dir) {
 	case Field::L:
 		if (this->leftField == NULL || !this->leftField->canMove()) { return false; }
 		nextField = static_cast<PathField*>(this->leftField);
-		//TODO 2 ghost same field
 		this->col -= 1;
 		nextCol = this->col;
 		break;
@@ -142,6 +144,7 @@ bool GhostObject::move(Field::Direction dir) {
 	logger->printMovement(this, prevRow, prevCol, nextRow, nextCol);
 	return true;
 }
+
 void GhostObject::start()
 {
 	list<Field::Direction> moveTo;

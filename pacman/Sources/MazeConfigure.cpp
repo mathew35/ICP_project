@@ -1,5 +1,5 @@
 /**
-* @brief
+* @brief	MazeConfigure implementation
 *
 * @authors	Adrian Horvath(xhorva14)
 *			Matúš Vráblik (xvrabl05)
@@ -7,7 +7,6 @@
 */
 
 #include "MazeConfigure.h"
-
 
 MazeConfigure::MazeConfigure(Logger* logger)
 {
@@ -43,6 +42,7 @@ void MazeConfigure::loadMapFromFile(std::string file)
 void MazeConfigure::startReading(int rows, int cols) {
 	newMaze = new MazeClass(rows, cols);
 }
+
 bool MazeConfigure::processLine(std::string line) {
 	this->counLines++;
 	if (this->correctLine)
@@ -55,6 +55,7 @@ bool MazeConfigure::processLine(std::string line) {
 	}
 	return this->correctLine;
 }
+
 bool MazeConfigure::stopReading() {
 	if (this->counLines != newMaze->numRows() - 2)
 	{
@@ -63,6 +64,7 @@ bool MazeConfigure::stopReading() {
 	newMaze->setFields();
 	return this->doneReading = true;
 }
+
 Maze* MazeConfigure::createMaze() {
 	if (this->doneReading && this->correctLine)
 	{
@@ -73,4 +75,3 @@ Maze* MazeConfigure::createMaze() {
 		return nullptr;
 	}
 }
-

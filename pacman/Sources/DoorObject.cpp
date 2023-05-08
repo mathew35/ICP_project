@@ -1,5 +1,5 @@
 /**
-* @brief
+* @brief	DoorObject implementation
 *
 * @author Adrian Horvath(xhorva14)
 *

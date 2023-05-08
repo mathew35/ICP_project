@@ -1,5 +1,5 @@
 /**
-* @brief
+* @brief MazeObject header file
 *
 * @author Adrian Horvath(xhorva14)
 *

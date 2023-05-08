@@ -1,5 +1,5 @@
 /**
-* @brief
+* @brief MazeConfigure header file
 *
 * @author Adrian Horvath(xhorva14)
 *
@@ -31,6 +31,4 @@ protected:
 private:
 	Logger* logger;
 	int counLines = 0;
-
 };
-

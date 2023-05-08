@@ -22,6 +22,13 @@ mainwindow::mainwindow(QWidget* parent)
 	ui->mainMenuWidget->setVisible(true);
 	ui->newGameWidget->setVisible(false);
 	ui->gameWidget->setVisible(false);
+	ui->resultWidget->setVisible(false);
+	ui->gameWidget->setFocusPolicy(Qt::NoFocus);
+	ui->newGameWidget->setFocusPolicy(Qt::NoFocus);
+	ui->mainMenuWidget->setFocusPolicy(Qt::NoFocus);
+	ui->gameScorePane->setFocusPolicy(Qt::NoFocus);
+	ui->gameGuidePane->setFocusPolicy(Qt::NoFocus);
+	ui->resultWidget->setFocusPolicy(Qt::NoFocus);
 
 	// mainMenuWidget
 	connect(ui->exitButton, SIGNAL(clicked()), this, SLOT(exitButtonClicked()));
@@ -64,6 +71,7 @@ mainwindow::mainwindow(QWidget* parent)
 
 	this->playerItem = nullptr;
 	this->doorItem = nullptr;
+	this->stepsItem = nullptr;
 }
 
 mainwindow::~mainwindow() {
@@ -210,6 +218,7 @@ void mainwindow::playGame()
 		keyItem->setPos(i * FIELDSIZE, 0);
 		this->keyScoreItems.push_back(keyItem);
 	}
+	updateSteps();
 	ui->gameScorePane->fitInView(0, 0, ui->gameScorePane->scene()->width(), ui->gameScorePane->scene()->height(), Qt::KeepAspectRatio);
 	ui->gameScorePane->update();
 
@@ -221,8 +230,32 @@ void mainwindow::updateEndGame()
 	this->keyPressTimer.stop();
 	this->moveGhostsTimer.stop();
 
-	ui->gameWidget->setVisible(false);
-	ui->mainMenuWidget->setVisible(true);
+	//TODO adjust endgame screen
+	ui->resultWidget->setVisible(true);
+	ui->resultWidget->setFocus();
+}
+
+void mainwindow::setScreen(bool win)
+{
+	if (win)
+	{
+		ui->statusLabel->setText("You Win!");
+		ui->statusLabel->setStyleSheet("background-color: rgba(0,0,0,0);color:rgba(0,150,0,255);");
+	}
+	else
+	{
+		ui->statusLabel->setText("You Lose!");
+		ui->statusLabel->setStyleSheet("background-color: rgba(0,0,0,0);color:rgba(150,0,0,255);");
+	}
+	ui->resultWidget->setStyleSheet("background-color: rgba(20, 20, 20, 220);");
+	ui->legendLabel->setStyleSheet("background-color: rgba(0,0,0,0);color:rgba(200,200,200,255);");
+	ui->stepsLabel->setStyleSheet("background-color: rgba(0,0,0,0);color:rgba(200,200,200,255);");
+	//TODO steps
+	ui->stepsLabel->setText("Steps taken: " + QString::number(this->steps));
+}
+
+void mainwindow::clearAfterGame()
+{
 	delete gameInterface;
 	gameInterface = new GameInterface(this);
 	ui->mainMenuWidget->setFocus();
@@ -248,8 +281,11 @@ void mainwindow::updateEndGame()
 	keyScoreItems.clear();
 	delete this->playerItem;
 	delete this->doorItem;
+	delete this->stepsItem;
 	this->playerItem = nullptr;
 	this->doorItem = nullptr;
+	this->stepsItem = nullptr;
+	this->steps = 0;
 	delete ui->gamePane->scene();
 	ui->gamePane->setScene(new QGraphicsScene);
 	delete ui->gameScorePane->scene();
@@ -276,6 +312,8 @@ bool mainwindow::updatePlayerItem()
 	}
 
 	this->playerItem->setPos(x * FIELDSIZE, y * FIELDSIZE);
+	this->steps++;
+	updateSteps();
 	return true;
 }
 
@@ -382,6 +420,20 @@ void mainwindow::updateKeyScoreItems()
 	}
 }
 
+void mainwindow::updateSteps()
+{
+	if (this->stepsItem == nullptr) {
+		this->stepsItem = new QGraphicsTextItem("Steps: " + QString::number(this->steps));
+		this->stepsItem->setFont(ui->legendLabel->font());
+		this->stepsItem->setPos(0, ui->gameScorePane->height() - this->stepsItem->boundingRect().height());
+		this->stepsItem->setTextWidth(ui->gameScorePane->width());
+		this->stepsItem->setScale(7);
+		ui->gameScorePane->scene()->addItem(this->stepsItem);
+	}
+	this->stepsItem->setPlainText("Steps: " + QString::number(this->steps));
+	ui->gameScorePane->update();
+}
+
 bool mainwindow::eventFilter(QObject* obj, QEvent* event)
 {
 	if (event->type() == QEvent::KeyPress)
@@ -391,6 +443,17 @@ bool mainwindow::eventFilter(QObject* obj, QEvent* event)
 			this->keyPressTimer.start(500);
 			this->pendingKey = static_cast<QKeyEvent*>(event)->key();
 		}
+		if (obj == ui->resultWidget)
+		{
+			QKeyEvent* keyEvent = (QKeyEvent*)event;
+			if (keyEvent->key() == Qt::Key_Escape)
+			{
+				ui->gameWidget->setVisible(false);
+				ui->resultWidget->setVisible(false);
+				ui->mainMenuWidget->setVisible(true);
+				this->clearAfterGame();
+			}
+		}
 	}
 	return QObject::eventFilter(obj, event);
 }
@@ -399,7 +462,6 @@ void mainwindow::processKeyPressEvent()
 {
 	int keyEvent = this->pendingKey;
 	if (keyEvent != 0) {
-		//QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
 		if (keyEvent == Qt::Key_Right) {
 			gameInterface->movePlayer(2);
 		}
@@ -420,4 +482,3 @@ void mainwindow::moveGhosts()
 {
 	gameInterface->startGame();
 }
-

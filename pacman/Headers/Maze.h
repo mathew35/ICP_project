@@ -1,5 +1,5 @@
 /**
-* @brief
+* @brief MazeObject template
 *
 * @author Adrian Horvath(xhorva14)
 *

@@ -1,14 +1,14 @@
 /**
-* @brief
+* @brief	MazeClass implementation
 *
 * @authors	Adrian Horvath(xhorva14)
 *			Matus Vrablik(xvrabl05)
 *
 */
 
-#include "MazeClass.h"
-
 #define BOUNDS 2
+
+#include "MazeClass.h"
 
 void MazeClass::horizontalWall(int rows, int cols) {
 	for (int c = 0; c < cols; c++)
@@ -17,6 +17,7 @@ void MazeClass::horizontalWall(int rows, int cols) {
 		this->fieldArray[rows - 1][c] = new WallField(rows - 1, c);
 	}
 }
+
 void MazeClass::verticalWall(int rows, int cols) {
 	for (int r = 1; r < rows - 1; r++)
 	{
@@ -24,6 +25,7 @@ void MazeClass::verticalWall(int rows, int cols) {
 		this->fieldArray[r][cols - 1] = new WallField(r, cols - 1);
 	}
 }
+
 void MazeClass::insertGhost(Field* field) {
 	this->listOfGhosts.emplace_back(field->get());
 }
@@ -60,6 +62,7 @@ void MazeClass::createArray(int rows, int cols) {
 		}
 	}
 }
+
 void MazeClass::insertLine(std::string line) {
 	for (int i = 1; i < this->numCols() - 1; i++)
 	{
@@ -86,12 +89,13 @@ void MazeClass::insertLine(std::string line) {
 			this->keys += 1;
 			continue;
 		default:
+			throw exception();
 			break;
-			//TODO
 		}
 	}
 	this->numberOfLines++;
 }
+
 void MazeClass::setFields() {
 	for (int r = 1; r < this->numRows() - 1; r++)
 	{
@@ -113,17 +117,21 @@ void MazeClass::setFields() {
 		}
 	}
 }
+
 DoorObject* MazeClass::getDoor()
 {
 	return this->door;
 }
+
 int MazeClass::getKeys()
 {
 	return this->keys;
 }
+
 int MazeClass::numCols() {
 	return this->cols;
 }
+
 int MazeClass::numRows() {
 	return this->rows;
 }

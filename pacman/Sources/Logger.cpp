@@ -1,5 +1,5 @@
 /**
-* @brief
+* @brief Logger of gameplay for later replay
 *
 * @author Adrian Horvath(xhorva14)
 *

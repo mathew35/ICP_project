@@ -1,8 +1,9 @@
 #include "PacmanObject.h"
 /**
-* @brief
+* @brief	PacmanObject implementation
 *
-* @author Adrian Horvath(xhorva14)
+* @author	Adrian Horvath(xhorva14)
+*			Matus Vrablik(xvrabl05)
 *
 */
 
@@ -52,19 +53,24 @@ bool PacmanObject::canMove(Field::Direction dir) {
 		return false;
 	}
 }
+
 Field* PacmanObject::getField() {
 	return this->callerField;
 }
+
 bool PacmanObject::isPacman()
 {
 	return true;
 }
+
 int PacmanObject::getLives() {
 	return this->lives;
 }
+
 void PacmanObject::start()
 {
 }
+
 bool PacmanObject::move(Field::Direction dir) {
 	PathField* nextField = nullptr;
 	PathField* prevField = nullptr;
@@ -110,6 +116,7 @@ bool PacmanObject::move(Field::Direction dir) {
 		MazeObject* object = nextField->get();
 		if (!nextField->fieldObjectList->empty())
 		{
+			MazeObject* keyRemove = nullptr;
 			for (MazeObject* obj : *nextField->fieldObjectList)
 			{
 				GhostObject* ghost = (GhostObject*)obj;
@@ -118,7 +125,6 @@ bool PacmanObject::move(Field::Direction dir) {
 				if (typeid(*ghost) == typeid(GhostObject))
 				{
 					lives = true;
-					break;
 				}
 				else if (typeid(*door) == typeid(DoorObject)) {
 					if (door->isOpen())
@@ -130,11 +136,12 @@ bool PacmanObject::move(Field::Direction dir) {
 				else if (typeid(*key) == typeid(KeyObject))
 				{
 					this->observer->notifyPickKey(nextRow, nextCol);
-					nextField->fieldObjectList->remove(obj);
+					this->logger->printKey(nextRow, nextCol);
+					keyRemove = obj;
 					this->keys.emplace_back(key);
-					break;
 				}
 			}
+			nextField->fieldObjectList->remove(keyRemove);
 		}
 	}
 	if (lives)
@@ -147,24 +154,24 @@ bool PacmanObject::move(Field::Direction dir) {
 	logger->printMovement(this, prevRow, prevCol, nextRow, nextCol);
 
 	return true;
-	//TODO end game when on doors
-	//TODO pick up key notify + log
 }
+
 bool PacmanObject::decreaseLives() {
-	//TODO Pacman dead
 	this->lives -= 1;
 	if (this->lives == 0) {
 		observer->notifyGameOver();
-		return false; //RIP Pacman
+		return false;
 	}
 	observer->notifyLives();
 	logger->printLives(lives);
 	return true;
 }
+
 void PacmanObject::setLogger(Logger* logger)
 {
 	this->logger = logger;
 }
+
 void PacmanObject::attach(GameInterface* o) {
 	this->observer = o;
 }

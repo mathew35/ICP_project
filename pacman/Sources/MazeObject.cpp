@@ -1,5 +1,5 @@
 /**
-* @brief
+* @brief MazeObject implementation
 *
 * @author Adrian Horvath(xhorva14)
 *

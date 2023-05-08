@@ -1,5 +1,5 @@
 /**
- * @brief Game interface holding all game logic.
+ * @brief Game interface holding most of the game logic contained from FrontEnd visual app.
  *
  * @author Matúš Vráblik (xvrabl05)
  */
@@ -46,7 +46,6 @@ void GameInterface::loadMap(std::string file)
 
 void GameInterface::loadMap()
 {
-	//TODO - add prompt to select file / function to load from file
 	config->startReading(4, 3);
 	config->processLine(".GG");
 	config->processLine(".XT");
@@ -55,7 +54,6 @@ void GameInterface::loadMap()
 	config->stopReading();
 
 	maze = config->createMaze();
-	//TODO - add signal that map is created?
 	updateVariables();
 }
 
@@ -134,9 +132,19 @@ bool GameInterface::isDoorOpen()
 
 void GameInterface::movePlayer(int d)
 {
-	//TODO add checks - oneliner is DANGEROUS - pacman removed after meeting with ghost
-	PacmanObject* player = (PacmanObject*)this->maze->getField(std::get<0>(this->player), std::get<1>(this->player))->get();
-	player->move(Field::Direction(d));
+	PathField* field = (PathField*)this->maze->getField(std::get<0>(this->player), std::get<1>(this->player));
+	if (!field->fieldObjectList->empty())
+	{
+		for (MazeObject* obj : *field->fieldObjectList)
+		{
+			PacmanObject* player = (PacmanObject*)obj;
+			if (typeid(*player) == typeid(PacmanObject))
+			{
+				player->move(Field::Direction(d));
+				break;
+			}
+		}
+	}
 }
 
 void GameInterface::notifyMove(int fromX, int fromY, int toX, int toY)
@@ -190,8 +198,8 @@ void GameInterface::notifyLives()
 
 void GameInterface::notifyEndLevel()
 {
-	//TODO
 	this->endGame();
+	this->window->setScreen(true);
 	this->window->updateEndGame();
 
 }
@@ -199,6 +207,7 @@ void GameInterface::notifyEndLevel()
 void GameInterface::notifyGameOver()
 {
 	this->endGame();
+	this->window->setScreen(false);
 	this->window->updateEndGame();
 }
 
@@ -208,14 +217,10 @@ void GameInterface::updateVariables()
 	if (!this->ghosts->empty())
 	{
 		this->ghosts->clear();
-		//delete this->ghosts;
-		//this->ghosts = new list<tuple<int, int>>();
 	}
 	if (!this->keys->empty())
 	{
 		this->keys->clear();
-		//delete this->keys;
-		//this->keys = new list<tuple<int, int>>();
 	}
 	for (int x = 0; x < maze->numRows(); x++)
 	{
