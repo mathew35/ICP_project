@@ -29,7 +29,8 @@ public:
 	void updateLives();
 	void updateKeys();
 	void updateEndGame();
-	void setScreen(bool win);
+	void setEndScreen(bool win);
+	void setPauseScreen();
 	void clearAfterGame();
 
 private slots:
@@ -39,6 +40,8 @@ private slots:
 	void loadMapButtonClicked();
 	void playMapButtonClicked();
 	void backToMainMenuButtonClicked();
+	void replayStartButtonClicked();
+	void replayEndButtonClicked();
 	void processKeyPressEvent();
 	void moveGhosts();
 
@@ -75,6 +78,7 @@ private:
 
 	QTimer keyPressTimer;
 	int pendingKey;
+	bool pause;
 	QTimer moveGhostsTimer;
 
 protected:

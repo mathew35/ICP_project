@@ -23,6 +23,7 @@ mainwindow::mainwindow(QWidget* parent)
 	ui->newGameWidget->setVisible(false);
 	ui->gameWidget->setVisible(false);
 	ui->resultWidget->setVisible(false);
+	ui->replayWidget->setVisible(false);
 	ui->gameWidget->setFocusPolicy(Qt::NoFocus);
 	ui->newGameWidget->setFocusPolicy(Qt::NoFocus);
 	ui->mainMenuWidget->setFocusPolicy(Qt::NoFocus);
@@ -39,6 +40,7 @@ mainwindow::mainwindow(QWidget* parent)
 	connect(ui->loadMapButton, SIGNAL(clicked()), this, SLOT(loadMapButtonClicked()));
 	connect(ui->playMapButton, SIGNAL(clicked()), this, SLOT(playMapButtonClicked()));
 	connect(ui->backToMainMenuButton, SIGNAL(clicked()), this, SLOT(backToMainMenuButtonClicked()));
+	connect(ui->backToMainMenuButton_2, SIGNAL(clicked()), this, SLOT(backToMainMenuButtonClicked()));
 
 	gameInterface = new GameInterface(this);
 	QPixmap* map = new QPixmap(":/wall");
@@ -72,6 +74,7 @@ mainwindow::mainwindow(QWidget* parent)
 	this->playerItem = nullptr;
 	this->doorItem = nullptr;
 	this->stepsItem = nullptr;
+	this->pause = false;
 }
 
 mainwindow::~mainwindow() {
@@ -138,7 +141,8 @@ void mainwindow::loadGameLogButtonClicked()
 	QString file = QFileDialog::getOpenFileName(this, "Choose map file", "C://", "Text file (*.txt)");
 	//guard no file selected
 	if (file == NULL) { return; }
-	//TODO
+	ui->mainMenuWidget->setVisible(false);
+	ui->replayWidget->setVisible(true);
 }
 
 void mainwindow::exitButtonClicked()
@@ -164,7 +168,18 @@ void mainwindow::playMapButtonClicked()
 void mainwindow::backToMainMenuButtonClicked()
 {
 	ui->newGameWidget->setVisible(false);
+	ui->replayWidget->setVisible(false);
 	ui->mainMenuWidget->setVisible(true);
+}
+
+void mainwindow::replayStartButtonClicked()
+{
+	//TODO
+}
+
+void mainwindow::replayEndButtonClicked()
+{
+	//TODO
 }
 
 void mainwindow::playGame()
@@ -230,12 +245,11 @@ void mainwindow::updateEndGame()
 	this->keyPressTimer.stop();
 	this->moveGhostsTimer.stop();
 
-	//TODO adjust endgame screen
 	ui->resultWidget->setVisible(true);
 	ui->resultWidget->setFocus();
 }
 
-void mainwindow::setScreen(bool win)
+void mainwindow::setEndScreen(bool win)
 {
 	if (win)
 	{
@@ -250,8 +264,21 @@ void mainwindow::setScreen(bool win)
 	ui->resultWidget->setStyleSheet("background-color: rgba(20, 20, 20, 220);");
 	ui->legendLabel->setStyleSheet("background-color: rgba(0,0,0,0);color:rgba(200,200,200,255);");
 	ui->stepsLabel->setStyleSheet("background-color: rgba(0,0,0,0);color:rgba(200,200,200,255);");
-	//TODO steps
+
+	ui->legendLabel_5->setVisible(false);
 	ui->stepsLabel->setText("Steps taken: " + QString::number(this->steps));
+	ui->stepsLabel->setVisible(true);
+}
+
+void mainwindow::setPauseScreen()
+{
+	ui->statusLabel->setText("Paused");
+	ui->statusLabel->setStyleSheet("background-color: rgba(0,0,0,0);color:rgba(200,200,200,255);");
+	ui->resultWidget->setStyleSheet("background-color: rgba(20, 20, 20, 220);");
+	ui->legendLabel_5->setVisible(true);
+	ui->legendLabel->setStyleSheet("background-color: rgba(0,0,0,0);color:rgba(200,200,200,255);");
+	ui->legendLabel_5->setStyleSheet("background-color: rgba(0,0,0,0);color:rgba(200,200,200,255);");
+	ui->stepsLabel->setVisible(false);
 }
 
 void mainwindow::clearAfterGame()
@@ -440,18 +467,52 @@ bool mainwindow::eventFilter(QObject* obj, QEvent* event)
 	{
 		if (obj == ui->gamePane)
 		{
-			this->keyPressTimer.start(500);
-			this->pendingKey = static_cast<QKeyEvent*>(event)->key();
+			QKeyEvent* keyEvent = (QKeyEvent*)event;
+			if (keyEvent->key() == Qt::Key_Escape)
+			{
+				this->keyPressTimer.stop();
+				this->moveGhostsTimer.stop();
+				this->pendingKey = 0;
+				ui->gamePane->clearFocus();
+				ui->resultWidget->setFocus();
+				ui->gameWidget->setVisible(false);
+				ui->resultWidget->setVisible(false);
+				ui->mainMenuWidget->setVisible(true);
+				this->clearAfterGame();
+			}
+			else if (keyEvent->key() == Qt::Key_Space)
+			{
+				this->pause = true;
+				this->keyPressTimer.stop();
+				this->moveGhostsTimer.stop();
+				this->pendingKey = 0;
+				ui->gamePane->clearFocus();
+				ui->resultWidget->setFocus();
+				ui->resultWidget->setVisible(true);
+				this->setPauseScreen();
+			}
+			else {
+				this->keyPressTimer.start(500);
+				this->pendingKey = keyEvent->key();
+			}
 		}
 		if (obj == ui->resultWidget)
 		{
 			QKeyEvent* keyEvent = (QKeyEvent*)event;
 			if (keyEvent->key() == Qt::Key_Escape)
 			{
+				ui->resultWidget->clearFocus();
 				ui->gameWidget->setVisible(false);
 				ui->resultWidget->setVisible(false);
 				ui->mainMenuWidget->setVisible(true);
 				this->clearAfterGame();
+			}
+			else if (keyEvent->key() == Qt::Key_Space && pause)
+			{
+				this->pause = false;
+				this->moveGhostsTimer.start(500);
+				ui->gamePane->setFocus();
+				ui->resultWidget->setVisible(false);
 			}
 		}
 	}
