@@ -25,7 +25,7 @@ void MazeConfigure::loadMapFromFile(std::string file)
 	using namespace std;
 	ifstream map(file);
 	string lineText;
-	if (!getline(map, lineText, ',')) { return; }
+	if (!getline(map, lineText, ' ')) { return; }
 	int rows = stoi(lineText);
 	if (!getline(map, lineText)) { return; }
 	int cols = stoi(lineText);

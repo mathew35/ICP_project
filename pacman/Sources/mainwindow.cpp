@@ -149,6 +149,7 @@ void mainwindow::loadMapButtonClicked()
 
 void mainwindow::playMapButtonClicked()
 {
+	gameInterface->loadMap();
 	this->playGame();
 }
 
@@ -164,7 +165,6 @@ void mainwindow::playGame()
 	ui->gameWidget->setVisible(true);
 
 	//TODO - add selection from gridPane to loadMap arguments
-	gameInterface->loadMap();
 	int z = 0;
 	for (auto& wall : gameInterface->getWalls())
 	{
@@ -213,7 +213,7 @@ void mainwindow::playGame()
 	ui->gameScorePane->fitInView(0, 0, ui->gameScorePane->scene()->width(), ui->gameScorePane->scene()->height(), Qt::KeepAspectRatio);
 	ui->gameScorePane->update();
 
-	this->moveGhostsTimer.start(500);
+	//this->moveGhostsTimer.start(500);
 }
 
 void mainwindow::updateEndGame()

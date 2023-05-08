@@ -39,6 +39,9 @@ GameInterface::~GameInterface()
 
 void GameInterface::loadMap(std::string file)
 {
+	config->loadMapFromFile(file);
+	maze = config->createMaze();
+	updateVariables();
 }
 
 void GameInterface::loadMap()
