@@ -28,22 +28,21 @@ void MazeConfigure::loadMapFromFile(std::string file)
 	int rows = stoi(lineText);
 	if (!getline(map, lineText)) { return; }
 	int cols = stoi(lineText);
-	this->logger->printFirstLine(rows, cols);
 	this->startReading(rows, cols);
 	while (getline(map, lineText))
 	{
-		this->logger->printMazeLine(lineText);
 		this->processLine(lineText);
 	}
-	this->logger->printTurnZero();
 	this->stopReading();
 }
 
 void MazeConfigure::startReading(int rows, int cols) {
+	this->logger->printFirstLine(rows, cols);
 	newMaze = new MazeClass(rows, cols);
 }
 
 bool MazeConfigure::processLine(std::string line) {
+	this->logger->printMazeLine(line);
 	this->counLines++;
 	if (this->correctLine)
 	{
@@ -57,6 +56,7 @@ bool MazeConfigure::processLine(std::string line) {
 }
 
 bool MazeConfigure::stopReading() {
+	this->logger->printTurnZero();
 	if (this->counLines != newMaze->numRows() - 2)
 	{
 		return false;

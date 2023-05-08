@@ -54,7 +54,7 @@ void Logger::printMovement(MazeObject* object, int fromX, int fromY, int toX, in
 	if (typeid(*pacman) == typeid(PacmanObject)) {
 		if (turn > 0)
 		{
-			this->m_logFile << "TURN:" << this->turn << std::endl;
+			this->m_logFile << "TURN: " << this->turn << std::endl;
 		}
 		this->turn++;
 		entity = "Pacman ";
