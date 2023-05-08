@@ -13,6 +13,7 @@ Logger::Logger()
 	std::string newFilename = Filename;
 	while (std::filesystem::exists(newFilename)) {
 		num++;
+		//TODO FIX ME CREATE LOG FILE
 		newFilename = newFilename + "_" + std::to_string(num);
 	}
 	this->m_filename = newFilename;
@@ -29,7 +30,7 @@ Logger::~Logger()
 
 void Logger::printTurnZero()
 {
-	this->m_logFile << turn << std::endl;
+	this->m_logFile << "TURN: " << this->turn << std::endl;
 }
 
 void Logger::printFirstLine(int rows, int cols)
@@ -54,7 +55,7 @@ void Logger::printMovement(MazeObject* object, int fromX, int fromY, int toX, in
 	if (typeid(*pacman) == typeid(PacmanObject)) {
 		if (turn > 0)
 		{
-			this->m_logFile << this->turn << std::endl;
+			this->m_logFile << "TURN:" << this->turn << std::endl;
 		}
 		this->turn++;
 		entity = "Pacman ";
