@@ -10,6 +10,7 @@
 #include <string>
 #include <regex>
 #include <fstream>
+#include <sstream>
 
 class ReplyMode {
 private:
