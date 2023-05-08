@@ -27,7 +27,7 @@ private:
 	char typeOfObject;
 
 public:
-	void objectMoved();
+	void objectMoved(MazeObject* object);
 
 	std::list<MazeObject*>* fieldObjectList;
 
@@ -44,6 +44,8 @@ public:
 	bool contains(MazeObject* obj);
 
 	MazeObject* get() override;
+
+	std::list<MazeObject*>* getObjectList();
 
 	bool isEmpty() override;
 

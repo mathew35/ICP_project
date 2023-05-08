@@ -64,7 +64,20 @@ void PathField::setSurroundingFields(Field* bottom, Field* right, Field* upper, 
 	this->leftField = left;
 }
 
-void PathField::objectMoved() { this->fieldObjectList->pop_back(); }
+void PathField::objectMoved(MazeObject* object)
+{
+	if (!this->fieldObjectList->empty())
+	{
+		for (MazeObject* obj : *this->fieldObjectList)
+		{
+			if (typeid(*obj) == typeid(*object))
+			{
+				this->fieldObjectList->remove(obj);
+				break;
+			}
+		}
+	}
+}
 
 bool PathField::canMove() {
 	return !(this->fieldType == 'X');
@@ -84,6 +97,10 @@ bool PathField::contains(MazeObject* obj) {
 
 MazeObject* PathField::get() { return !fieldObjectList->empty() ? fieldObjectList->back() : nullptr; }
 
+list<MazeObject*>* PathField::getObjectList()
+{
+	return fieldObjectList;
+}
 bool PathField::isEmpty() {
 	//TODO - posible logic break
 	if (this->fieldObjectList->empty())

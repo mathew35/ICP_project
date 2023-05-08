@@ -34,26 +34,29 @@ void GhostObject::setSurroundinFieldsGhost(Field* bottom, Field* right, Field* u
 
 bool GhostObject::canMove(Field::Direction dir) {
 
+	GhostObject* ghost = nullptr;
 	if (this->bottomField != nullptr && dir == Field::D && this->bottomField->canMove())
 	{
-		return true;
+		ghost = (GhostObject*)this->bottomField->get();
 	}
 	else if (this->rightField != nullptr && dir == Field::R && this->rightField->canMove())
 	{
-		return true;
+		ghost = (GhostObject*)this->bottomField->get();
 	}
 	else if (this->upperField != nullptr && dir == Field::U && this->upperField->canMove())
 	{
-		return true;
+		ghost = (GhostObject*)this->bottomField->get();
 	}
 	else if (this->leftField != nullptr && dir == Field::L && this->leftField->canMove())
 	{
-		return true;
+		ghost = (GhostObject*)this->bottomField->get();
 	}
-	else
-	{
+
+	if (ghost != nullptr && typeid(*ghost) == typeid(GhostObject)) {
 		return false;
 	}
+	return true;
+
 }
 Field* GhostObject::getField() {
 	return this->callerField;
@@ -104,7 +107,7 @@ bool GhostObject::move(Field::Direction dir) {
 		return false;
 	}
 	prevField = this->callerField;
-	if (!prevField->fieldObjectList->empty()) { prevField->fieldObjectList->pop_back(); }
+	prevField->objectMoved(this);
 	if (!(nextField->isEmpty()))
 	{
 		MazeObject* object = nextField->get();

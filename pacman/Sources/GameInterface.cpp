@@ -145,7 +145,18 @@ void GameInterface::notifyMove(int fromX, int fromY, int toX, int toY)
 void GameInterface::notifyPickKey(int x, int y)
 {
 	this->keys->remove(tuple(x, y));
-	this->maze->getField(std::get<0>(this->door), std::get<1>(this->door))->get()->start();
+	PathField* field = (PathField*)this->maze->getField(std::get<0>(this->door), std::get<1>(this->door));
+	if (!field->fieldObjectList->empty())
+	{
+		for (MazeObject* obj : *field->fieldObjectList)
+		{
+			if (typeid(*obj) == typeid(DoorObject))
+			{
+				obj->start();
+				break;
+			}
+		}
+	}
 	this->window->updateKeys();
 	this->window->updateMap(tuple(x, y), tuple(-1, -1));
 }
@@ -206,46 +217,49 @@ void GameInterface::updateVariables()
 				this->walls->push_back(tuple(x, y));
 				continue;
 			}
-			if (field == nullptr) { continue; }
-			MazeObject* obj = field->get();
-			if (obj == nullptr) { continue; }
-			GhostObject* ghost = (GhostObject*)obj;
-			PacmanObject* player = (PacmanObject*)obj;
-			DoorObject* Door = (DoorObject*)obj;
-			KeyObject* Key = (KeyObject*)obj;
-			//ghosts
-			if (typeid(*ghost) == typeid(GhostObject))
+			if (field == nullptr || field->getType() == 'X') { continue; }
+
+			PathField* pathField = (PathField*)field;
+			for (MazeObject* obj : *pathField->getObjectList())
 			{
-				field->get()->attach(this);
-				field->get()->setLogger(this->logger);
-				this->ghosts->push_back(tuple(x, y));
-				continue;
-			}
-			//player
-			if (typeid(*player) == typeid(PacmanObject))
-			{
-				field->get()->attach(this);
-				field->get()->setLogger(this->logger);
-				this->player = tuple(x, y);
-				this->lives = field->get()->getLives();
-				if (this->maxLives < 0) { this->maxLives = this->lives; }
-				continue;
-			}
-			//door
-			if (this->door == tuple(-1, -1) && typeid(*Door) == typeid(DoorObject))
-			{
-				field->get()->attach(this);
-				field->get()->setLogger(this->logger);
-				this->door = tuple(x, y);
-				continue;
-			}
-			//keys
-			if (typeid(*Key) == typeid(KeyObject))
-			{
-				field->get()->attach(this);
-				field->get()->setLogger(this->logger);
-				this->keys->push_back(tuple(x, y));
-				continue;
+				GhostObject* ghost = (GhostObject*)obj;
+				PacmanObject* player = (PacmanObject*)obj;
+				DoorObject* Door = (DoorObject*)obj;
+				KeyObject* Key = (KeyObject*)obj;
+				//ghosts
+				if (typeid(*ghost) == typeid(GhostObject))
+				{
+					field->get()->attach(this);
+					field->get()->setLogger(this->logger);
+					this->ghosts->push_back(tuple(x, y));
+					continue;
+				}
+				//player
+				if (typeid(*player) == typeid(PacmanObject))
+				{
+					field->get()->attach(this);
+					field->get()->setLogger(this->logger);
+					this->player = tuple(x, y);
+					this->lives = field->get()->getLives();
+					if (this->maxLives < 0) { this->maxLives = this->lives; }
+					continue;
+				}
+				//door
+				if (this->door == tuple(-1, -1) && typeid(*Door) == typeid(DoorObject))
+				{
+					field->get()->attach(this);
+					field->get()->setLogger(this->logger);
+					this->door = tuple(x, y);
+					continue;
+				}
+				//keys
+				if (typeid(*Key) == typeid(KeyObject))
+				{
+					field->get()->attach(this);
+					field->get()->setLogger(this->logger);
+					this->keys->push_back(tuple(x, y));
+					continue;
+				}
 			}
 		}
 	}

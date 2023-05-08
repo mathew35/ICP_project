@@ -104,7 +104,7 @@ bool PacmanObject::move(Field::Direction dir) {
 	}
 
 	prevField = this->callerField;
-	if (!prevField->fieldObjectList->empty()) { prevField->fieldObjectList->pop_back(); }
+	prevField->objectMoved(this);
 	if (!(nextField->isEmpty()))
 	{
 		MazeObject* object = nextField->get();
@@ -124,7 +124,7 @@ bool PacmanObject::move(Field::Direction dir) {
 			// is this return ok?
 			if (!this->decreaseLives()) { return false; }
 		}
-		if (typeid(*key) == typeid(KeyObject))
+		else if (typeid(*key) == typeid(KeyObject))
 		{
 			this->observer->notifyPickKey(nextRow, nextCol);
 			nextField->fieldObjectList->pop_back();

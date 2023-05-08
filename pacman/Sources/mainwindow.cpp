@@ -291,7 +291,7 @@ void mainwindow::updateGhostItems()
 			QGraphicsItem* ghostItem = ui->gamePane->scene()->addRect(QRectF(0, 0, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(this->ghost));
 			ghostItem->setPos(x * FIELDSIZE, y * FIELDSIZE);
 			ghostItem->setZValue(z);
-			this->ghostItems[tuple(x, y)] = ghostItem;
+			this->ghostItems.insert(std::make_pair(tuple(x, y), ghostItem));
 		}
 		return;
 	}
@@ -323,7 +323,7 @@ void mainwindow::updateGhostItems()
 		int y = std::get<0>(ghosts.back());
 		ghosts.pop_back();
 		tmp->setPos(x * FIELDSIZE, y * FIELDSIZE);
-		this->ghostItems[tuple(x, y)] = tmp;
+		this->ghostItems.insert(std::make_pair(tuple(x, y), tmp));
 	}
 }
 

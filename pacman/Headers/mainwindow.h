@@ -60,7 +60,7 @@ private:
 	QPixmap keyEmpty;
 	map<tuple<int, int>, QGraphicsItem*> wallItems;
 	QGraphicsRectItem* playerItem;
-	map<tuple<int, int>, QGraphicsItem*> ghostItems;
+	multimap<tuple<int, int>, QGraphicsItem*> ghostItems;
 	QGraphicsRectItem* doorItem;
 	map<tuple<int, int>, QGraphicsItem*> keyItems;
 	list<QGraphicsRectItem*> liveItems;
