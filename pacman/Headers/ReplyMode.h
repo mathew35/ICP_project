@@ -14,6 +14,7 @@
 
 class ReplyMode {
 private:
+	int turns;
 	std::list<std::string> Maze;
 	int rows;
 	int cols;
@@ -27,8 +28,8 @@ private:
 	void parseLogsFromFile(std::string filePath);
 
 public:
-	ReplyMode(std::string filePath);
+	ReplyMode(std::string filePath, bool fromStart = true);
 	~ReplyMode();
-	void parseLogsFromTrun(int turnNumber);
+	bool parseLogsFromTurn(bool reverse = false);
 };
 

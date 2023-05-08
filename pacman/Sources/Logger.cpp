@@ -10,11 +10,10 @@ Logger::Logger()
 {
 	int num = 0;
 	std::string Filename = "Log";
-	std::string newFilename = Filename;
+	std::string newFilename = Filename + ".txt";
 	while (std::filesystem::exists(newFilename)) {
 		num++;
-		//TODO FIX ME CREATE LOG FILE
-		newFilename = newFilename + "_" + std::to_string(num);
+		newFilename = Filename + "_" + std::to_string(num) + ".txt";
 	}
 	this->m_filename = newFilename;
 	this->m_logFile.open(m_filename);
