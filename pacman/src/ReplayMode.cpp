@@ -259,5 +259,6 @@ bool ReplayMode::parseLogsFromTurn(bool reverse)
 		}
 		this->turns++;
 	}
+	return true;
 }
 
