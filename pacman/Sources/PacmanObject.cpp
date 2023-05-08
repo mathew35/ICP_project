@@ -104,7 +104,6 @@ bool PacmanObject::move(Field::Direction dir) {
 	}
 
 	prevField = this->callerField;
-	prevField->objectMoved(this);
 	bool lives = false;
 	if (!(nextField->isEmpty()))
 	{
@@ -119,6 +118,7 @@ bool PacmanObject::move(Field::Direction dir) {
 				if (typeid(*ghost) == typeid(GhostObject))
 				{
 					lives = true;
+					break;
 				}
 				else if (typeid(*door) == typeid(DoorObject)) {
 					if (door->isOpen())
@@ -137,14 +137,15 @@ bool PacmanObject::move(Field::Direction dir) {
 			}
 		}
 	}
-	nextField->setPacmanObject(this);
-	observer->notifyMove(prevRow, prevCol, nextRow, nextCol);
-	logger->printMovement(this, prevRow, prevCol, nextRow, nextCol);
-
 	if (lives)
 	{
 		if (!this->decreaseLives()) { return false; }
 	}
+	prevField->objectMoved(this);
+	nextField->setPacmanObject(this);
+	observer->notifyMove(prevRow, prevCol, nextRow, nextCol);
+	logger->printMovement(this, prevRow, prevCol, nextRow, nextCol);
+
 	return true;
 	//TODO end game when on doors
 	//TODO pick up key notify + log

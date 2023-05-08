@@ -213,7 +213,7 @@ void mainwindow::playGame()
 	ui->gameScorePane->fitInView(0, 0, ui->gameScorePane->scene()->width(), ui->gameScorePane->scene()->height(), Qt::KeepAspectRatio);
 	ui->gameScorePane->update();
 
-	//this->moveGhostsTimer.start(500);
+	this->moveGhostsTimer.start(500);
 }
 
 void mainwindow::updateEndGame()
