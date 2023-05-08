@@ -199,7 +199,7 @@ void GameInterface::notifyLives()
 void GameInterface::notifyEndLevel()
 {
 	this->endGame();
-	this->window->setScreen(true);
+	this->window->setEndScreen(true);
 	this->window->updateEndGame();
 
 }
@@ -207,7 +207,7 @@ void GameInterface::notifyEndLevel()
 void GameInterface::notifyGameOver()
 {
 	this->endGame();
-	this->window->setScreen(false);
+	this->window->setEndScreen(false);
 	this->window->updateEndGame();
 }
 
