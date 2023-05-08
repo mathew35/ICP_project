@@ -105,10 +105,10 @@ bool PacmanObject::move(Field::Direction dir) {
 
 	prevField = this->callerField;
 	prevField->objectMoved(this);
+	bool lives = false;
 	if (!(nextField->isEmpty()))
 	{
 		MazeObject* object = nextField->get();
-
 		if (!nextField->fieldObjectList->empty())
 		{
 			for (MazeObject* obj : *nextField->fieldObjectList)
@@ -118,7 +118,7 @@ bool PacmanObject::move(Field::Direction dir) {
 				KeyObject* key = (KeyObject*)obj;
 				if (typeid(*ghost) == typeid(GhostObject))
 				{
-					if (!this->decreaseLives()) { return false; }
+					lives = true;
 				}
 				else if (typeid(*door) == typeid(DoorObject)) {
 					if (door->isOpen())
@@ -141,6 +141,10 @@ bool PacmanObject::move(Field::Direction dir) {
 	observer->notifyMove(prevRow, prevCol, nextRow, nextCol);
 	logger->printMovement(this, prevRow, prevCol, nextRow, nextCol);
 
+	if (lives)
+	{
+		if (!this->decreaseLives()) { return false; }
+	}
 	//TODO end game when on doors
 	//TODO pick up key notify + log
 }

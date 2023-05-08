@@ -169,10 +169,18 @@ void GameInterface::notifyOpenDoors(int x, int y)
 
 void GameInterface::notifyLives()
 {
-	Field* field = this->maze->getField(std::get<0>(this->player), std::get<1>(this->player));
-	if (field != NULL && field->get() != NULL && field->get()->isPacman())
+	PathField* field = (PathField*)this->maze->getField(std::get<0>(this->player), std::get<1>(this->player));
+	if (!field->fieldObjectList->empty())
 	{
-		this->lives = field->get()->getLives();
+		for (MazeObject* obj : *field->fieldObjectList)
+		{
+			PacmanObject* player = (PacmanObject*)obj;
+			if (typeid(*player) == typeid(PacmanObject))
+			{
+				this->lives = obj->getLives();
+				break;
+			}
+		}
 	}
 	this->window->updateLives();
 }
