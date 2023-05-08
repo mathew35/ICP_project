@@ -108,27 +108,33 @@ bool PacmanObject::move(Field::Direction dir) {
 	if (!(nextField->isEmpty()))
 	{
 		MazeObject* object = nextField->get();
-		GhostObject* ghost = (GhostObject*)object;
-		DoorObject* door = (DoorObject*)object;
-		KeyObject* key = (KeyObject*)object;
-		if (typeid(*door) == typeid(DoorObject)) {
-			if (door->isOpen())
+
+		if (!nextField->fieldObjectList->empty())
+		{
+			for (MazeObject* obj : *nextField->fieldObjectList)
 			{
-				//TODO end game here
-				this->observer->notifyEndLevel();
-				return false;
+				GhostObject* ghost = (GhostObject*)obj;
+				DoorObject* door = (DoorObject*)obj;
+				KeyObject* key = (KeyObject*)obj;
+				if (typeid(*ghost) == typeid(GhostObject))
+				{
+					if (!this->decreaseLives()) { return false; }
+				}
+				else if (typeid(*door) == typeid(DoorObject)) {
+					if (door->isOpen())
+					{
+						this->observer->notifyEndLevel();
+						return false;
+					}
+				}
+				else if (typeid(*key) == typeid(KeyObject))
+				{
+					this->observer->notifyPickKey(nextRow, nextCol);
+					nextField->fieldObjectList->remove(obj);
+					this->keys.emplace_back(key);
+					break;
+				}
 			}
-		}
-		else if (typeid(*ghost) == typeid(GhostObject))
-		{
-			// is this return ok?
-			if (!this->decreaseLives()) { return false; }
-		}
-		else if (typeid(*key) == typeid(KeyObject))
-		{
-			this->observer->notifyPickKey(nextRow, nextCol);
-			nextField->fieldObjectList->pop_back();
-			this->keys.emplace_back(key);
 		}
 	}
 	nextField->setPacmanObject(this);
