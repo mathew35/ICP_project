@@ -20,9 +20,6 @@ void ReplayMode::setMazeFromLog(std::string line)
 
 void ReplayMode::parseLogsFromFile(std::string filePath)
 {
-
-
-
 	std::ifstream inputFile(filePath);;
 	if (inputFile.is_open())
 	{
@@ -60,9 +57,9 @@ void ReplayMode::parseLogsFromFile(std::string filePath)
 }
 
 ReplayMode::ReplayMode(std::string filePath, mainwindow* window, bool fromStart) : logRegex("(Pacman|Ghost) \\[(\\d+),(\\d+)\\] -> \\[(\\d+),(\\d+)\\]"
-	"|Door \\[(\\d+),(\\d+)\\] \\[OPEN\\]"
-	"|Key \\[(\\d+),(\\d+)\\] \\[PICKED UP\\]"
-	"|Pacman lives \\[(\\d+)\\] -> \\[(\\d+)\\]"), turnRegex("TURN (\\d+)")
+	"|Doors \\[(\\d+),(\\d+)\\]\\[OPEN\\]"
+	"|Key \\[(\\d+),(\\d+)\\]\\[PICKED UP\\]"
+	"|Pacman lives \\[(\\d+)\\] -> \\[(\\d+)\\]"), turnRegex("TURN: (\\d+)")
 {
 	parseLogsFromFile(filePath);
 	turns = 0;
@@ -234,8 +231,8 @@ bool ReplayMode::parseLogsFromTurn(bool reverse)
 				}
 				else if (match[9].matched) {
 					// Key log
-					int x = std::stoi(match[9].str());
-					int y = std::stoi(match[10].str());
+					int x = std::stoi(match[8].str());
+					int y = std::stoi(match[9].str());
 
 					//TODO key
 					this->window->replayKey(x, y);
@@ -244,8 +241,8 @@ bool ReplayMode::parseLogsFromTurn(bool reverse)
 				}
 				else if (match[11].matched) {
 					// Pacman HP log
-					int hp1 = std::stoi(match[11].str());
-					int hp2 = std::stoi(match[12].str());
+					int hp1 = std::stoi(match[10].str());
+					int hp2 = std::stoi(match[11].str());
 
 					//TODO pacman hp
 					this->window->replayLive(hp1, hp2);

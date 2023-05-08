@@ -78,6 +78,7 @@ mainwindow::mainwindow(QWidget* parent)
 	this->stepsItem = nullptr;
 	this->pause = false;
 	this->replayer = nullptr;
+	this->forward = true;
 }
 
 mainwindow::~mainwindow() {
@@ -163,31 +164,37 @@ void mainwindow::replayLive(int prev, int curr)
 
 void mainwindow::replayGhostMove(int prevRow, int prevCol, int nextRow, int nextCol)
 {
-	//TODO
+	auto ghost = this->ghostItems.find(tuple(prevCol, prevRow));
+	QGraphicsItem* tmp = ghost->second;
+	tmp->setPos(nextCol * FIELDSIZE, nextRow * FIELDSIZE);
+	this->ghostItems.erase(ghost->first);
+	this->ghostItems.insert(std::make_pair(tuple(nextCol, nextRow), tmp));
+	ui->gamePane->update();
 }
 
 void mainwindow::replayPacmanMove(int prevRow, int prevCol, int nextRow, int nextCol)
 {
-	//TODO
+	this->playerItem->setPos(nextCol * FIELDSIZE, nextRow * FIELDSIZE);
+	ui->gamePane->update();
 }
 
 void mainwindow::replayKey(int Row, int Col)
 {
-	auto it = this->keyItems.find(tuple(Col, Row));
+	auto it = this->keyItems.find(tuple(Row, Col));
 	bool found = true;
 	if (it == this->keyItems.end())
 	{
 		found = false;
-		QGraphicsItem* keyItem = ui->gamePane->scene()->addRect(QRectF(Col * FIELDSIZE, Row * FIELDSIZE, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(this->key));
+		QGraphicsItem* keyItem = ui->gamePane->scene()->addRect(QRectF(Row * FIELDSIZE, Col * FIELDSIZE, FIELDSIZE, FIELDSIZE), Qt::NoPen, QBrush(this->key));
 		keyItem->setZValue(0);
-		this->keyItems[tuple(Col, Row)] = keyItem;
+		this->keyItems[tuple(Row, Col)] = keyItem;
 		ui->gamePane->update();
 	}
 
 	if (found)
 	{
 		ui->gamePane->scene()->removeItem(it->second);
-		this->keyItems.erase(tuple(Col, Row));
+		this->keyItems.erase(tuple(Row, Col));
 	}
 
 	int count = gameInterface->getMaxKeys();
@@ -405,6 +412,8 @@ void mainwindow::clearAfterGame()
 	ui->gamePane->setScene(new QGraphicsScene);
 	delete ui->gameScorePane->scene();
 	ui->gameScorePane->setScene(new QGraphicsScene);
+	delete this->replayer;
+	this->replayer = nullptr;
 }
 
 bool mainwindow::updatePlayerItem()
@@ -556,6 +565,8 @@ void mainwindow::startReplay()
 	this->playGame();
 	this->moveGhostsTimer.stop();
 	ui->gamePane->clearFocus();
+	ui->gameGuidePane->setFocus();
+	this->replayTimer.start(800);
 }
 
 bool mainwindow::eventFilter(QObject* obj, QEvent* event)
@@ -604,7 +615,7 @@ bool mainwindow::eventFilter(QObject* obj, QEvent* event)
 				ui->mainMenuWidget->setVisible(true);
 				this->clearAfterGame();
 			}
-			else if (keyEvent->key() == Qt::Key_Space && pause)
+			else if (keyEvent->key() == Qt::Key_Space && pause && this->replayer == nullptr)
 			{
 				this->pause = false;
 				this->moveGhostsTimer.start(500);
@@ -614,7 +625,7 @@ bool mainwindow::eventFilter(QObject* obj, QEvent* event)
 			else if (keyEvent->key() == Qt::Key_Space && pause && this->replayer != nullptr)
 			{
 				this->pause = false;
-				this->replayTimer.start(300);
+				this->replayTimer.start(800);
 				ui->gameGuidePane->setFocus();
 				ui->resultWidget->setVisible(false);
 			}
@@ -636,7 +647,7 @@ bool mainwindow::eventFilter(QObject* obj, QEvent* event)
 			}
 			else if (keyEvent->key() == Qt::Key_Left)
 			{
-				//TODO
+				//TODO - reverse not working
 			}
 			else if (keyEvent->key() == Qt::Key_Up)
 			{
@@ -644,7 +655,7 @@ bool mainwindow::eventFilter(QObject* obj, QEvent* event)
 			}
 			else if (keyEvent->key() == Qt::Key_Down)
 			{
-				//TODO
+				//TODO - reverse not working
 			}
 			else if (keyEvent->key() == Qt::Key_Space)
 			{
@@ -687,4 +698,12 @@ void mainwindow::moveGhosts()
 
 void mainwindow::replayTurn()
 {
+	if (this->replayer == nullptr) {
+		return;
+	}
+	if (!this->replayer->parseLogsFromTurn(false)) {
+		this->replayTimer.stop();
+		delete this->replayer;
+		this->replayer = nullptr;
+	}
 }

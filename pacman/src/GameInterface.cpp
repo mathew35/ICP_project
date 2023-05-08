@@ -46,7 +46,7 @@ void GameInterface::loadMap(std::string file)
 
 void GameInterface::loadReplay(list<string> maze)
 {
-	config->startReading(maze.front().length(), maze.size());
+	config->startReading(maze.size(),maze.front().length());
 	for (auto line : maze)
 	{
 		config->processLine(line);
