@@ -24,8 +24,6 @@ ICP týmový projekt
 		- je možné prehrať hru z logu
 		####Módy
 			- plynulé krokovanie
-			- postupné krokovanie
-			- medzi módmi možno prepínať
 			- prehrávanie je možné len dopredu
 ------------------------------------------------------------------------
 ## Nesplnené požiadavky
@@ -34,6 +32,8 @@ ICP týmový projekt
 	###Logovanie hry
 		- prehrávanie od konca
 		- spiatočné prehrávanie
+		- postupné krokovanie
+		- medzi módmi možno prepínať
 ## Známe problémy
 	- Pri ukončení levelu posunutím panáčika do ducha môže nastat neošetrená situácia
 ## Autori
