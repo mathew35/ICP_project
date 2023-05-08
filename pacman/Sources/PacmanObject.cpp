@@ -110,6 +110,7 @@ bool PacmanObject::move(Field::Direction dir) {
 		MazeObject* object = nextField->get();
 		if (!nextField->fieldObjectList->empty())
 		{
+			MazeObject* keyRemove = nullptr;
 			for (MazeObject* obj : *nextField->fieldObjectList)
 			{
 				GhostObject* ghost = (GhostObject*)obj;
@@ -118,7 +119,6 @@ bool PacmanObject::move(Field::Direction dir) {
 				if (typeid(*ghost) == typeid(GhostObject))
 				{
 					lives = true;
-					break;
 				}
 				else if (typeid(*door) == typeid(DoorObject)) {
 					if (door->isOpen())
@@ -130,11 +130,11 @@ bool PacmanObject::move(Field::Direction dir) {
 				else if (typeid(*key) == typeid(KeyObject))
 				{
 					this->observer->notifyPickKey(nextRow, nextCol);
-					nextField->fieldObjectList->remove(obj);
+					keyRemove = obj;
 					this->keys.emplace_back(key);
-					break;
 				}
 			}
+			nextField->fieldObjectList->remove(keyRemove);
 		}
 	}
 	if (lives)
