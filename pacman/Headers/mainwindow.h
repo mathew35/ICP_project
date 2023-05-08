@@ -52,6 +52,7 @@ private:
 	void updateDoorItem();
 	void updateKeyItems(tuple<int, int>);
 	void updateKeyScoreItems();
+	void updateSteps();
 
 	QPixmap wall;
 	QPixmap player;
@@ -68,6 +69,9 @@ private:
 	map<tuple<int, int>, QGraphicsItem*> keyItems;
 	list<QGraphicsRectItem*> liveItems;
 	list<QGraphicsRectItem*> keyScoreItems;
+
+	QGraphicsTextItem* stepsItem;
+	int steps = 0;
 
 	QTimer keyPressTimer;
 	int pendingKey;

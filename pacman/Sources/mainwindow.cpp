@@ -71,6 +71,7 @@ mainwindow::mainwindow(QWidget* parent)
 
 	this->playerItem = nullptr;
 	this->doorItem = nullptr;
+	this->stepsItem = nullptr;
 }
 
 mainwindow::~mainwindow() {
@@ -217,6 +218,7 @@ void mainwindow::playGame()
 		keyItem->setPos(i * FIELDSIZE, 0);
 		this->keyScoreItems.push_back(keyItem);
 	}
+	updateSteps();
 	ui->gameScorePane->fitInView(0, 0, ui->gameScorePane->scene()->width(), ui->gameScorePane->scene()->height(), Qt::KeepAspectRatio);
 	ui->gameScorePane->update();
 
@@ -235,7 +237,6 @@ void mainwindow::updateEndGame()
 
 void mainwindow::setScreen(bool win)
 {
-	//TODO
 	if (win)
 	{
 		ui->statusLabel->setText("You Win!");
@@ -250,8 +251,7 @@ void mainwindow::setScreen(bool win)
 	ui->legendLabel->setStyleSheet("background-color: rgba(0,0,0,0);color:rgba(200,200,200,255);");
 	ui->stepsLabel->setStyleSheet("background-color: rgba(0,0,0,0);color:rgba(200,200,200,255);");
 	//TODO steps
-	int i = 10;
-	ui->stepsLabel->setText("Steps taken: "+QString::number(i));
+	ui->stepsLabel->setText("Steps taken: " + QString::number(this->steps));
 }
 
 void mainwindow::clearAfterGame()
@@ -281,8 +281,11 @@ void mainwindow::clearAfterGame()
 	keyScoreItems.clear();
 	delete this->playerItem;
 	delete this->doorItem;
+	delete this->stepsItem;
 	this->playerItem = nullptr;
 	this->doorItem = nullptr;
+	this->stepsItem = nullptr;
+	this->steps = 0;
 	delete ui->gamePane->scene();
 	ui->gamePane->setScene(new QGraphicsScene);
 	delete ui->gameScorePane->scene();
@@ -309,6 +312,8 @@ bool mainwindow::updatePlayerItem()
 	}
 
 	this->playerItem->setPos(x * FIELDSIZE, y * FIELDSIZE);
+	this->steps++;
+	updateSteps();
 	return true;
 }
 
@@ -413,6 +418,20 @@ void mainwindow::updateKeyScoreItems()
 		}
 		count--;
 	}
+}
+
+void mainwindow::updateSteps()
+{
+	if (this->stepsItem == nullptr) {
+		this->stepsItem = new QGraphicsTextItem("Steps: " + QString::number(this->steps));
+		this->stepsItem->setFont(ui->legendLabel->font());
+		this->stepsItem->setPos(0, ui->gameScorePane->height() - this->stepsItem->boundingRect().height());
+		this->stepsItem->setTextWidth(ui->gameScorePane->width());
+		this->stepsItem->setScale(7);
+		ui->gameScorePane->scene()->addItem(this->stepsItem);
+	}
+	this->stepsItem->setPlainText("Steps: " + QString::number(this->steps));
+	ui->gameScorePane->update();
 }
 
 bool mainwindow::eventFilter(QObject* obj, QEvent* event)
