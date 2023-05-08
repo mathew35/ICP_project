@@ -13,6 +13,7 @@
 #include <QThread>
 #include <QKeyEvent>
 #include <QTimer>
+#include <QColor>
 #include "ui_mainwindow.h"
 #include "GameInterface.h"
 
@@ -28,6 +29,8 @@ public:
 	void updateLives();
 	void updateKeys();
 	void updateEndGame();
+	void setScreen(bool win);
+	void clearAfterGame();
 
 private slots:
 	void newGameButtonClicked();

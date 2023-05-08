@@ -22,6 +22,13 @@ mainwindow::mainwindow(QWidget* parent)
 	ui->mainMenuWidget->setVisible(true);
 	ui->newGameWidget->setVisible(false);
 	ui->gameWidget->setVisible(false);
+	ui->resultWidget->setVisible(false);
+	ui->gameWidget->setFocusPolicy(Qt::NoFocus);
+	ui->newGameWidget->setFocusPolicy(Qt::NoFocus);
+	ui->mainMenuWidget->setFocusPolicy(Qt::NoFocus);
+	ui->gameScorePane->setFocusPolicy(Qt::NoFocus);
+	ui->gameGuidePane->setFocusPolicy(Qt::NoFocus);
+	ui->resultWidget->setFocusPolicy(Qt::NoFocus);
 
 	// mainMenuWidget
 	connect(ui->exitButton, SIGNAL(clicked()), this, SLOT(exitButtonClicked()));
@@ -221,8 +228,34 @@ void mainwindow::updateEndGame()
 	this->keyPressTimer.stop();
 	this->moveGhostsTimer.stop();
 
-	ui->gameWidget->setVisible(false);
-	ui->mainMenuWidget->setVisible(true);
+	//TODO adjust endgame screen
+	ui->resultWidget->setVisible(true);
+	ui->resultWidget->setFocus();
+}
+
+void mainwindow::setScreen(bool win)
+{
+	//TODO
+	if (win)
+	{
+		ui->statusLabel->setText("You Win!");
+		ui->statusLabel->setStyleSheet("background-color: rgba(0,0,0,0);color:rgba(0,150,0,255);");
+	}
+	else
+	{
+		ui->statusLabel->setText("You Lose!");
+		ui->statusLabel->setStyleSheet("background-color: rgba(0,0,0,0);color:rgba(150,0,0,255);");
+	}
+	ui->resultWidget->setStyleSheet("background-color: rgba(20, 20, 20, 220);");
+	ui->legendLabel->setStyleSheet("background-color: rgba(0,0,0,0);color:rgba(200,200,200,255);");
+	ui->stepsLabel->setStyleSheet("background-color: rgba(0,0,0,0);color:rgba(200,200,200,255);");
+	//TODO steps
+	int i = 10;
+	ui->stepsLabel->setText("Steps taken: "+QString::number(i));
+}
+
+void mainwindow::clearAfterGame()
+{
 	delete gameInterface;
 	gameInterface = new GameInterface(this);
 	ui->mainMenuWidget->setFocus();
@@ -390,6 +423,17 @@ bool mainwindow::eventFilter(QObject* obj, QEvent* event)
 		{
 			this->keyPressTimer.start(500);
 			this->pendingKey = static_cast<QKeyEvent*>(event)->key();
+		}
+		if (obj == ui->resultWidget)
+		{
+			QKeyEvent* keyEvent = (QKeyEvent*)event;
+			if (keyEvent->key() == Qt::Key_Escape)
+			{
+				ui->gameWidget->setVisible(false);
+				ui->resultWidget->setVisible(false);
+				ui->mainMenuWidget->setVisible(true);
+				this->clearAfterGame();
+			}
 		}
 	}
 	return QObject::eventFilter(obj, event);
