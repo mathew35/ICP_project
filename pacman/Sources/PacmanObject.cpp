@@ -2,7 +2,8 @@
 /**
 * @brief
 *
-* @author Adrian Horvath(xhorva14)
+* @author	Adrian Horvath(xhorva14)
+*			Matus Vrablik(xvrabl05)
 *
 */
 
@@ -130,6 +131,7 @@ bool PacmanObject::move(Field::Direction dir) {
 				else if (typeid(*key) == typeid(KeyObject))
 				{
 					this->observer->notifyPickKey(nextRow, nextCol);
+					this->logger->printKey(nextRow, nextCol);
 					keyRemove = obj;
 					this->keys.emplace_back(key);
 				}
@@ -147,15 +149,12 @@ bool PacmanObject::move(Field::Direction dir) {
 	logger->printMovement(this, prevRow, prevCol, nextRow, nextCol);
 
 	return true;
-	//TODO end game when on doors
-	//TODO pick up key notify + log
 }
 bool PacmanObject::decreaseLives() {
-	//TODO Pacman dead
 	this->lives -= 1;
 	if (this->lives == 0) {
 		observer->notifyGameOver();
-		return false; //RIP Pacman
+		return false;
 	}
 	observer->notifyLives();
 	logger->printLives(lives);
