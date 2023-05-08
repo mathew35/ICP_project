@@ -1,5 +1,5 @@
 /**
-* @brief Header file for main window of application.
+* @brief Header file for main window of application
 *
 * @author Matus Vrablik(xvrabl05)
 *

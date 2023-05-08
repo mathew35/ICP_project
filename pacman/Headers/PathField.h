@@ -1,11 +1,10 @@
 /**
-* @brief
+* @brief PathField header file
 *
 * @author Adrian Horvath(xhorva14)
 *
 */
 #pragma once
-
 
 #include <typeinfo>
 #include <list>

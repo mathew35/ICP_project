@@ -462,7 +462,6 @@ void mainwindow::processKeyPressEvent()
 {
 	int keyEvent = this->pendingKey;
 	if (keyEvent != 0) {
-		//QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
 		if (keyEvent == Qt::Key_Right) {
 			gameInterface->movePlayer(2);
 		}
@@ -483,4 +482,3 @@ void mainwindow::moveGhosts()
 {
 	gameInterface->startGame();
 }
-

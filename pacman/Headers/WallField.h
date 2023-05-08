@@ -1,20 +1,21 @@
 /**
-* @brief
+* @brief WallField header file
 *
 * @author Adrian Horvath(xhorva14)
 *
 */
 #pragma once
 
-
 #include <typeinfo>
 #include "Field.h"
 
-class WallField : public Field {
+class WallField : public Field
+{
 private:
 	char fieldType;
 	int row;
 	int col;
+
 public:
 	WallField(int row, int col);
 	~WallField();
@@ -30,5 +31,4 @@ public:
 	Field* nextField(Field::Direction dir);
 
 	char getType() override;
-
 };

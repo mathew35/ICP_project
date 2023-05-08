@@ -1,6 +1,6 @@
 #include "PacmanObject.h"
 /**
-* @brief
+* @brief	PacmanObject implementation
 *
 * @author	Adrian Horvath(xhorva14)
 *			Matus Vrablik(xvrabl05)
@@ -53,19 +53,24 @@ bool PacmanObject::canMove(Field::Direction dir) {
 		return false;
 	}
 }
+
 Field* PacmanObject::getField() {
 	return this->callerField;
 }
+
 bool PacmanObject::isPacman()
 {
 	return true;
 }
+
 int PacmanObject::getLives() {
 	return this->lives;
 }
+
 void PacmanObject::start()
 {
 }
+
 bool PacmanObject::move(Field::Direction dir) {
 	PathField* nextField = nullptr;
 	PathField* prevField = nullptr;
@@ -150,6 +155,7 @@ bool PacmanObject::move(Field::Direction dir) {
 
 	return true;
 }
+
 bool PacmanObject::decreaseLives() {
 	this->lives -= 1;
 	if (this->lives == 0) {
@@ -160,10 +166,12 @@ bool PacmanObject::decreaseLives() {
 	logger->printLives(lives);
 	return true;
 }
+
 void PacmanObject::setLogger(Logger* logger)
 {
 	this->logger = logger;
 }
+
 void PacmanObject::attach(GameInterface* o) {
 	this->observer = o;
 }

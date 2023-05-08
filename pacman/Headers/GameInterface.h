@@ -1,5 +1,5 @@
 ﻿/**
- * @brief Game interface header file.
+ * @brief Game interface header file
  *
  * @author Matúš Vráblik (xvrabl05)
  */
@@ -60,6 +60,3 @@ private:
 	mainwindow* window;
 	void updateVariables();
 };
-
-
-/*Pohyby strety ducha a hráča - životy , ďalej keď vezme kľúč a keď pôjde do dverí a ukončí level/hru*/

@@ -1,5 +1,5 @@
 /**
-* @brief
+* @brief PacmanObject header file
 *
 * @author Adrian Horvath(xhorva14)
 *
@@ -50,5 +50,4 @@ public:
 	void setLogger(Logger* logger) override;
 	void attach(GameInterface* o) override;
 	void detach(GameInterface* o) override;
-
 };

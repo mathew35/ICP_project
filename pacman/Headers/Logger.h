@@ -1,5 +1,5 @@
 /**
-* @brief
+* @brief Logger header file
 *
 * @author Adrian Horvath(xhorva14)
 *
@@ -32,3 +32,4 @@ public:
 	void printKey(int x, int y);
 	void printLives(int lives);
 };
+

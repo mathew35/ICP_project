@@ -1,5 +1,5 @@
 /**
-* @brief
+* @brief Field template
 *
 * @author Adrian Horvath(xhorva14)
 *
@@ -10,7 +10,6 @@ class MazeObject;
 class Field {
 public:
 	virtual ~Field() = default;
-	//TODO Fix Direction
 	enum Direction {
 		L,
 		U,

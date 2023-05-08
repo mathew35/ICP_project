@@ -1,5 +1,5 @@
 /**
-* @brief KeyObject header file.
+* @brief KeyObject header file
 *
 * @author Matus Vrablik(xvrabl05)
 *
