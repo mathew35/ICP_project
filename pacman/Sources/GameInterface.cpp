@@ -45,7 +45,7 @@ void GameInterface::loadMap()
 {
 	//TODO - add prompt to select file / function to load from file
 	config->startReading(4, 3);
-	config->processLine("..G");
+	config->processLine(".GG");
 	config->processLine(".XT");
 	config->processLine("KX.");
 	config->processLine(".S.");

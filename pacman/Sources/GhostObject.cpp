@@ -41,15 +41,15 @@ bool GhostObject::canMove(Field::Direction dir) {
 	}
 	else if (this->rightField != nullptr && dir == Field::R && this->rightField->canMove())
 	{
-		ghost = (GhostObject*)this->bottomField->get();
+		ghost = (GhostObject*)this->rightField->get();
 	}
 	else if (this->upperField != nullptr && dir == Field::U && this->upperField->canMove())
 	{
-		ghost = (GhostObject*)this->bottomField->get();
+		ghost = (GhostObject*)this->upperField->get();
 	}
 	else if (this->leftField != nullptr && dir == Field::L && this->leftField->canMove())
 	{
-		ghost = (GhostObject*)this->bottomField->get();
+		ghost = (GhostObject*)this->leftField->get();
 	}
 
 	if (ghost != nullptr && typeid(*ghost) == typeid(GhostObject)) {
@@ -107,17 +107,36 @@ bool GhostObject::move(Field::Direction dir) {
 		return false;
 	}
 	prevField = this->callerField;
-	prevField->objectMoved(this);
 	if (!(nextField->isEmpty()))
 	{
+		bool player = false;
+		bool ghost = false;
+		if (!nextField->fieldObjectList->empty())
+		{
+			for (MazeObject* obj : *nextField->fieldObjectList)
+			{
+				if (typeid(*obj) == typeid(*this))
+				{
+					ghost = true;
+					break;
+				}
+				if (typeid(*obj) == typeid(PacmanObject))
+				{
+					player = true;
+					break;
+				}
+			}
+		}
+		if (ghost) { return false; }
 		MazeObject* object = nextField->get();
-		if (object->isPacman())
+		if (player)
 		{
 			PacmanObject* pacman = static_cast<PacmanObject*>(object);
-			//has to end here ? cant finish function ?
 			if (!pacman->decreaseLives()) { return false; }
 		}
 	}
+	//moved from 109
+	prevField->objectMoved(this);
 	nextField->setGhostObject(this);
 	observer->notifyMove(prevRow, prevCol, nextRow, nextCol);
 	logger->printMovement(this, prevRow, prevCol, nextRow, nextCol);
