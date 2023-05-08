@@ -15,9 +15,9 @@ mainwindow::mainwindow(QWidget* parent)
 	ui = new Ui::mainwindowClass();
 	ui->setupUi(this);
 	qApp->installEventFilter(this);
-	keyPressTimer.stop();
 	connect(&keyPressTimer, &QTimer::timeout, this, &mainwindow::processKeyPressEvent);
 	connect(&moveGhostsTimer, &QTimer::timeout, this, &mainwindow::moveGhosts);
+	connect(&replayTimer, &QTimer::timeout, this, &mainwindow::replayTurn);
 
 	ui->mainMenuWidget->setVisible(true);
 	ui->newGameWidget->setVisible(false);
@@ -35,6 +35,8 @@ mainwindow::mainwindow(QWidget* parent)
 	connect(ui->exitButton, SIGNAL(clicked()), this, SLOT(exitButtonClicked()));
 	connect(ui->newGameButton, SIGNAL(clicked()), this, SLOT(newGameButtonClicked()));
 	connect(ui->loadGameLogButton, SIGNAL(clicked()), this, SLOT(loadGameLogButtonClicked()));
+	connect(ui->replayStartButton, SIGNAL(clicked()), this, SLOT(replayStartButtonClicked()));
+	connect(ui->replayEndButton, SIGNAL(clicked()), this, SLOT(replayEndButtonClicked()));
 
 	// newGameWidget
 	connect(ui->loadMapButton, SIGNAL(clicked()), this, SLOT(loadMapButtonClicked()));
@@ -609,6 +611,50 @@ bool mainwindow::eventFilter(QObject* obj, QEvent* event)
 				ui->gamePane->setFocus();
 				ui->resultWidget->setVisible(false);
 			}
+			else if (keyEvent->key() == Qt::Key_Space && pause && this->replayer != nullptr)
+			{
+				this->pause = false;
+				this->replayTimer.start(300);
+				ui->gameGuidePane->setFocus();
+				ui->resultWidget->setVisible(false);
+			}
+		}
+		if (obj == ui->gameGuidePane)
+		{
+			QKeyEvent* keyEvent = (QKeyEvent*)event;
+			if (keyEvent->key() == Qt::Key_Escape)
+			{
+				ui->gameGuidePane->clearFocus();
+				ui->gameWidget->setVisible(false);
+				ui->resultWidget->setVisible(false);
+				ui->mainMenuWidget->setVisible(true);
+				this->clearAfterGame();
+			}
+			else if (keyEvent->key() == Qt::Key_Right)
+			{
+				//TODO
+			}
+			else if (keyEvent->key() == Qt::Key_Left)
+			{
+				//TODO
+			}
+			else if (keyEvent->key() == Qt::Key_Up)
+			{
+				//TODO
+			}
+			else if (keyEvent->key() == Qt::Key_Down)
+			{
+				//TODO
+			}
+			else if (keyEvent->key() == Qt::Key_Space)
+			{
+				this->pause = true;
+				this->replayTimer.stop();
+				ui->gameGuidePane->clearFocus();
+				ui->resultWidget->setFocus();
+				ui->resultWidget->setVisible(true);
+				this->setPauseScreen();
+			}
 		}
 	}
 	return QObject::eventFilter(obj, event);
@@ -637,4 +683,8 @@ void mainwindow::processKeyPressEvent()
 void mainwindow::moveGhosts()
 {
 	gameInterface->startGame();
+}
+
+void mainwindow::replayTurn()
+{
 }

@@ -7,18 +7,18 @@
 #include "ReplayMode.h"
 
 
-void ReplyMode::setMazeSize(std::string line)
+void ReplayMode::setMazeSize(std::string line)
 {
 	std::istringstream iss(line);
 	iss >> this->rows >> this->cols;
 }
 
-void ReplyMode::setMazeFromLog(std::string line)
+void ReplayMode::setMazeFromLog(std::string line)
 {
 	this->Maze.push_back(line);
 }
 
-void ReplyMode::parseLogsFromFile(std::string filePath)
+void ReplayMode::parseLogsFromFile(std::string filePath)
 {
 
 
@@ -59,7 +59,7 @@ void ReplyMode::parseLogsFromFile(std::string filePath)
 	}
 }
 
-ReplyMode::ReplyMode(std::string filePath, mainwindow* window, bool fromStart) : logRegex("(Pacman|Ghost) \\[(\\d+),(\\d+)\\] -> \\[(\\d+),(\\d+)\\]"
+ReplayMode::ReplayMode(std::string filePath, mainwindow* window, bool fromStart) : logRegex("(Pacman|Ghost) \\[(\\d+),(\\d+)\\] -> \\[(\\d+),(\\d+)\\]"
 	"|Door \\[(\\d+),(\\d+)\\] \\[OPEN\\]"
 	"|Key \\[(\\d+),(\\d+)\\] \\[PICKED UP\\]"
 	"|Pacman lives \\[(\\d+)\\] -> \\[(\\d+)\\]"), turnRegex("TURN (\\d+)")
@@ -73,16 +73,16 @@ ReplyMode::ReplyMode(std::string filePath, mainwindow* window, bool fromStart) :
 	this->window = window;
 }
 
-ReplyMode::~ReplyMode()
+ReplayMode::~ReplayMode()
 {
 }
 
-std::list<std::string> ReplyMode::getMaze()
+std::list<std::string> ReplayMode::getMaze()
 {
 	return this->Maze;
 }
 
-bool ReplyMode::parseLogsFromTurn(bool reverse)
+bool ReplayMode::parseLogsFromTurn(bool reverse)
 {
 	if (this->turns > parsedTurns.size() - 1 || this->turns < 0)
 	{

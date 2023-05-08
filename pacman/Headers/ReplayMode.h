@@ -15,7 +15,7 @@
 
 class mainwindow;
 
-class ReplyMode {
+class ReplayMode {
 private:
 	mainwindow* window;
 	int turns;
@@ -33,8 +33,8 @@ private:
 
 public:
 
-	ReplyMode(std::string filePath, mainwindow* window, bool fromStart = true);
-	~ReplyMode();
+	ReplayMode(std::string filePath, mainwindow* window, bool fromStart = true);
+	~ReplayMode();
 	std::list<std::string> getMaze();
 	bool parseLogsFromTurn(bool reverse = false);
 };

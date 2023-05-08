@@ -17,7 +17,7 @@
 #include "ui_mainwindow.h"
 #include "GameInterface.h"
 #include "ReplayMode.h"	
-
+class ReplayMode;
 using namespace std;
 class mainwindow : public QMainWindow
 {
@@ -52,6 +52,7 @@ private slots:
 	void replayEndButtonClicked();
 	void processKeyPressEvent();
 	void moveGhosts();
+	void replayTurn();
 
 private:
 	Ui::mainwindowClass* ui;
@@ -89,6 +90,8 @@ private:
 	int pendingKey;
 	bool pause;
 	QTimer moveGhostsTimer;
+	QTimer replayTimer;
+	bool forward;
 
 	ReplayMode* replayer;
 	QString file;
