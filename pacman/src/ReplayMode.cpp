@@ -1,7 +1,7 @@
 /**
-* @brief
+* @brief	ReplayMode implementation
 *
-* @author Adrian Horvath(xhorva14)
+* @author	Adrian Horvath(xhorva14)
 *
 */
 #include "ReplayMode.h"
@@ -59,7 +59,7 @@ void ReplyMode::parseLogsFromFile(std::string filePath)
 	}
 }
 
-ReplyMode::ReplyMode(std::string filePath, bool fromStart) : logRegex("(Pacman|Ghost) \\[(\\d+),(\\d+)\\] -> \\[(\\d+),(\\d+)\\]"
+ReplyMode::ReplyMode(std::string filePath, mainwindow* window, bool fromStart) : logRegex("(Pacman|Ghost) \\[(\\d+),(\\d+)\\] -> \\[(\\d+),(\\d+)\\]"
 	"|Door \\[(\\d+),(\\d+)\\] \\[OPEN\\]"
 	"|Key \\[(\\d+),(\\d+)\\] \\[PICKED UP\\]"
 	"|Pacman lives \\[(\\d+)\\] -> \\[(\\d+)\\]"), turnRegex("TURN (\\d+)")
@@ -70,11 +70,16 @@ ReplyMode::ReplyMode(std::string filePath, bool fromStart) : logRegex("(Pacman|G
 	{
 		turns = parsedTurns.size() - 1;
 	}
-
+	this->window = window;
 }
 
 ReplyMode::~ReplyMode()
 {
+}
+
+std::list<std::string> ReplyMode::getMaze()
+{
+	return this->Maze;
 }
 
 bool ReplyMode::parseLogsFromTurn(bool reverse)
@@ -107,6 +112,8 @@ bool ReplyMode::parseLogsFromTurn(bool reverse)
 					// Perform actions based on the log content
 					if (objectType == "Pacman") {
 						//TODO move pacman
+						this->window->replayStep(this->turns);
+						this->window->replayPacmanMove(x1, y1, x2, y2);
 
 						// Use the extracted values
 						std::cout << "Object Type: " << "Pacman" << std::endl;
@@ -118,7 +125,7 @@ bool ReplyMode::parseLogsFromTurn(bool reverse)
 					}
 					else if (objectType == "Ghost") {
 						//TODO move ghost
-
+						this->window->replayGhostMove(x1, y1, x2, y2);
 						// Use the extracted values
 						std::cout << "Object Type: " << "Ghost" << std::endl;
 						std::cout << "x1: " << x1 << std::endl;
@@ -134,7 +141,7 @@ bool ReplyMode::parseLogsFromTurn(bool reverse)
 					int y = std::stoi(match[7].str());
 
 					//TODO doors
-
+					this->window->replayDoor(false);
 					std::cout << "Door x: " << x << std::endl;
 					std::cout << "Door y: " << y << std::endl;
 				}
@@ -144,7 +151,7 @@ bool ReplyMode::parseLogsFromTurn(bool reverse)
 					int y = std::stoi(match[10].str());
 
 					//TODO key
-
+					this->window->replayKey(x, y);
 					std::cout << "Key x: " << x << std::endl;
 					std::cout << "Key y: " << y << std::endl;
 				}
@@ -154,7 +161,7 @@ bool ReplyMode::parseLogsFromTurn(bool reverse)
 					int hp1 = std::stoi(match[12].str());
 
 					//TODO pacman hp
-
+					this->window->replayLive(hp1, hp2);
 					std::cout << "Pacman HP 1: " << hp1 << std::endl;
 					std::cout << "Pacman HP 2: " << hp2 << std::endl;
 				}
@@ -193,7 +200,8 @@ bool ReplyMode::parseLogsFromTurn(bool reverse)
 					// Perform actions based on the log content
 					if (objectType == "Pacman") {
 						//TODO move pacman
-
+						this->window->replayStep(this->turns);
+						this->window->replayPacmanMove(x1, y1, x2, y2);
 						// Use the extracted values
 						std::cout << "Object Type: " << "Pacman" << std::endl;
 						std::cout << "x1: " << x1 << std::endl;
@@ -204,7 +212,7 @@ bool ReplyMode::parseLogsFromTurn(bool reverse)
 					}
 					else if (objectType == "Ghost") {
 						//TODO move ghost
-
+						this->window->replayGhostMove(x1, y1, x2, y2);
 						// Use the extracted values
 						std::cout << "Object Type: " << "Ghost" << std::endl;
 						std::cout << "x1: " << x1 << std::endl;
@@ -220,7 +228,7 @@ bool ReplyMode::parseLogsFromTurn(bool reverse)
 					int y = std::stoi(match[7].str());
 
 					//TODO doors
-
+					this->window->replayDoor(true);
 					std::cout << "Door x: " << x << std::endl;
 					std::cout << "Door y: " << y << std::endl;
 				}
@@ -230,7 +238,7 @@ bool ReplyMode::parseLogsFromTurn(bool reverse)
 					int y = std::stoi(match[10].str());
 
 					//TODO key
-
+					this->window->replayKey(x, y);
 					std::cout << "Key x: " << x << std::endl;
 					std::cout << "Key y: " << y << std::endl;
 				}
@@ -240,7 +248,7 @@ bool ReplyMode::parseLogsFromTurn(bool reverse)
 					int hp2 = std::stoi(match[12].str());
 
 					//TODO pacman hp
-
+					this->window->replayLive(hp1, hp2);
 					std::cout << "Pacman HP 1: " << hp1 << std::endl;
 					std::cout << "Pacman HP 2: " << hp2 << std::endl;
 				}

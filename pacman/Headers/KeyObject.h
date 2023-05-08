@@ -21,6 +21,13 @@ protected:
 	int col;
 	PathField* callerField;
 public:
+	/**
+	* @brief Constructs a KeyObject with the specified row, column, and field.
+	*
+	* @param row The row coordinate of the KeyObject in the maze.
+	* @param col The column coordinate of the KeyObject in the maze.
+	* @param field A pointer to the PathField that the KeyObject belongs to.
+	*/
 	KeyObject(int row, int col, PathField* field);
 	~KeyObject();
 

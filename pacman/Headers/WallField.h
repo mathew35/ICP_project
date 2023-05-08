@@ -22,12 +22,23 @@ public:
 
 	bool canMove() override;
 
+	/**
+	*
+	* @brief Checks if the field contains the specified MazeObject.
+	* @param obj The MazeObject to check for.
+	* @return bool True if the field contains the MazeObject, false otherwise.
+	*/
 	bool contains(MazeObject* obj);
 
 	MazeObject* get() override;
 
 	bool isEmpty() override;
-
+	/**
+	*
+	* @brief Returns the next field in the specified direction.
+	* @param dir The direction to move in.
+	* @return Field* The next field in the specified direction.
+	*/
 	Field* nextField(Field::Direction dir);
 
 	char getType() override;

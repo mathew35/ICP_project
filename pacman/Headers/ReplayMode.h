@@ -11,9 +11,13 @@
 #include <regex>
 #include <fstream>
 #include <sstream>
+#include "mainwindow.h"
 
-class ReplayMode {
+class mainwindow;
+
+class ReplyMode {
 private:
+	mainwindow* window;
 	int turns;
 	std::list<std::string> Maze;
 	int rows;
@@ -28,8 +32,10 @@ private:
 	void parseLogsFromFile(std::string filePath);
 
 public:
-	ReplayMode(std::string filePath, bool fromStart = true);
-	~ReplayMode();
+
+	ReplyMode(std::string filePath, mainwindow* window, bool fromStart = true);
+	~ReplyMode();
+	std::list<std::string> getMaze();
 	bool parseLogsFromTurn(bool reverse = false);
 };
 

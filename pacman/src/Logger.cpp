@@ -1,7 +1,7 @@
 /**
-* @brief Logger of gameplay for later replay
+* @brief	Logger of gameplay for later replay
 *
-* @author Adrian Horvath(xhorva14)
+* @author	Adrian Horvath(xhorva14)
 *
 */
 #include "Logger.h"

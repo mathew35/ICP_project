@@ -1,7 +1,7 @@
 /**
-* @brief MazeObject implementation
+* @brief	MazeObject implementation
 *
-* @author Adrian Horvath(xhorva14)
+* @author	Adrian Horvath(xhorva14)
 *
 */
 

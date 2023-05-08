@@ -10,22 +10,6 @@
 
 #include "MazeClass.h"
 
-void MazeClass::horizontalWall(int rows, int cols) {
-	for (int c = 0; c < cols; c++)
-	{
-		this->fieldArray[0][c] = new WallField(0, c);
-		this->fieldArray[rows - 1][c] = new WallField(rows - 1, c);
-	}
-}
-
-void MazeClass::verticalWall(int rows, int cols) {
-	for (int r = 1; r < rows - 1; r++)
-	{
-		this->fieldArray[r][0] = new WallField(r, 0);
-		this->fieldArray[r][cols - 1] = new WallField(r, cols - 1);
-	}
-}
-
 void MazeClass::insertGhost(Field* field) {
 	this->listOfGhosts.emplace_back(field->get());
 }
