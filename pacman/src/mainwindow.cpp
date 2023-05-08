@@ -23,6 +23,7 @@ mainwindow::mainwindow(QWidget* parent)
 	ui->newGameWidget->setVisible(false);
 	ui->gameWidget->setVisible(false);
 	ui->resultWidget->setVisible(false);
+	ui->replayWidget->setVisible(false);
 	ui->gameWidget->setFocusPolicy(Qt::NoFocus);
 	ui->newGameWidget->setFocusPolicy(Qt::NoFocus);
 	ui->mainMenuWidget->setFocusPolicy(Qt::NoFocus);
@@ -39,6 +40,7 @@ mainwindow::mainwindow(QWidget* parent)
 	connect(ui->loadMapButton, SIGNAL(clicked()), this, SLOT(loadMapButtonClicked()));
 	connect(ui->playMapButton, SIGNAL(clicked()), this, SLOT(playMapButtonClicked()));
 	connect(ui->backToMainMenuButton, SIGNAL(clicked()), this, SLOT(backToMainMenuButtonClicked()));
+	connect(ui->backToMainMenuButton_2, SIGNAL(clicked()), this, SLOT(backToMainMenuButtonClicked()));
 
 	gameInterface = new GameInterface(this);
 	QPixmap* map = new QPixmap(":/wall");
@@ -139,7 +141,8 @@ void mainwindow::loadGameLogButtonClicked()
 	QString file = QFileDialog::getOpenFileName(this, "Choose map file", "C://", "Text file (*.txt)");
 	//guard no file selected
 	if (file == NULL) { return; }
-	//TODO
+	ui->mainMenuWidget->setVisible(false);
+	ui->replayWidget->setVisible(true);
 }
 
 void mainwindow::exitButtonClicked()
@@ -165,7 +168,18 @@ void mainwindow::playMapButtonClicked()
 void mainwindow::backToMainMenuButtonClicked()
 {
 	ui->newGameWidget->setVisible(false);
+	ui->replayWidget->setVisible(false);
 	ui->mainMenuWidget->setVisible(true);
+}
+
+void mainwindow::replayStartButtonClicked()
+{
+	//TODO
+}
+
+void mainwindow::replayEndButtonClicked()
+{
+	//TODO
 }
 
 void mainwindow::playGame()

@@ -40,6 +40,8 @@ private slots:
 	void loadMapButtonClicked();
 	void playMapButtonClicked();
 	void backToMainMenuButtonClicked();
+	void replayStartButtonClicked();
+	void replayEndButtonClicked();
 	void processKeyPressEvent();
 	void moveGhosts();
 
