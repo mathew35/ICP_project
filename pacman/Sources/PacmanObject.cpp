@@ -145,6 +145,7 @@ bool PacmanObject::move(Field::Direction dir) {
 	{
 		if (!this->decreaseLives()) { return false; }
 	}
+	return true;
 	//TODO end game when on doors
 	//TODO pick up key notify + log
 }
