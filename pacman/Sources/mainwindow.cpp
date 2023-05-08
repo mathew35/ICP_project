@@ -223,20 +223,37 @@ void mainwindow::updateEndGame()
 
 	ui->gameWidget->setVisible(false);
 	ui->mainMenuWidget->setVisible(true);
-	delete ui->gamePane->scene();
-	ui->gamePane->setScene(new QGraphicsScene);
-	delete ui->gameScorePane->scene();
-	ui->gameScorePane->setScene(new QGraphicsScene);
 	delete gameInterface;
 	gameInterface = new GameInterface(this);
 	ui->mainMenuWidget->setFocus();
+	for (auto& wall : wallItems) {
+		delete wall.second;
+	}
+	for (auto& ghost : ghostItems) {
+		delete ghost.second;
+	}
+	for (auto& key : keyItems) {
+		delete key.second;
+	}
+	for (auto& live : liveItems) {
+		delete live;
+	}
+	for (auto& key : keyScoreItems) {
+		delete key;
+	}
 	wallItems.clear();
 	ghostItems.clear();
 	keyItems.clear();
 	liveItems.clear();
 	keyScoreItems.clear();
+	delete this->playerItem;
+	delete this->doorItem;
 	this->playerItem = nullptr;
 	this->doorItem = nullptr;
+	delete ui->gamePane->scene();
+	ui->gamePane->setScene(new QGraphicsScene);
+	delete ui->gameScorePane->scene();
+	ui->gameScorePane->setScene(new QGraphicsScene);
 }
 
 bool mainwindow::updatePlayerItem()
