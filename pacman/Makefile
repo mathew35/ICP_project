@@ -13,7 +13,7 @@ clean:
 	rm -rf doc/*
 
 pack: clean
-	zip -x */.\* -r xhorva14-xvrabl05.zip src/ Headers/ Forms/ Resources/ CMakeLists.txt CMakePresets.json out/build/ README.txt doc examples Makefile Doxyfile -x out/build/*\* doc/*\*
+	zip -x */.\* -r xvrabl05-xhorva14.zip src/ Headers/ Forms/ Resources/ CMakeLists.txt CMakePresets.json out/build/ README.txt doc examples Makefile Doxyfile -x out/build/*\* doc/*\*
 
 doxygen:
 	doxygen Doxyfile
