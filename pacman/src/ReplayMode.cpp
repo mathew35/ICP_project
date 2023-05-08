@@ -165,7 +165,7 @@ bool ReplayMode::parseLogsFromTurn(bool reverse)
 			}
 			else {
 				// Invalid log format
-				throw _exception();
+				throw exception();
 
 			}
 		}
