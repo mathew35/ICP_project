@@ -14,6 +14,7 @@
 #include "MazeObject.h"
 #include "PacmanObject.h"
 #include "GhostObject.h"
+#include "Action.h"
 
 class Logger {
 private:
@@ -77,5 +78,10 @@ public:
 	 * @param lives The number of lives remaining.
 	 */
 	void printLives(int lives);
+	/**
+	 * @brief Erase log in replay mode
+	 * 
+	 */
+	void erase();
 };
 

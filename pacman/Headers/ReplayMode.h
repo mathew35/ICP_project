@@ -12,6 +12,7 @@
 #include <fstream>
 #include <sstream>
 #include "mainwindow.h"
+#include "Action.h"
 
 class mainwindow;
 
@@ -19,6 +20,7 @@ class ReplayMode {
 private:
 	mainwindow* window;
 	int turns;
+	std::vector<std::list<Action>> turnList;
 	std::list<std::string> Maze;
 	int rows;
 	int cols;
@@ -30,12 +32,16 @@ private:
 	void setMazeSize(std::string line);
 	void setMazeFromLog(std::string line);
 	void parseLogsFromFile(std::string filePath);
+	void replayAction(int turn, bool reverse);
+	void resolveAction(Action action, bool reverse);
 
 public:
 
 	ReplayMode(std::string filePath, mainwindow* window, bool fromStart = true);
 	~ReplayMode();
 	std::list<std::string> getMaze();
-	bool parseLogsFromTurn(bool reverse = false);
+	bool parseLogsFromTurn();
+	bool nextTurn();
+	bool prevTurn();
 };
 

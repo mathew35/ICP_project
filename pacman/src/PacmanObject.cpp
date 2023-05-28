@@ -111,6 +111,10 @@ bool PacmanObject::move(Field::Direction dir) {
 
 	prevField = this->callerField;
 	bool lives = false;
+	prevField->objectMoved(this);
+	nextField->setPacmanObject(this);
+	observer->notifyMove(prevRow, prevCol, nextRow, nextCol);
+	logger->printMovement(this, prevRow, prevCol, nextRow, nextCol);
 	if (!(nextField->isEmpty()))
 	{
 		MazeObject* object = nextField->get();
@@ -148,10 +152,6 @@ bool PacmanObject::move(Field::Direction dir) {
 	{
 		if (!this->decreaseLives()) { return false; }
 	}
-	prevField->objectMoved(this);
-	nextField->setPacmanObject(this);
-	observer->notifyMove(prevRow, prevCol, nextRow, nextCol);
-	logger->printMovement(this, prevRow, prevCol, nextRow, nextCol);
 
 	return true;
 }

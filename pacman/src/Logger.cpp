@@ -24,7 +24,13 @@ Logger::Logger()
 
 Logger::~Logger()
 {
-	this->m_logFile.close();
+	if (this->m_logFile.tellp() == std::streampos(0)) {
+		m_logFile.close();
+		std::filesystem::remove(m_filename);
+	}
+	else {
+		m_logFile.close();
+	}
 }
 
 void Logger::printTurnZero()
@@ -80,4 +86,10 @@ void Logger::printLives(int lives)
 {
 	int prevLives = lives + 1;
 	this->m_logFile << "Pacman lives [" << prevLives << "]" << " -> " << "[" << lives << "]" << std::endl;
+}
+
+void Logger::erase()
+{
+	m_logFile.close();
+	std::filesystem::remove(m_filename);
 }
